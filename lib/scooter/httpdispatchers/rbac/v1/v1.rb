@@ -4,11 +4,11 @@ end
 module Scooter
   module HttpDispatchers
     module Rbac
+      # Methods here are generally representative of endpoints, and depending
+      # on the method, return either a Faraday response object or some sort of
+      # instance of the object created/modified.
       module V1
 
-        # Methods here are generally representative of endpoints, and depending
-        # on the method, return either a Faraday response object or some sort of
-        # instance of the object created/modified.
 
         include Scooter::Utilities
         include Scooter::HttpDispatchers::Rbac::V1::DirectoryService
@@ -60,12 +60,11 @@ module Scooter
           @connection.get('v1/users/current').env.body
         end
 
+        # The ParseJson middleware throws an exception because this returns
+        # json headers while simply returning a token. In order to avoid this
+        # middleware throwing an error, we have to replace the connection with
+        # a temporary connection that doesn't use that particular middleware.
         def create_password_reset_token(uuid)
-
-          # The ParseJson middleware throws an exception because this returns
-          # json headers while simply returning a token. In order to avoid this
-          # middleware throwing an error, we have to replace the connection with
-          # a temporary connection that doesn't use that particular middleware.
           old_connection = @connection
           @connection = create_default_connection_and_initialize
           @connection.builder.delete(FaradayMiddleware::ParseJson)
