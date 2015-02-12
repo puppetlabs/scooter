@@ -1,11 +1,11 @@
 module Scooter
   module HttpDispatchers
     module Classifier
+      # Methods here are generally representative of endpoints, and depending
+      # on the method, return either a Faraday response object or some sort of
+      # instance of the object created/modified.
       module V1
 
-        # Methods here are generally representative of endpoints, and depending
-        # on the method, return either a Faraday response object or some sort of
-        # instance of the object created/modified.
 
         include Scooter::Utilities
         Rootuuid = '00000000-0000-4000-8000-000000000000'

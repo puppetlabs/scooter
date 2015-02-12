@@ -2,6 +2,9 @@ module Scooter
   module HttpDispatchers
     module Rbac
       module V1
+        # Methods defined here are broken out from the rest of the RBAC
+        # endpoints because they use a ldapdispatcher object to determine
+        # various settings for the ds endpoint.
         module DirectoryService
 
           def ds_default_settings(ldapdispatcher)
