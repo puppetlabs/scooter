@@ -19,21 +19,19 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   #Development dependencies
-  spec.add_development_dependency "bundler", "~> 1.6"
-  spec.add_development_dependency "minitest"
-  spec.add_development_dependency "pry", '~> 0.9.12.6'
+  spec.add_development_dependency 'bundler', '~> 1.6'
+  spec.add_development_dependency 'pry', '~> 0.9.12'
 
   #Documentation dependencies
-  spec.add_development_dependency 'yard'
-  spec.add_development_dependency 'markdown'
+  spec.add_development_dependency 'yard', '~> 0'
+  spec.add_development_dependency 'markdown', '~> 0'
 
   #Run time dependencies
-  spec.add_runtime_dependency 'json'
-  spec.add_runtime_dependency 'httparty'
-  spec.add_runtime_dependency 'net-ldap'
-  spec.add_runtime_dependency 'beaker'
-  spec.add_runtime_dependency 'faraday'
-  spec.add_runtime_dependency 'faraday_middleware'
-  spec.add_runtime_dependency 'faraday-cookie_jar'
-  spec.add_runtime_dependency 'nokogiri'
+  spec.add_runtime_dependency 'json', '~> 1.8'
+  spec.add_runtime_dependency 'net-ldap', '~> 0.6', '>= 0.6.1'
+  spec.add_runtime_dependency 'beaker', '~> 2.1', '>= 2.1.0'
+  spec.add_runtime_dependency 'faraday', '~> 0.9'
+  spec.add_runtime_dependency 'faraday_middleware', '~> 0.9'
+  spec.add_runtime_dependency 'faraday-cookie_jar', '~> 0.0', '>= 0.0.6'
+  spec.add_runtime_dependency 'nokogiri', '~> 1.5', '>= 1.5.10'
 end
