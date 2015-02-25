@@ -82,10 +82,10 @@ module Scooter
 
           # This logger will need to be configurable somehow..., maybe based on
           # beaker log-level?
-          conn.response :logger, nil, bodies: true
           conn.response :follow_redirects
           conn.response :json, :content_type => /\bjson$/
           conn.response :raise_error
+          conn.response :logger, nil, bodies: true
 
           conn.use :cookie_jar
 
