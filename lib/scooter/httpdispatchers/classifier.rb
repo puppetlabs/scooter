@@ -73,7 +73,7 @@ module Scooter
       # method doesn't clean out any classes or other settings the root group
       # might have.
       def delete_all_node_groups
-        delete_node_group_descendents(Rootuuid)
+        delete_node_group_descendents(get_node_group(Rootuuid))
       end
 
       # This takes an optional hash of node group parameters, and auto-fills
