@@ -116,16 +116,20 @@ module Scooter
       end
 
       # This method should execute after a test's completion; the group's ou
-      # and the user's ou should be passed in and it should be run in a beaker
-      # teardown.
+      # and users's ou will be deleted, as will any entity with those
+      # respective ou's in their distinguished name.
       # === Example beaker teardown
       #
       #  Example beaker teardown
       #
       #  teardown do
-      #    delete_all_dn_entries(groups_dn)
-      #    delete_all_dn_entries(users_dn)
+      #    ldapdispatcher.delete_users_and_groups_organizational_units
       #  end
+      def delete_users_and_groups_organizational_units
+        delete_all_dn_entries(@groups_dn)
+        delete_all_dn_entries(@users_dn)
+      end
+
       def delete_all_dn_entries(dn)
         entries = search(:base => dn, :attributes => ['dn'])
         entries.each do |entry|
