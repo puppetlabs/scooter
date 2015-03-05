@@ -1,5 +1,4 @@
 require 'scooter/version'
-require 'httparty'
 require 'beaker'
 require 'net/ldap'
 require 'faraday'
