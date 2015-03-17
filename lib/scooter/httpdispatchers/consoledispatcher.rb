@@ -123,7 +123,7 @@ module Scooter
         if is_certificate_dispatcher?
           connection.url_prefix.path = '/classifier-api'
         else
-          connection.url_prefix.path = '/node_groups/classifier-api'
+          connection.url_prefix.path = '/api/classifier/service/'
         end
       end
 
@@ -131,7 +131,7 @@ module Scooter
         if is_certificate_dispatcher?
           connection.url_prefix.path = '/rbac-api'
         else
-          connection.url_prefix.path = '/rbac/rbac-api'
+          connection.url_prefix.path = '/api/rbac/service/'
         end
       end
 
@@ -194,7 +194,7 @@ module Scooter
         # about every non-GET request. This could be smarter to only send on
         # the required requests, but doesn't seem necessary to embed that logic;
         # we will just send it on every request after successful signin.
-        response_body = @connection.get('/rbac/#/users').env.body
+        response_body = @connection.get.env.body
         parsed_body = Nokogiri::HTML(response_body)
         token = parsed_body.css("meta[name='__anti-forgery-token']")[0].attributes['content'].value
         @connection.headers['X-CSRF-Token'] = token
