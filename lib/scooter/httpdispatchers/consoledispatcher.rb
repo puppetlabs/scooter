@@ -110,7 +110,7 @@ module Scooter
 
       def set_host_and_port(connection=@connection)
         connection.url_prefix.scheme = 'https'
-        connection.url_prefix.host = "#{@dashboard}"
+        connection.url_prefix.host = "#{@dashboard.reachable_name}"
 
         if is_certificate_dispatcher?
           connection.url_prefix.port = 4433
