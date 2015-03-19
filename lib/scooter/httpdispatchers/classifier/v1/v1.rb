@@ -56,6 +56,7 @@ module Scooter
         end
 
         def update_classes
+          set_classifier_path
           @connection.post('v1/update-classes')
         end
 
