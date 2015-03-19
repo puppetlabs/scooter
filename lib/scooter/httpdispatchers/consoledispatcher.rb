@@ -1,6 +1,7 @@
 %w( rbac classifier).each do |lib|
   require "scooter/httpdispatchers/#{lib}"
 end
+require 'resolv'
 
 module Scooter
 
@@ -108,9 +109,20 @@ module Scooter
         connection.builder.delete(Faraday::Response::RaiseError)
       end
 
+      # See if we can reach the dashboard by hostname
+      def is_resolvable(dashboard=@dashboard)
+        begin
+          Resolv.getaddress(@dashboard.hostname)
+          true
+        rescue Resolv::ResolvError
+          false
+        end
+      end
+
+
       def set_host_and_port(connection=@connection)
         connection.url_prefix.scheme = 'https'
-        connection.url_prefix.host = "#{@dashboard.reachable_name}"
+        connection.url_prefix.host = is_resolvable ? @dashboard.hostname : @dashboard.reachable_name
 
         if is_certificate_dispatcher?
           connection.url_prefix.port = 4433
@@ -148,6 +160,7 @@ module Scooter
           raise 'Can only acquire SSL certs if the dashboard is a Unix::Host'
         end
         @ssl = {}
+
         @ssl['ca_file'] = Scooter::Utilities::BeakerUtilities.pe_ca_cert_file(@dashboard)
         if is_certificate_dispatcher?
           client_key = Scooter::Utilities::BeakerUtilities.pe_private_key(@dashboard)
@@ -161,6 +174,13 @@ module Scooter
       def add_ssl_components_to_connection(connection=@connection)
         @ssl.each do |k, v|
           connection.ssl[k] = v
+        end
+
+        if connection.url_prefix.host == @dashboard.reachable_name && connection.ssl['verify'] == nil
+          # Becuase we are connecting to the dashboard by IP address, SSL verification
+          # against the CA will fail. Disable verifying against it for now until a better
+          # fix can be found.
+          @ssl['verify'] = false
         end
       end
 
