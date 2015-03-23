@@ -122,7 +122,7 @@ module Scooter
 
       def set_host_and_port(connection=@connection)
         connection.url_prefix.scheme = 'https'
-        connection.url_prefix.host = is_resolvable ? @dashboard.hostname : @dashboard.ip
+        connection.url_prefix.host = is_resolvable ? @dashboard.hostname : Scooter::Utilities::BeakerUtilities.get_public_ip(@dashboard)
 
         if is_certificate_dispatcher?
           connection.url_prefix.port = 4433
@@ -176,7 +176,7 @@ module Scooter
           connection.ssl[k] = v
         end
 
-        if connection.url_prefix.host == @dashboard.ip && connection.ssl['verify'] == nil
+        if connection.url_prefix.host == Scooter::Utilities::BeakerUtilities.get_public_ip(@dashboard) && connection.ssl['verify'] == nil
           # Becuase we are connecting to the dashboard by IP address, SSL verification
           # against the CA will fail. Disable verifying against it for now until a better
           # fix can be found.
