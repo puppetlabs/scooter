@@ -180,7 +180,7 @@ module Scooter
           # Becuase we are connecting to the dashboard by IP address, SSL verification
           # against the CA will fail. Disable verifying against it for now until a better
           # fix can be found.
-          @ssl['verify'] = false
+          connection.ssl['verify'] = false
         end
       end
 
