@@ -13,7 +13,7 @@ module Scooter
         if host['hypervisor'] == 'ec2'
           on(host, "curl http://169.254.169.254/latest/meta-data/public-ipv4").stdout
         else
-          self.ip
+          host.ip
         end
       end
 
