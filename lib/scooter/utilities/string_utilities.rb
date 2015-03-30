@@ -10,10 +10,10 @@ module Scooter
         end
       end
 
-      # Create a string of two-byte Chinese characters.
+      # Create a string of two-byte Cyrillic characters.
       class RandomTwoByteUnicodeString
         def self.generate(length = 32)
-          characters  = (0xAC00..0xD799).to_a.map {|e| e.chr(Encoding::UTF_8) }
+          characters  = (0x0400..0x04FF).to_a.map {|e| e.chr(Encoding::UTF_8) }
           (0...length).map{ characters[rand(characters.length)] }.join
         end
       end
