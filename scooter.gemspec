@@ -5,7 +5,7 @@ require 'scooter/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "scooter"
-  spec.version       = Scooter::VERSION
+  spec.version       = Scooter::Version::STRING
   spec.authors       = ["Puppetlabs"]
   spec.email         = ["qa@puppetlabs.com"]
   spec.summary       = %q{Puppetlabs testing tool}
