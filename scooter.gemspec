@@ -20,6 +20,8 @@ Gem::Specification.new do |spec|
   #Development dependencies
   spec.add_development_dependency 'bundler', '~> 1.6'
   spec.add_development_dependency 'pry', '~> 0.9.12'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec', '>= 3.0.0'
 
   #Documentation dependencies
   spec.add_development_dependency 'yard', '~> 0'
