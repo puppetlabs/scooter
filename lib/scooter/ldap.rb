@@ -48,10 +48,10 @@ module Scooter
         # All initialized LDAPDispatcher objects will have test_uids to ensure
         # no collisions when creating entries in the directory services.
         @test_uid = Scooter::Utilities::RandomString.generate(4)
-        if host.is_a? Unix::Host
-          @ds_type = :openldap
-        elsif host.is_a? Windows::Host
+        if host.is_a? Windows::Host
           @ds_type = :ad
+        elsif host.is_a? Unix::Host
+          @ds_type = :openldap
         else
           raise "host must be Unix::Host or Windows::Host, not #{host.class}"
         end
