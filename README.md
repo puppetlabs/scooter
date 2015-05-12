@@ -1,21 +1,12 @@
 # Scooter
 
-TODO: Write a gem description
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'scooter'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install scooter
+Scooter is a ruby gem developed by QA to facilitate http traffic between the
+test runner and a Puppet Enterprise Installation–specifically the services
+available in the pe-console-services process: Classifier, RBAC, and Activity
+Service.
 
 ## Usage
 
-TODO: Write usage instructions here
+TODO: Import Confluence Documentation into repo
+
+Confluence Link: https://confluence.puppetlabs.com/display/QA/Scooter
