@@ -117,6 +117,25 @@ module Scooter
         create_node_group(hash).env.body
       end
 
+      # This takes an optional hash of node group parameters. If a "name" option
+      # is provided it will attempt to find an existing node group with that
+      # name in the environment specified in the "environment" option (default:
+      # "production").
+      #
+      # If an existing node group is found, it will be updated according to the
+      # provided options (via `#replace_node_group_with_update_hash`).
+      #
+      # If no existing node group is found, the options hash will be used to
+      # create a new node group (via `#create_new_node_group_model`).
+      def find_or_create_node_group_model(options={})
+        options["environment"] ||= "production"
+        if options["name"] && existing = get_node_group_by_name(options["name"], options["environment"])
+          replace_node_group_with_update_hash(existing, options)
+        else
+          create_new_node_group_model(options)
+        end
+      end
+
       # If for some reason your node group model is out of sync with the
       # server's state for that node group, you can use this method to just
       # update your model with the server state.
