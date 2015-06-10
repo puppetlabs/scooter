@@ -1,7 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 14 May, 2015 (ddf63d73)](#LATEST)
-* [1.0.1 - 13 May, 2015 (22052a7a)](#1.0.1)
+* [LATEST - 10 Jun, 2015 (416a5c4f)](#LATEST)
+* [2.1.0 - 14 May, 2015 (ce963c12)](#2.1.0)
 * [2.0.1 - 13 May, 2015 (cba48153)](#2.0.1)
 * [2.0.0 - 6 May, 2015 (99e32b38)](#2.0.0)
 * [1.0.0 - 6 May, 2015 (4d701cbd)](#1.0.0)
@@ -15,7 +15,62 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 14 May, 2015 (ddf63d73)
+### <a name = "LATEST">LATEST - 10 Jun, 2015 (416a5c4f)
+
+* (GEM) update scooter version to 2.1.1 (416a5c4f)
+
+* Merge pull request #34 from objectverbobject/separate_signin_and_xcsrf_token (767b196f)
+
+
+```
+Merge pull request #34 from objectverbobject/separate_signin_and_xcsrf_token
+
+(QA-1925) Change signin to not autoacquire xcsrf
+```
+* Merge pull request #35 from anodelman/master (951e3775)
+
+
+```
+Merge pull request #35 from anodelman/master
+
+(MAINT) set pe_rbac_service based upon scooter branch
+```
+* (MAINT) set pe_rbac_service based upon scooter branch (34e4d15c)
+
+* (QA-1925) Change signin to not autoacquire xcsrf (c40d3e8d)
+
+
+```
+(QA-1925) Change signin to not autoacquire xcsrf
+
+The console used to not have a console view permission, allowing any
+authenticated entity view access; This allowed any user to acquire an
+xcsrf token after successful login.
+
+The signin method still tries to acquire the XCSRF token, but catches
+failures if the dispatcher does not have view access to the console.
+```
+* Merge pull request #33 from anodelman/split-pipeline-master (55ee8517)
+
+
+```
+Merge pull request #33 from anodelman/split-pipeline-master
+
+(QENG-2382) scooter pipeline needs to install different pe depending...
+```
+* (QENG-2382) scooter pipeline needs to install different pe depending... (98958ca7)
+
+
+```
+(QENG-2382) scooter pipeline needs to install different pe depending...
+
+...on target branch
+
+- create .env file with branch appropriate testing information
+```
+### <a name = "2.1.0">2.1.0 - 14 May, 2015 (ce963c12)
+
+* (HISTORY) update scooter history for gem release 2.1.0 (ce963c12)
 
 * (GEM) update scooter version to 2.1.0 (ddf63d73)
 
@@ -59,68 +114,6 @@ environment.
 
 This commit brings that method back to `Scooter::HttpDispatchers::Classifier`.
 ```
-* (HISTORY) update scooter history for gem release 2.0.1 (cba48153)
-
-* (GEM) update scooter version to 2.0.1 (5265b3bb)
-
-* Merge pull request #28 from objectverbobject/add_readme_link (81070779)
-
-
-```
-Merge pull request #28 from objectverbobject/add_readme_link
-
-(maint) Add link to README.md to confluence
-```
-* Merge pull request #27 from objectverbobject/merge_stable (019f05e0)
-
-
-```
-Merge pull request #27 from objectverbobject/merge_stable
-
-(maint) Merge stable
-```
-* (maint) Add link to README.md to confluence (e7542509)
-
-
-```
-(maint) Add link to README.md to confluence
-
-This is a temporary link that will exist until the confluence
-documentation is imported into the Scooter repository.
-```
-* Merge remote-tracking branch 'upstream/stable' into merge_stable (1d604238)
-
-
-```
-Merge remote-tracking branch 'upstream/stable' into merge_stable
-
-Merge in fix for beaker change to object inheritance for Windows::Host
-object.
-```
-* (GEM) update scooter version to 2.0.0 (99e32b38)
-
-* Merge pull request #25 from anodelman/cherry (2c82eef1)
-
-
-```
-Merge pull request #25 from anodelman/cherry
-
-Update paths for non-cert rbac and classifier requests
-```
-* Update paths for non-cert rbac and classifier requests (d83aed0c)
-
-
-```
-Update paths for non-cert rbac and classifier requests
-
-This updates the paths to match the new routing for PE 4.0
-```
-### <a name = "1.0.1">1.0.1 - 13 May, 2015 (22052a7a)
-
-* (HISTORY) update scooter history for gem release 1.0.1 (22052a7a)
-
-* (GEM) update scooter version to 1.0.1 (9e81e9de)
-
 ### <a name = "2.0.1">2.0.1 - 13 May, 2015 (cba48153)
 
 * (HISTORY) update scooter history for gem release 2.0.1 (cba48153)
