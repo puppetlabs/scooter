@@ -209,11 +209,19 @@ module Scooter
         #return the response if the status code was not 200
         return response if response.status != 200
 
-        # Acquire the X-CSRF token if signin was successful. The console doesn't
-        # require the token for every request, but it is required for just
-        # about every non-GET request. This could be smarter to only send on
-        # the required requests, but doesn't seem necessary to embed that logic;
-        # we will just send it on every request after successful signin.
+        # try to be helpful and acquire the xcsrf; catch any error that occurs
+        # in the acquire_xcsrf method
+        begin
+          acquire_xcsrf
+        rescue
+          # do nothing in the rescue
+        end
+      end
+
+      def acquire_xcsrf
+        # This simply makes a call to the base_uri and extracts out an
+        # anti-forgery-token and adds that token to the headers for the
+        #connection object
         response_body = @connection.get.env.body
         parsed_body = Nokogiri::HTML(response_body)
         token = parsed_body.css("meta[name='__anti-forgery-token']")[0].attributes['content'].value
@@ -224,7 +232,7 @@ module Scooter
         @connection.post "https://#{dashboard}/auth/reset" do |request|
           request.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
           request.body = "password=#{new_password}&token=#{token}"
-        end
+      end
 
       end
     end
