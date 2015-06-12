@@ -14,8 +14,46 @@ module Scooter
     # probably be using a method defined in the version module instead.
     module Rbac
 
-
       include Scooter::HttpDispatchers::Rbac::V1
+      include Scooter::Utilities
+
+      def generate_local_user(options = {})
+        email = options['email'] || "#{RandomString.generate(4)}@example.com"
+        display_name = options['display_name'] || RandomString.generate(4)
+        login = options['login'] || RandomString.generate(4)
+        role_ids = options['role_ids'] || []
+        password = options['password'] || 'Puppet11'
+
+        user_hash = { "email" => email,
+                      "display_name" => display_name,
+                      "login" => login,
+                      "role_ids" => role_ids,
+                      "password" => password }
+
+        response = create_local_user(user_hash)
+        return response if response.env.status != 200
+        Scooter::HttpDispatchers::ConsoleDispatcher.new(@dashboard,
+                                                        login: login,
+                                                        password: password)
+      end
+
+      def generate_role(options = {})
+        permissions  = options['permissions'] || []
+        user_ids     = options['user_ids'] || []
+        group_ids    = options['group_ids'] || []
+        display_name = options['display_name'] || RandomString.generate
+        description  = options['description'] || RandomString.generate
+
+        role_hash = { "permissions"  => permissions,
+                      "user_ids"     => user_ids,
+                      "group_ids"    => group_ids,
+                      "display_name" => display_name,
+                      "description"  => description }
+
+        response = create_role(role_hash)
+        return response if response.env.status != 200
+        response.env.body
+      end
 
       def get_user_id_of_console_dispatcher(console_dispatcher)
         if console_dispatcher.is_certificate_dispatcher?
