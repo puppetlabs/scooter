@@ -9,33 +9,13 @@ module Scooter
       # instance of the object created/modified.
       module V1
 
-
-        include Scooter::Utilities
         include Scooter::HttpDispatchers::Rbac::V1::DirectoryService
 
-        def create_local_user(options = {})
-          email = options['email'] || "#{RandomString.generate(4)}@example.com"
-          display_name = options['display_name'] || RandomString.generate(4)
-          login = options['login'] || RandomString.generate(4)
-          role_ids = options['role_ids'] || []
-          password = options['password'] || 'Puppet11'
-
-          user_hash = { "email" => email,
-                        "display_name" => display_name,
-                        "login" => login,
-                        "role_ids" => role_ids,
-                        "password" => password }
-
+        def create_local_user(options)
           set_rbac_path
-          response = @connection.post 'v1/users' do |request|
-            request.body = user_hash
+          @connection.post 'v1/users' do |request|
+            request.body = options
           end
-
-          return response if response.env.status != 200
-
-          Scooter::HttpDispatchers::ConsoleDispatcher.new(@dashboard,
-                                                          login: login,
-                                                          password: password)
         end
 
         def update_local_user(update_hash)
@@ -90,6 +70,13 @@ module Scooter
         def get_list_of_roles
           set_rbac_path
           @connection.get('v1/roles').env.body
+        end
+
+        def create_role(options)
+          set_rbac_path
+          @connection.post('v1/roles') do |request|
+            request.body = options
+          end
         end
 
       end

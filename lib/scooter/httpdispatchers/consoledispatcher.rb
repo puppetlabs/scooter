@@ -222,6 +222,7 @@ module Scooter
         # This simply makes a call to the base_uri and extracts out an
         # anti-forgery-token and adds that token to the headers for the
         #connection object
+        @connection.url_prefix.path = ''
         response_body = @connection.get.env.body
         parsed_body = Nokogiri::HTML(response_body)
         token = parsed_body.css("meta[name='__anti-forgery-token']")[0].attributes['content'].value
