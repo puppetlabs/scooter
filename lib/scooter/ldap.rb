@@ -150,7 +150,7 @@ module Scooter
         end
       end
 
-      def create_ds_user(attributes, users_dn=users_dn)
+      def create_ds_user(attributes, users_dn=self.users_dn)
         default_attributes = {:objectClass => ['top',
                                                'person',
                                                'organizationalPerson',
@@ -171,7 +171,7 @@ module Scooter
         end
       end
 
-      def create_ds_group(attributes, groups_dn=groups_dn)
+      def create_ds_group(attributes, groups_dn=self.groups_dn)
 
         #When Openldap, you must specify :member entries in the attributes
         default_attributes = {:objectClass => ["top", "groupOfUniqueNames"]}
