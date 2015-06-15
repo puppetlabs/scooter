@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 10 Jun, 2015 (416a5c4f)](#LATEST)
+* [LATEST - 15 Jun, 2015 (ba8647c8)](#LATEST)
+* [2.1.1 - 10 Jun, 2015 (6878cb4b)](#2.1.1)
 * [2.1.0 - 14 May, 2015 (ce963c12)](#2.1.0)
 * [2.0.1 - 13 May, 2015 (cba48153)](#2.0.1)
 * [2.0.0 - 6 May, 2015 (99e32b38)](#2.0.0)
@@ -15,7 +16,66 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 10 Jun, 2015 (416a5c4f)
+### <a name = "LATEST">LATEST - 15 Jun, 2015 (ba8647c8)
+
+* (GEM) update scooter version to 2.2 (ba8647c8)
+
+* Merge pull request #31 from pcarlisle/fix-ruby-2.2 (07e4e8e2)
+
+
+```
+Merge pull request #31 from pcarlisle/fix-ruby-2.2
+
+(maint) Fix optional arguments for ruby 2.2
+```
+* Merge pull request #37 from objectverbobject/moar_rbac_helpers (cd55f50a)
+
+
+```
+Merge pull request #37 from objectverbobject/moar_rbac_helpers
+
+Moar rbac helpers
+```
+* Add more RBAC helpers (0e274ac8)
+
+
+```
+Add more RBAC helpers
+
+This adds methods to generate local users and roles. Previously, the
+logic to create a local user was embedded into the v1 module, which was
+not the correct location for it. The method has been moved to the Rbac
+module and renamed generate_local_user.
+
+While this is a breaking change, none of the tests actually used that
+method, and so it can be safely erased.
+```
+* (maint) fix acquire_xcsrf to clear the prefix path (4221cb45)
+
+* (maint) Fix optional arguments for ruby 2.2 (febef0fc)
+
+
+```
+(maint) Fix optional arguments for ruby 2.2
+
+As of ruby 2.2 it's no longer possible to assign a default value in an
+argument from an outer scope method of the same name.
+
+e.g.
+
+def foo
+  10
+end
+
+def bar(foo=foo)
+  puts foo
+end
+
+In ruby 2.1 this prints 10, in ruby 2.2 a blank line as foo is nil.
+```
+### <a name = "2.1.1">2.1.1 - 10 Jun, 2015 (6878cb4b)
+
+* (HISTORY) update scooter history for gem release 2.1.1 (6878cb4b)
 
 * (GEM) update scooter version to 2.1.1 (416a5c4f)
 
