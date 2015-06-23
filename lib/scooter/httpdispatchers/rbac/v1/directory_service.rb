@@ -8,7 +8,7 @@ module Scooter
         module DirectoryService
 
           def ds_default_settings(ldapdispatcher)
-            base_dn_to_chomp = ',' + ldapdispatcher.default_base_dn
+            base_dn_to_chomp = ',' + ldapdispatcher.base
             user_rdn = ldapdispatcher.users_dn.chomp(base_dn_to_chomp)
             group_rdn = ldapdispatcher.groups_dn.chomp(base_dn_to_chomp)
             settings                      = {
@@ -18,10 +18,10 @@ module Scooter
                 "hostname"               => ldapdispatcher.host,
                 "port"                   => ldapdispatcher.port,
                 "login"                  => ldapdispatcher.admin_dn,
-                "password"               => ldapdispatcher.default_ds_password,
+                "password"               => ldapdispatcher.return_default_password,
                 "connect_timeout"        => 20,
                 "ssl"                    => true,
-                "base_dn"                => ldapdispatcher.default_base_dn,
+                "base_dn"                => ldapdispatcher.base,
                 "user_lookup_attr"       => 'cn',
                 "user_email_attr"        => 'mail',
                 "user_display_name_attr" => 'displayName',

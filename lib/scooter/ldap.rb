@@ -4,9 +4,8 @@ end
 module Scooter
   module LDAP
 
-    DEFAULT_DS_PASSWORD = 'Puppet11'
-    DEFAULT_BASE_DN = 'dc=delivery,dc=puppetlabs,dc=net'
     DEFAULT_DS_PORT = 636
+    DEFAULT_USER_PASSWORD = 'Puppet11'
 
     # == Quick-start guide for the impatient
     # === Quick example creating an LDAPDispatcher object with a beaker config:
@@ -21,12 +20,18 @@ module Scooter
     #
     #  require 'scooter'
     #  ldapdispatcher = Scooter::LDAP::LDAPDispatcher.new(directory_service)
+    #  # If you are not using the default static fixtures, you probably want
+    #  # to change the credentials for your LDAP instance
+    #  ldapdispatcher.auth(user_dn, password)
+    #  # This is the normal method you would use to set up a standard test
+    #  # environment, with groups of writers(poets, lyricists, novelists)
+    #  # to populate your directory_service
     #  ldapdispatcher.create_default_test_groups_and_users
     class LDAPDispatcher < Net::LDAP
 
+
       attr_accessor :test_uid
-      attr_reader :ds_type, :users_dn, :groups_dn, :ds_users, :default_base_dn,
-                  :default_ds_password, :default_ds_port
+      attr_reader :ds_type, :users_dn, :groups_dn, :ds_users
 
       # Instantiating an object of type Scooter::LDAP::LDAPDispatcher extends
       # the Net::LDAP class to include helper methods to make test setup and
@@ -36,13 +41,12 @@ module Scooter
       # helper methods construct a test environment of groups and users.
       #
       # Unlike the Net::LDAP, LDAPDispatcher <i>does</i> test the network
-      # connection during initialization and raise an error if it fails. Beyond
-      # testing the connection, it also creates two organizational units, or
-      # ou's, to base all your testing around. There is one ou for groups and
-      # one for users. Most testing can be covered by simply running the method
-      # <tt>create_default_test_groups_and_users</tt>.
+      # connection during initialization and raises a warning if it fails.
       # @param host [Unix::Host, Windows::Host] the DS host object defined in
       #   your Beaker config
+      # @param options [hash] any params you would like to override; you are
+      #   likely to want to do this if you are not using the static Puppet LDAP
+      #   fixtures
       def initialize(host, options={})
         
         # All initialized LDAPDispatcher objects will have test_uids to ensure
@@ -56,33 +60,37 @@ module Scooter
           raise "host must be Unix::Host or Windows::Host, not #{host.class}"
         end
 
-        @default_ds_password = Scooter::LDAP::DEFAULT_DS_PASSWORD
-        @default_ds_port = Scooter::LDAP::DEFAULT_DS_PORT
-        @default_base_dn = Scooter::LDAP::DEFAULT_BASE_DN
         generated_args = {}
-
-        generated_args[:auth] = {:method => :simple,
-                                 :username => admin_dn,
-                                 :password => @default_ds_password}
-
         generated_args[:host] = host.reachable_name
-        generated_args[:port] = @default_ds_port
-
+        generated_args[:port] = DEFAULT_DS_PORT
         generated_args[:encryption] = {:method => :simple_tls}
-
-        generated_args[:base] = @default_base_dn
+        generated_args[:base] = return_default_base
 
         generated_args.merge!(options)
         super(generated_args)
 
-        if !bind
-          raise "Problem binding to #{host}, #{get_operation_result}\n
-                username: #{admin_dn}, pw: #{@default_ds_password}"
+        # If we didn't pass in an :auth hash, generate the default settings
+        # using the auth method of Net::LDAP
+        if !options[:auth]
+          self.auth admin_dn, return_default_password
         end
 
-        @users_dn = create_temp_ou('users')
-        @groups_dn = create_temp_ou('groups')
+        if !bind
+          warn "Problem binding to #{host}, #{get_operation_result}\n
+                username: #{admin_dn}, pw: #{return_default_password}"
+        end
+      end
 
+      def return_default_password
+        "Puppet11"
+      end
+
+      def return_default_base
+        if @ds_type == :ad
+          'dc=puppetlabs,dc=local'
+        elsif @ds_type= :openldap
+          'dc=delivery,dc=puppetlabs,dc=net'
+        end
       end
 
       def is_openldap?
@@ -95,15 +103,15 @@ module Scooter
 
       def admin_dn
         if is_windows_ad?
-          "cn=Administrator,cn=Users,#{@default_base_dn}"
+          "cn=Administrator,cn=Users,#{return_default_base}"
         else
-          "cn=admin,#{@default_base_dn}"
+          "cn=admin,#{return_default_base}"
         end
       end
 
       def create_temp_ou(base_string='test_')
         ou = base_string + @test_uid
-        dn = "ou=#{ou},#{@default_base_dn}"
+        dn = "ou=#{ou},#{self.base}"
         attr = {:objectClass => ['top', 'organizationalUnit'],
                 :ou => ou}
         add(:dn => dn, :attributes => attr)
@@ -191,8 +199,15 @@ module Scooter
         end
       end
 
-      # This is the primary method most tests will need
+      # This is the primary method most tests will use. It creates two
+      # organizational units, or ou's, to base all your testing around. There is
+      # one ou for groups and one for users. Most testing can be covered by
+      # simply running the method <tt>create_default_test_groups_and_users</tt>.
       def create_default_test_groups_and_users
+
+        @users_dn = create_temp_ou('users')
+        @groups_dn = create_temp_ou('groups')
+
         create_default_users
 
         if is_windows_ad?
@@ -208,8 +223,8 @@ module Scooter
 
         users.each do |name, hash|
           create_ds_user(hash)
-          update_user_password("CN=#{hash[:cn]},#{users_dn}", @default_ds_password)
-          hash[:password] = "Puppet11"
+          update_user_password("CN=#{hash[:cn]},#{users_dn}", DEFAULT_USER_PASSWORD)
+          hash[:password] = DEFAULT_USER_PASSWORD
         end
         @ds_users = users
       end
@@ -232,7 +247,7 @@ module Scooter
 
         if get_operation_result.code != 0
           raise "Updating password failed: #{get_operation_result}\n
-                #{default_attributes}"
+                #{ops}"
         end
       end
 
