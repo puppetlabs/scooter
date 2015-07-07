@@ -41,7 +41,7 @@ module Scooter
           end
 
           def attach_ds_to_rbac(ldapdispatcher=nil, options={})
-            settings = ds_default_settings(ldapdispatcher) if ldapdispatcher
+            settings = ldapdispatcher ? ds_default_settings(ldapdispatcher) : {}
             settings.merge!(options)
 
             set_rbac_path
@@ -51,7 +51,7 @@ module Scooter
           end
 
           def test_attach_ds_to_rbac(ldapdispatcher=nil, options={})
-            settings = ds_default_settings(ldapdispatcher) if ldapdispatcher
+            settings = ldapdispatcher ? ds_default_settings(ldapdispatcher) : {}
             settings.merge!(options)
 
             set_rbac_path
