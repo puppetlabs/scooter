@@ -1,7 +1,6 @@
 %w( rbac classifier).each do |lib|
   require "scooter/httpdispatchers/#{lib}"
 end
-require 'resolv'
 
 module Scooter
 
@@ -38,11 +37,11 @@ module Scooter
     #
     #  # this method will now return nil because new_user is deleted
     #  certificate_dispatcher.get_console_dispatcher_data(new_guy)
-    class ConsoleDispatcher
+    class ConsoleDispatcher < HttpDispatcher
 
       include Scooter::HttpDispatchers::Rbac
       include Scooter::HttpDispatchers::Classifier
-      attr_accessor :connection, :dashboard, :credentials, :ssl
+      attr_accessor :credentials
       Credentials = Struct.new(:login, :password)
 
       # This class is designed to interact with any of the pe-console-services:
@@ -60,78 +59,27 @@ module Scooter
       # credentials, Faraday connection object, and ssl parameters. Note that
       # this is largely untested. Use outside of a Beaker test run at your own
       # risk.
-      # @param dashboard [Unix::Host optional] the dashboard specified in your
-      #   beaker config. If no dashboard is passed, then the initialization
-      #   process is skipped and you must define the connection and dashboard
-      #   manually.
       #
       # @param credentials(Hash optional) Provide credentials if you wish to
       #   communicate through the UI proxy. If no credentials are provided, then
       #   it is assumed the dispatching object will send traffic directly to the
       #   Services.
-      def initialize(dashboard = nil, credentials=nil)
-        @dashboard = dashboard if dashboard.is_a?(Unix::Host)
+      def initialize(host, credentials=nil)
         @credentials = Credentials.new(credentials[:login],
                                        credentials[:password]) if credentials
-
-        @connection = create_default_connection_and_initialize if @dashboard
+        super(host)
       end
 
-      def create_default_connection
-        Faraday.new do |conn|
-          conn.request :json
-
-          # This logger will need to be configurable somehow..., maybe based on
-          # beaker log-level?
-          conn.response :follow_redirects
-          conn.response :json, :content_type => /\bjson$/
-          conn.response :raise_error
-          conn.response :logger, nil, bodies: true
-
-          conn.use :cookie_jar
-
-          conn.adapter :net_http
-        end
-      end
-
-      def create_default_connection_and_initialize
-        connection = create_default_connection
-        set_host_and_port(connection)
-        acquire_ssl_components
-        add_ssl_components_to_connection(connection)
-        connection
-      end
-
-
-      # If you would like to run tests that expect 400 or even 500 responses,
-      # apply this method to remove the <tt>:raise_error</tt> middleware.
-      def remove_error_checking(connection=@connection)
-        connection.builder.delete(Faraday::Response::RaiseError)
-      end
-
-      # See if we can reach the dashboard by hostname
-      def is_resolvable(dashboard=@dashboard)
-        begin
-          Resolv.getaddress(@dashboard.hostname)
-          true
-        rescue Resolv::ResolvError
-          false
-        end
-      end
-
-
-      def set_host_and_port(connection=@connection)
-        connection.url_prefix.scheme = 'https'
-        connection.url_prefix.host = is_resolvable ? @dashboard.hostname : Scooter::Utilities::BeakerUtilities.get_public_ip(@dashboard)
-
+      def set_url_prefix(connection=self.connection)
         if is_certificate_dispatcher?
           connection.url_prefix.port = 4433
         else
           connection.url_prefix.port = 443
         end
+        super(connection)
       end
 
-      def set_classifier_path(connection=@connection)
+      def set_classifier_path(connection=self.connection)
         if is_certificate_dispatcher?
           connection.url_prefix.path = '/classifier-api'
         else
@@ -139,7 +87,7 @@ module Scooter
         end
       end
 
-      def set_rbac_path(connection=@connection)
+      def set_rbac_path(connection=self.connection)
         if is_certificate_dispatcher?
           connection.url_prefix.path = '/rbac-api'
         else
@@ -147,7 +95,7 @@ module Scooter
         end
       end
 
-      def set_activity_service_path(connection=@connection)
+      def set_activity_service_path(connection=self.connection)
         if is_certificate_dispatcher?
           connection.url_prefix.path = '/activity-api'
         else
@@ -155,52 +103,25 @@ module Scooter
         end
       end
 
-      def acquire_ssl_components
-        if !@dashboard.is_a?(Unix::Host)
-          raise 'Can only acquire SSL certs if the dashboard is a Unix::Host'
-        end
-        @ssl = {}
-
-        @ssl['ca_file'] = Scooter::Utilities::BeakerUtilities.pe_ca_cert_file(@dashboard)
+      # This is overridden from the parent class; in the case of
+      # ConsoleDispatcher objects, there are often cases where the Dispatcher is
+      # not a certificate dispatcher, but representing an LDAP or local user.
+      def acquire_ssl_components(host=self.host)
         if is_certificate_dispatcher?
-          client_key = Scooter::Utilities::BeakerUtilities.pe_private_key(@dashboard)
-          client_cert = Scooter::Utilities::BeakerUtilities.pe_hostcert(@dashboard)
-
-          @ssl['client_key']  = OpenSSL::PKey.read(client_key)
-          @ssl['client_cert'] = OpenSSL::X509::Certificate.new(client_cert)
+          super(host)
+        else
+          if !host.is_a?(Unix::Host)
+            raise 'Can only acquire SSL certs if the host is a Unix::Host'
+          end
+         acquire_ca_cert(host)
         end
-      end
-
-      def add_ssl_components_to_connection(connection=@connection)
-        @ssl.each do |k, v|
-          connection.ssl[k] = v
-        end
-
-        if connection.url_prefix.host == Scooter::Utilities::BeakerUtilities.get_public_ip(@dashboard) && connection.ssl['verify'] == nil
-          # Becuase we are connecting to the dashboard by IP address, SSL verification
-          # against the CA will fail. Disable verifying against it for now until a better
-          # fix can be found.
-          connection.ssl['verify'] = false
-        end
-      end
-
-      # Run this method if you have replaced the connection with a different
-      # Faraday connection; it will just set the prefix_url and add the ssl
-      # components already stored. This method is used primarily when you have
-      # not passed in a dashboard from beaker and are acquiring ssl credentials
-      # through separate means; it skips the <tt>acquire_ssl_components</tt>
-      # and assumes that you acquired an ssl client_key and client_cert through
-      # separate means.
-      def reinitialize_connection(connection=@connection)
-        set_host_and_port(connection)
-        add_ssl_components_to_connection(connection)
       end
 
       def is_certificate_dispatcher?
         true unless @credentials
       end
 
-      def signin(login=@credentials.login, password=@credentials.password)
+      def signin(login=self.credentials.login, password=self.credentials.password)
         response = @connection.post "/auth/login" do |request|
           request.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
           request.body = "username=#{login}&password=#{CGI.escape(password)}"
@@ -230,7 +151,7 @@ module Scooter
       end
 
       def reset_local_user_password(token, new_password)
-        @connection.post "https://#{dashboard}/auth/reset" do |request|
+        @connection.post "https://#{host}/auth/reset" do |request|
           request.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
           request.body = "password=#{new_password}&token=#{token}"
       end

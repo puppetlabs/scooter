@@ -32,7 +32,7 @@ module Scooter
 
         response = create_local_user(user_hash)
         return response if response.env.status != 200
-        Scooter::HttpDispatchers::ConsoleDispatcher.new(@dashboard,
+        Scooter::HttpDispatchers::ConsoleDispatcher.new(@host,
                                                         login: login,
                                                         password: password)
       end

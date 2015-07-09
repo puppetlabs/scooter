@@ -1,4 +1,4 @@
-%w( consoledispatcher ).each do |lib|
+%w( httpdispatcher consoledispatcher ).each do |lib|
   require "scooter/httpdispatchers/#{lib}"
 end
 
