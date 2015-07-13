@@ -86,11 +86,7 @@ module Scooter
       end
 
       def return_default_base
-        if @ds_type == :ad
-          'dc=puppetlabs,dc=local'
-        elsif @ds_type= :openldap
-          'dc=delivery,dc=puppetlabs,dc=net'
-        end
+        'dc=delivery,dc=puppetlabs,dc=net'
       end
 
       def is_openldap?
