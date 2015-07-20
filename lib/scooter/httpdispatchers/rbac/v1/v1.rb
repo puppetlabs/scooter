@@ -46,7 +46,7 @@ module Scooter
         # a temporary connection that doesn't use that particular middleware.
         def create_password_reset_token(uuid)
           old_connection = @connection
-          @connection = create_default_connection_and_initialize
+          @connection = initialize_connection
           @connection.builder.delete(FaradayMiddleware::ParseJson)
           signin if !is_certificate_dispatcher?
           set_rbac_path
