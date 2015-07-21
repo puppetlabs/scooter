@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 15 Jun, 2015 (ba8647c8)](#LATEST)
+* [LATEST - 21 Jul, 2015 (8de59de2)](#LATEST)
+* [2.2 - 15 Jun, 2015 (7c4645e9)](#2.2)
 * [2.1.1 - 10 Jun, 2015 (6878cb4b)](#2.1.1)
 * [2.1.0 - 14 May, 2015 (ce963c12)](#2.1.0)
 * [2.0.1 - 13 May, 2015 (cba48153)](#2.0.1)
@@ -16,7 +17,101 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 15 Jun, 2015 (ba8647c8)
+### <a name = "LATEST">LATEST - 21 Jul, 2015 (8de59de2)
+
+* (GEM) update scooter version to 2.3.0 (8de59de2)
+
+* Merge pull request #41 from objectverbobject/QA-1937/create_base_httpdispatcher_class (3cfdcab9)
+
+
+```
+Merge pull request #41 from objectverbobject/QA-1937/create_base_httpdispatcher_class
+
+(QA-1937) Create base httpdispatcher
+```
+* Merge pull request #40 from objectverbobject/refactor_ldapdispatcher (bda5be50)
+
+
+```
+Merge pull request #40 from objectverbobject/refactor_ldapdispatcher
+
+Refactor ldapdispatcher
+```
+* (QA-1937) Create base httpdispatcher (71630c30)
+
+
+```
+(QA-1937) Create base httpdispatcher
+
+Prior to this commit, the only real dispatcher available was the
+consoledispatcher. The consoledispatcher had much of the base methods
+defined in itself, which needed to be pulled out and put into another
+class that all other dispatcher classes should be subclassing. This PR
+creates a base httpdispatcher, making it more straightfoward to
+subclass the httpdispatcher class and build different dispatching
+objects.
+```
+* (maint) fix bug with attach_ds_to_rbac (52244b1b)
+
+
+```
+(maint) fix bug with attach_ds_to_rbac
+
+A bug existed in the implementation of this method; if no ldapdispatcher
+was provided, the local var settings would not be set and you would get
+an uninitialized error for settings. This change fixes that issue so you
+can supply an options hash with any set of directory_service parameters
+you want.
+```
+* (maint) remove conditional ldap base logic (c1fdc861)
+
+
+```
+(maint) remove conditional ldap base logic
+
+In a previous build, the ldap dispatcher used a new base_dn for windows;
+a new fixture has been created and this no longer needs to be
+conditional per openldap or active directory.
+```
+* Merge pull request #39 from objectverbobject/refactor_ldapdispatcher (921deee2)
+
+
+```
+Merge pull request #39 from objectverbobject/refactor_ldapdispatcher
+
+(QA-1926) Refactor LDAPDispatcher
+```
+* (QA-1926) Refactor LDAPDispatcher (63bb82fa)
+
+
+```
+(QA-1926) Refactor LDAPDispatcher
+
+This commit changes the LDAPDispatcher to make less assumptions about
+the directory service object and allow for more settings to be adjusted,
+such as the user and password settings.
+```
+* Merge pull request #38 from objectverbobject/fix_version_numbering (0f610643)
+
+
+```
+Merge pull request #38 from objectverbobject/fix_version_numbering
+
+(maint) fix bad version number
+```
+* (maint) fix bad version number (54b37ddf)
+
+
+```
+(maint) fix bad version number
+
+Tony accidently pushed 2.2 instead of 2.2.0 to the internal mirror; this
+commit just fixes the bump so that the release pipeline doesn't break
+when trying to parse the 2.2 version.
+```
+### <a name = "2.2">2.2 - 15 Jun, 2015 (7c4645e9)
+
+* (HISTORY) update scooter history for gem release 2.2 (7c4645e9)
 
 * (GEM) update scooter version to 2.2 (ba8647c8)
 
