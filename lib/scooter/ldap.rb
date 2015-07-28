@@ -195,14 +195,18 @@ module Scooter
         end
       end
 
+      def create_ou_for_users_and_groups
+        @users_dn = create_temp_ou('users')
+        @groups_dn = create_temp_ou('groups')
+      end
+
       # This is the primary method most tests will use. It creates two
       # organizational units, or ou's, to base all your testing around. There is
       # one ou for groups and one for users. Most testing can be covered by
       # simply running the method <tt>create_default_test_groups_and_users</tt>.
       def create_default_test_groups_and_users
 
-        @users_dn = create_temp_ou('users')
-        @groups_dn = create_temp_ou('groups')
+        create_ou_for_users_and_groups
 
         create_default_users
 
