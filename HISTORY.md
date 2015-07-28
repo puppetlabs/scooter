@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 21 Jul, 2015 (8de59de2)](#LATEST)
+* [LATEST - 28 Jul, 2015 (042b1cbc)](#LATEST)
+* [2.3.0 - 21 Jul, 2015 (84ae1fbe)](#2.3.0)
 * [2.2 - 15 Jun, 2015 (7c4645e9)](#2.2)
 * [2.1.1 - 10 Jun, 2015 (6878cb4b)](#2.1.1)
 * [2.1.0 - 14 May, 2015 (ce963c12)](#2.1.0)
@@ -17,7 +18,36 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 21 Jul, 2015 (8de59de2)
+### <a name = "LATEST">LATEST - 28 Jul, 2015 (042b1cbc)
+
+* (GEM) update scooter version to 2.3.1 (042b1cbc)
+
+* Merge pull request #42 from objectverbobject/QA-1943/fix_ou_creation (f8699ff8)
+
+
+```
+Merge pull request #42 from objectverbobject/QA-1943/fix_ou_creation
+
+(QA-1943) Add method for ou's created during old init
+```
+* (QA-1943) Add method for ou's created during old init (1813f5ea)
+
+
+```
+(QA-1943) Add method for ou's created during old init
+
+A previous commit moved the organizational unit creation from the init
+to the base method to generate a test environment of users and groups
+for RBAC; this broke any implementation not using that method to
+generate a test environment.
+
+This doesn't add that back, as putting this action in the init was a
+mistake; it does, however, give the user the ability to create the ou's
+independently, and set the instance variables accordingly.
+```
+### <a name = "2.3.0">2.3.0 - 21 Jul, 2015 (84ae1fbe)
+
+* (HISTORY) update scooter history for gem release 2.3.0 (84ae1fbe)
 
 * (GEM) update scooter version to 2.3.0 (8de59de2)
 
