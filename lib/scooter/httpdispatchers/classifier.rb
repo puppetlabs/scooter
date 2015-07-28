@@ -17,6 +17,15 @@ module Scooter
       include Scooter::Utilities
       Rootuuid = '00000000-0000-4000-8000-000000000000'
 
+      def set_classifier_path(connection=self.connection)
+        set_url_prefix
+        if is_certificate_dispatcher? || has_token?
+          connection.url_prefix.path = '/classifier-api'
+        else
+          connection.url_prefix.path = '/api/classifier/service/'
+        end
+      end
+
       # This returns a tree-like hash of all node groups in the classifier; each
       # key is a uuid, each value is an array of direct children. If no direct
       # children are found, the value is an empty array. This representation
@@ -116,6 +125,8 @@ module Scooter
 
         create_node_group(hash).env.body
       end
+
+      alias_method :generate_node_group, :create_new_node_group_model
 
       # This takes an optional hash of node group parameters. If a "name" option
       # is provided it will attempt to find an existing node group with that

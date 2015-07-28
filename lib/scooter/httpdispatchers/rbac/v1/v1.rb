@@ -79,6 +79,29 @@ module Scooter
           end
         end
 
+        def replace_role(role)
+          set_rbac_path
+          @connection.put("v1/roles/#{role['id']}") do |request|
+            request.body = role
+          end
+        end
+
+        def acquire_token(login, password)
+          # set the token to true to correctly set the url_prefix
+          @token = true
+          set_rbac_path
+
+          # set this back to nil in case the call fails
+          @token = nil
+          response = @connection.post "v1/auth/token" do |request|
+            creds= {}
+            creds[:login] = login
+            creds[:password] = password
+            request.body = creds
+          end
+          response.env.body['token']
+        end
+
       end
     end
   end

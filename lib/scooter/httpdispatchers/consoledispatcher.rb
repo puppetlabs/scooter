@@ -1,4 +1,4 @@
-%w( rbac classifier).each do |lib|
+%w( rbac classifier activity).each do |lib|
   require "scooter/httpdispatchers/#{lib}"
 end
 
@@ -41,7 +41,8 @@ module Scooter
 
       include Scooter::HttpDispatchers::Rbac
       include Scooter::HttpDispatchers::Classifier
-      attr_accessor :credentials
+      include Scooter::HttpDispatchers::Activity
+      attr_accessor :credentials, :token, :send_auth_token_as_query_param
       Credentials = Struct.new(:login, :password)
 
       # This class is designed to interact with any of the pe-console-services:
@@ -70,37 +71,21 @@ module Scooter
         super(host)
       end
 
+      # This slightly overrides the original method to add the middleware to
+      # to add rbac tokens when available.
+      def create_default_connection
+        connection = super
+        connection.builder.insert(0, Faraday::RbacAuthToken, self)
+        connection
+      end
+
       def set_url_prefix(connection=self.connection)
-        if is_certificate_dispatcher?
+        if is_certificate_dispatcher? || has_token?
           connection.url_prefix.port = 4433
         else
           connection.url_prefix.port = 443
         end
         super(connection)
-      end
-
-      def set_classifier_path(connection=self.connection)
-        if is_certificate_dispatcher?
-          connection.url_prefix.path = '/classifier-api'
-        else
-          connection.url_prefix.path = '/api/classifier/service/'
-        end
-      end
-
-      def set_rbac_path(connection=self.connection)
-        if is_certificate_dispatcher?
-          connection.url_prefix.path = '/rbac-api'
-        else
-          connection.url_prefix.path = '/api/rbac/service/'
-        end
-      end
-
-      def set_activity_service_path(connection=self.connection)
-        if is_certificate_dispatcher?
-          connection.url_prefix.path = '/activity-api'
-        else
-          connection.url_prefix.path = '/rbac/activity-api'
-        end
       end
 
       # This is overridden from the parent class; in the case of
@@ -119,6 +104,10 @@ module Scooter
 
       def is_certificate_dispatcher?
         true unless @credentials
+      end
+
+      def has_token?
+        true if @token
       end
 
       def signin(login=self.credentials.login, password=self.credentials.password)
@@ -154,9 +143,9 @@ module Scooter
         @connection.post "https://#{host}/auth/reset" do |request|
           request.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
           request.body = "password=#{new_password}&token=#{token}"
+        end
       end
 
-      end
     end
   end
 end
