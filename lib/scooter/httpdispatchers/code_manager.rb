@@ -1,5 +1,5 @@
 %w( v1 ).each do |lib|
-  require "scooter/httpdispatchers/code-manager/v1/#{lib}"
+  require "scooter/httpdispatchers/code_manager/v1/#{lib}"
 end
 
 module Scooter
