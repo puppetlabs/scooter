@@ -10,6 +10,8 @@ module Scooter
     # extend it and write higher level functionality.
     class HttpDispatcher
 
+      require 'scooter/httpdispatchers/code-manager'
+
       attr_accessor :connection, :host, :ssl
       # The only required parameter for the HttpDispatcher is the host, which
       # could either be a beaker Unix::Host or a String. HttpDispatchers offer

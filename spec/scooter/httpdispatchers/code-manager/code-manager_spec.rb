@@ -1,15 +1,13 @@
 require 'spec_helper'
-require 'json'
-require 'scooter/httpdispatchers/code-manager/v1/v1'
 
-describe Scooter::HttpDispatchers::CodeManager::V1 do
+describe Scooter::HttpDispatchers::CodeManager do
 
   let(:api) {
     class DummyClass
       attr_accessor :connection
     end
 
-    dummy = DummyClass.new.extend(Scooter::HttpDispatchers::CodeManager::V1)
+    dummy = DummyClass.new.extend(Scooter::HttpDispatchers::CodeManager)
     dummy.connection = double(Faraday::Connection)
     dummy
   }
