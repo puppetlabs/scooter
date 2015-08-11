@@ -1,6 +1,8 @@
 module Scooter
   module HttpDispatchers
 
+    require 'scooter/middleware/rbac_auth_token'
+
     # <i>HttpDispatcher</i> is the base class to extend when constructing
     # service specific objects. It contains specific logic to extract out
     # certificates from Beaker hosts provided as the host argument.

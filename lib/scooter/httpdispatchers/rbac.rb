@@ -17,6 +17,15 @@ module Scooter
       include Scooter::HttpDispatchers::Rbac::V1
       include Scooter::Utilities
 
+      def set_rbac_path(connection=self.connection)
+        set_url_prefix
+        if is_certificate_dispatcher? || has_token?
+          connection.url_prefix.path = '/rbac-api'
+        else
+          connection.url_prefix.path = '/api/rbac/service/'
+        end
+      end
+
       def generate_local_user(options = {})
         email = options['email'] || "#{RandomString.generate(4)}@example.com"
         display_name = options['display_name'] || RandomString.generate(4)
@@ -53,6 +62,18 @@ module Scooter
         response = create_role(role_hash)
         return response if response.env.status != 200
         response.env.body
+      end
+
+      def add_user_to_role(console_dispatcher, role)
+        user_id = get_user_id_of_console_dispatcher(console_dispatcher)
+        role['user_ids'].push(user_id)
+        replace_role(role)
+      end
+
+      def remove_user_from_role(console_dispatcher, role)
+        user_id = get_user_id_of_console_dispatcher(console_dispatcher)
+        role['user_ids'].delete(user_id)
+        replace_role(role)
       end
 
       def get_user_id_of_console_dispatcher(console_dispatcher)
@@ -105,6 +126,14 @@ module Scooter
         nil #return nil if group_name not found
       end
 
+      def get_role_by_name(role_name)
+        roles = get_list_of_roles
+        roles.each do |role|
+          return role if role['display_name'] == role_name
+        end
+        nil # return nil if role_name not found
+      end
+
       def get_role_id(role_name)
         roles = get_list_of_roles
         roles.each do |role|
@@ -124,6 +153,9 @@ module Scooter
         create_password_reset_token(uuid)
       end
 
+      def acquire_token_with_credentials
+        @token = acquire_token(credentials.login, credentials.password)
+      end
     end
   end
 end
