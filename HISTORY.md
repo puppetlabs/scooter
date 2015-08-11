@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 28 Jul, 2015 (042b1cbc)](#LATEST)
+* [LATEST - 11 Aug, 2015 (b9c7cb0d)](#LATEST)
+* [2.3.1 - 28 Jul, 2015 (4803c55a)](#2.3.1)
 * [2.3.0 - 21 Jul, 2015 (84ae1fbe)](#2.3.0)
 * [2.2 - 15 Jun, 2015 (7c4645e9)](#2.2)
 * [2.1.1 - 10 Jun, 2015 (6878cb4b)](#2.1.1)
@@ -18,7 +19,57 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 28 Jul, 2015 (042b1cbc)
+### <a name = "LATEST">LATEST - 11 Aug, 2015 (b9c7cb0d)
+
+* (GEM) update scooter version to 2.4.0 (b9c7cb0d)
+
+* Merge pull request #44 from objectverbobject/improve_rbac_methods (40f15b10)
+
+
+```
+Merge pull request #44 from objectverbobject/improve_rbac_methods
+
+(QA-1969) Add token support to Scooter
+```
+* Merge pull request #43 from zreichert/code_manager (1cbc8117)
+
+
+```
+Merge pull request #43 from zreichert/code_manager
+
+Code manager
+```
+* (CODEMGMT-302) replace dash with underscore (bd80b94c)
+
+* (CODEMGMT-302) Create CodeManager module (88125425)
+
+* Merge pull request #45 from objectverbobject/update_pe_dir (7cdfefb8)
+
+
+```
+Merge pull request #45 from objectverbobject/update_pe_dir
+
+(maint) update jenkins beaker_pe_dir
+```
+* (maint) update jenkins beaker_pe_dir (7b86e14f)
+
+* (CODEMGMT-302) add CodeManager to HttpDispatchers (76e798ea)
+
+* (QA-1969) Add token support to Scooter (997f704d)
+
+
+```
+(QA-1969) Add token support to Scooter
+
+In Ankeny, RBAC now supports acquiring tokens through a new endpoint
+provided by RBAC. This PR extends the RBAC modules and
+ConsoleDispatcher to allow for a new 'token' instance variable that can
+be set; if the token is set, console dispatchers will attempt to use it
+in the request and set the correct routes, directly to the API.
+```
+### <a name = "2.3.1">2.3.1 - 28 Jul, 2015 (4803c55a)
+
+* (HISTORY) update scooter history for gem release 2.3.1 (4803c55a)
 
 * (GEM) update scooter version to 2.3.1 (042b1cbc)
 
