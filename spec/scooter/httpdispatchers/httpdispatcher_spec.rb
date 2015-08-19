@@ -45,6 +45,22 @@ module Scooter
         expect(subject.connection.ssl['client_cert']).to eq('client_cert')
       end
 
+      context 'when it receives a 500 error' do
+        before do
+          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
+            stub.get('/test/route') {[500,
+                                      {'content-type' => 'application/json;charset=UTF-8'},
+                                      "{ \"key\" : \"value\" }"]}
+          end
+        end
+        it 'has a correctly parsed body in the error' do
+          expect{subject.connection.get('/test/route')}.to raise_error do |error|
+            expect(error.response[:body]).to be_a(Hash)
+          end
+
+        end
+      end
     end
 
     context 'with a string passed in for initialization' do

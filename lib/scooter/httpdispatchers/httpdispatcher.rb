@@ -1,6 +1,7 @@
 module Scooter
   module HttpDispatchers
 
+    require 'scooter/httpdispatchers/code_manager'
     require 'scooter/middleware/rbac_auth_token'
 
     # <i>HttpDispatcher</i> is the base class to extend when constructing
@@ -12,7 +13,6 @@ module Scooter
     # extend it and write higher level functionality.
     class HttpDispatcher
 
-      require 'scooter/httpdispatchers/code_manager'
 
       attr_accessor :connection, :host, :ssl
       # The only required parameter for the HttpDispatcher is the host, which
@@ -59,8 +59,8 @@ module Scooter
           # This logger will need to be configurable somehow..., maybe based on
           # beaker log-level?
           conn.response :follow_redirects
-          conn.response :json, :content_type => /\bjson$/
           conn.response :raise_error
+          conn.response :json, :content_type => /\bjson$/
           conn.response :logger, nil, bodies: true
 
           conn.use :cookie_jar
