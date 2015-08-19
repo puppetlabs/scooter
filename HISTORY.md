@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 11 Aug, 2015 (b9c7cb0d)](#LATEST)
+* [LATEST - 19 Aug, 2015 (d3dd0fce)](#LATEST)
+* [2.4.0 - 11 Aug, 2015 (5436f473)](#2.4.0)
 * [2.3.1 - 28 Jul, 2015 (4803c55a)](#2.3.1)
 * [2.3.0 - 21 Jul, 2015 (84ae1fbe)](#2.3.0)
 * [2.2 - 15 Jun, 2015 (7c4645e9)](#2.2)
@@ -19,7 +20,53 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 11 Aug, 2015 (b9c7cb0d)
+### <a name = "LATEST">LATEST - 19 Aug, 2015 (d3dd0fce)
+
+* (GEM) update scooter version to 2.4.1 (d3dd0fce)
+
+* Merge pull request #46 from objectverbobject/rearrange_middleware_stack (e7550a98)
+
+
+```
+Merge pull request #46 from objectverbobject/rearrange_middleware_stack
+
+Rearrange middleware stack
+```
+* (maint) Add spec test for new middleware order (091557d1)
+
+
+```
+(maint) Add spec test for new middleware order
+
+This spec test ensures that Faraday::ClientError exceptions have
+correctly formatted bodies in their responses. In effect, this test
+ensures that the middleware processes the body before letting the
+:raise_error middleware bubble up the exception.
+```
+* (maint) move require to module level (a1a90ffc)
+
+
+```
+(maint) move require to module level
+
+The require for the CodeManager was wrapped in the HttpDispatcher class;
+this should be require at the module level to allow for any mixins
+outside of the HttpDispatcher.
+```
+* (maint) parse json in middleware before throwing errors (d58dc78f)
+
+
+```
+(maint) parse json in middleware before throwing errors
+
+If you attempted to rescue Faraday::ClientErrors in tests, the bodies of
+responses would not get parsed in the error object. This change allows
+the json to parse into a ruby hash so that introspection of the response
+object is simpler when rescuing Faraday::ClientErrors.
+```
+### <a name = "2.4.0">2.4.0 - 11 Aug, 2015 (5436f473)
+
+* (HISTORY) update scooter history for gem release 2.4.0 (5436f473)
 
 * (GEM) update scooter version to 2.4.0 (b9c7cb0d)
 
