@@ -42,18 +42,17 @@ module Scooter
 
         # The ParseJson middleware throws an exception because this returns
         # json headers while simply returning a token. In order to avoid this
-        # middleware throwing an error, we have to replace the connection with
-        # a temporary connection that doesn't use that particular middleware.
+        # middleware throwing an error, we catch the exception and parse the
+        # ParsingError object for a token in the error message.
         def create_password_reset_token(uuid)
-          old_connection = @connection
-          @connection = initialize_connection
-          @connection.builder.delete(FaradayMiddleware::ParseJson)
-          signin if !is_certificate_dispatcher?
           set_rbac_path
+          begin
           token = @connection.post("v1/users/#{uuid}/password/reset").env.body
-
-          #replace the old connection
-          @connection = old_connection
+          rescue Faraday::ParsingError => error
+            # Use a regex to parse the token from the ParsingError object
+            regex = /\'(.+)\'/
+            token = regex.match(error.message)[1]
+          end
           token
         end
 
@@ -87,12 +86,7 @@ module Scooter
         end
 
         def acquire_token(login, password)
-          # set the token to true to correctly set the url_prefix
-          @token = true
           set_rbac_path
-
-          # set this back to nil in case the call fails
-          @token = nil
           response = @connection.post "v1/auth/token" do |request|
             creds= {}
             creds[:login] = login

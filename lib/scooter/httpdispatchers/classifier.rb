@@ -19,11 +19,7 @@ module Scooter
 
       def set_classifier_path(connection=self.connection)
         set_url_prefix
-        if is_certificate_dispatcher? || has_token?
-          connection.url_prefix.path = '/classifier-api'
-        else
-          connection.url_prefix.path = '/api/classifier/service/'
-        end
+        connection.url_prefix.path = '/classifier-api'
       end
 
       # This returns a tree-like hash of all node groups in the classifier; each
