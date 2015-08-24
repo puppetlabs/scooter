@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 19 Aug, 2015 (d3dd0fce)](#LATEST)
+* [LATEST - 24 Aug, 2015 (0e35b8a6)](#LATEST)
+* [2.4.1 - 19 Aug, 2015 (999bb34b)](#2.4.1)
 * [2.4.0 - 11 Aug, 2015 (5436f473)](#2.4.0)
 * [2.3.1 - 28 Jul, 2015 (4803c55a)](#2.3.1)
 * [2.3.0 - 21 Jul, 2015 (84ae1fbe)](#2.3.0)
@@ -20,7 +21,31 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 19 Aug, 2015 (d3dd0fce)
+### <a name = "LATEST">LATEST - 24 Aug, 2015 (0e35b8a6)
+
+* (GEM) update scooter version to 3.0.0 (0e35b8a6)
+
+* Merge pull request #47 from objectverbobject/update_routes_for_ankeny (451a3633)
+
+
+```
+Merge pull request #47 from objectverbobject/update_routes_for_ankeny
+
+(QA-1980) Remove routes to pe-console-middlware proxies
+```
+* (QA-1980) Remove routes to pe-console-middlware proxies (2cbbca4b)
+
+
+```
+(QA-1980) Remove routes to pe-console-middlware proxies
+
+Now that the routes have been relaxed in Ankeny, we can send all traffic
+to the services directly and not rely on the pe-console-middleware to
+proxy web sessions.
+```
+### <a name = "2.4.1">2.4.1 - 19 Aug, 2015 (999bb34b)
+
+* (HISTORY) update scooter history for gem release 2.4.1 (999bb34b)
 
 * (GEM) update scooter version to 2.4.1 (d3dd0fce)
 
