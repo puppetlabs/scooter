@@ -19,11 +19,7 @@ module Scooter
 
       def set_rbac_path(connection=self.connection)
         set_url_prefix
-        if is_certificate_dispatcher? || has_token?
-          connection.url_prefix.path = '/rbac-api'
-        else
-          connection.url_prefix.path = '/api/rbac/service/'
-        end
+        connection.url_prefix.path = '/rbac-api'
       end
 
       def generate_local_user(options = {})
@@ -77,9 +73,7 @@ module Scooter
       end
 
       def get_user_id_of_console_dispatcher(console_dispatcher)
-        if console_dispatcher.is_certificate_dispatcher?
-          return get_user_id_by_login_name('api_user')
-        end
+        return get_user_id_by_login_name('api_user') if console_dispatcher.credentials == nil
         get_user_id_by_login_name(console_dispatcher.credentials.login)
       end
 
@@ -140,6 +134,12 @@ module Scooter
           return role['id'] if role['display_name'] == role_name
         end
         nil #return nil if role_name not found
+      end
+
+      def reset_console_dispatcher_password(console_dispatcher, password)
+        token = get_password_reset_token_for_console_dispatcher(console_dispatcher)
+        reset_local_user_password(token, password)
+        console_dispatcher.credentials.password = password
       end
 
       def reset_console_dispatcher_password_to_default(console_dispatcher)
