@@ -5,7 +5,7 @@ module Scooter
       module V1
 
         def deploys(environments_payload_hash)
-          @connection.url_prefix.port = 8141
+          @connection.url_prefix.port = 8170
           @connection.post('/code-manager/v1/deploys') do |req|
             req.body = environments_payload_hash
           end
