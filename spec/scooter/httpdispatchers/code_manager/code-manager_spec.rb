@@ -16,7 +16,7 @@ describe Scooter::HttpDispatchers::CodeManager do
   describe '.deploy_environments' do
 
     it 'works when passing in an array' do
-      expect(api.connection).to receive_message_chain('url_prefix.port=').with(8141)
+      expect(api.connection).to receive_message_chain('url_prefix.port=').with(8170)
       expect(api.connection).to receive(:post).with('/code-manager/v1/deploys')
       expect{api.deploy_environments(array)}.not_to raise_error
     end
@@ -32,7 +32,7 @@ describe Scooter::HttpDispatchers::CodeManager do
   describe '.deploy_all_environments' do
 
     it 'works with no arguments' do
-      expect(api.connection).to receive_message_chain('url_prefix.port=').with(8141)
+      expect(api.connection).to receive_message_chain('url_prefix.port=').with(8170)
       expect(api.connection).to receive(:post).with('/code-manager/v1/deploys')
       expect{api.deploy_all_environments}.not_to raise_error
     end
