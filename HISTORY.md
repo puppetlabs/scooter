@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 24 Aug, 2015 (0e35b8a6)](#LATEST)
+* [LATEST - 4 Sep, 2015 (3c0435b6)](#LATEST)
+* [3.0.0 - 24 Aug, 2015 (ca7de665)](#3.0.0)
 * [2.4.1 - 19 Aug, 2015 (999bb34b)](#2.4.1)
 * [2.4.0 - 11 Aug, 2015 (5436f473)](#2.4.0)
 * [2.3.1 - 28 Jul, 2015 (4803c55a)](#2.3.1)
@@ -21,7 +22,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 24 Aug, 2015 (0e35b8a6)
+### <a name = "LATEST">LATEST - 4 Sep, 2015 (3c0435b6)
+
+* (GEM) update scooter version to 3.1.0 (3c0435b6)
+
+* Merge pull request #48 from zreichert/update_code-manager_port (d0364c70)
+
+
+```
+Merge pull request #48 from zreichert/update_code-manager_port
+
+Update Code-Manager port to 8170
+```
+* Update Code-Manager port to 8170 (bd025326)
+
+### <a name = "3.0.0">3.0.0 - 24 Aug, 2015 (ca7de665)
+
+* (HISTORY) update scooter history for gem release 3.0.0 (ca7de665)
 
 * (GEM) update scooter version to 3.0.0 (0e35b8a6)
 
