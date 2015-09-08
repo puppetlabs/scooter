@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 4 Sep, 2015 (3c0435b6)](#LATEST)
+* [LATEST - 8 Sep, 2015 (312df756)](#LATEST)
+* [3.1.0 - 4 Sep, 2015 (88954e48)](#3.1.0)
 * [3.0.0 - 24 Aug, 2015 (ca7de665)](#3.0.0)
 * [2.4.1 - 19 Aug, 2015 (999bb34b)](#2.4.1)
 * [2.4.0 - 11 Aug, 2015 (5436f473)](#2.4.0)
@@ -22,7 +23,31 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 4 Sep, 2015 (3c0435b6)
+### <a name = "LATEST">LATEST - 8 Sep, 2015 (312df756)
+
+* (GEM) update scooter version to 3.1.1 (312df756)
+
+* Merge pull request #49 from objectverbobject/add_token_expiry_parameter (da3485fd)
+
+
+```
+Merge pull request #49 from objectverbobject/add_token_expiry_parameter
+
+Add optional expiry parameter to token acquisition
+```
+* Add optional expiry parameter to token acquisition (4a23b57d)
+
+
+```
+Add optional expiry parameter to token acquisition
+
+The RBAC auth token endpoint now takes an optional expiry parameter;
+this change allows for that paramter to be exposed by the relevant rbac
+and v1 methods.
+```
+### <a name = "3.1.0">3.1.0 - 4 Sep, 2015 (88954e48)
+
+* (HISTORY) update scooter history for gem release 3.1.0 (88954e48)
 
 * (GEM) update scooter version to 3.1.0 (3c0435b6)
 
