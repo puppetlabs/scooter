@@ -35,6 +35,10 @@ module Scooter
           expect{subject.acquire_token_with_credentials}.not_to raise_error
           expect(subject.token).to eq('blah')
         end
+        it 'accepts an optional expiry parameter' do
+          expect{subject.acquire_token_with_credentials('600')}.not_to raise_error
+          expect(subject.token).to eq('blah')
+        end
       end
 
       describe 'ensure failure to get a token does not set the token instance variable' do
