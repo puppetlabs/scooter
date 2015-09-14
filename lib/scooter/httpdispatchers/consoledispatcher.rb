@@ -42,7 +42,7 @@ module Scooter
       include Scooter::HttpDispatchers::Rbac
       include Scooter::HttpDispatchers::Classifier
       include Scooter::HttpDispatchers::Activity
-      attr_accessor :credentials, :token, :send_auth_token_as_query_param
+      attr_accessor :credentials
       Credentials = Struct.new(:login, :password)
 
       # This class is designed to interact with any of the pe-console-services:
@@ -64,14 +64,6 @@ module Scooter
         @credentials = Credentials.new(credentials[:login],
                                        credentials[:password]) if credentials
         super(host)
-      end
-
-      # This slightly overrides the original method to add the middleware to
-      # to add rbac tokens when available.
-      def create_default_connection
-        connection = super
-        connection.builder.insert(0, Faraday::RbacAuthToken, self)
-        connection
       end
 
       def set_url_prefix(connection=self.connection)
