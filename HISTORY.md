@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 8 Sep, 2015 (312df756)](#LATEST)
+* [LATEST - 14 Sep, 2015 (78853bd7)](#LATEST)
+* [3.1.1 - 8 Sep, 2015 (a7bc092b)](#3.1.1)
 * [3.1.0 - 4 Sep, 2015 (88954e48)](#3.1.0)
 * [3.0.0 - 24 Aug, 2015 (ca7de665)](#3.0.0)
 * [2.4.1 - 19 Aug, 2015 (999bb34b)](#2.4.1)
@@ -23,7 +24,40 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 8 Sep, 2015 (312df756)
+### <a name = "LATEST">LATEST - 14 Sep, 2015 (78853bd7)
+
+* (GEM) update scooter version to 3.1.2 (78853bd7)
+
+* Merge pull request #52 from zreichert/update_token_location (6f902d5d)
+
+
+```
+Merge pull request #52 from zreichert/update_token_location
+
+move token to base httpdispatcher class
+```
+* Merge pull request #51 from objectverbobject/add_rbac_group_helpers (bc948eea)
+
+
+```
+Merge pull request #51 from objectverbobject/add_rbac_group_helpers
+
+(maint) Add missing groups rbac method
+```
+* move token to base httpdispatcher class (b555b794)
+
+* (maint) Add missing groups rbac method (7d61dc16)
+
+
+```
+(maint) Add missing groups rbac method
+
+In the import of helpers, the groups endpoint was missed; this PR just
+adds that functionality to the rbac/v1 module.
+```
+### <a name = "3.1.1">3.1.1 - 8 Sep, 2015 (a7bc092b)
+
+* (HISTORY) update scooter history for gem release 3.1.1 (a7bc092b)
 
 * (GEM) update scooter version to 3.1.1 (312df756)
 
