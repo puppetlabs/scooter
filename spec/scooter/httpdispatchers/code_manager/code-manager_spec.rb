@@ -31,17 +31,16 @@ describe Scooter::HttpDispatchers::CodeManager do
 
   describe '.deploy_all_environments' do
 
-    it 'works with no arguments' do
+    it 'works with no token' do
       expect(api.connection).to receive_message_chain('url_prefix.port=').with(8170)
       expect(api.connection).to receive(:post).with('/code-manager/v1/deploys')
       expect{api.deploy_all_environments}.not_to raise_error
     end
 
-    context 'negative cases' do
-
-      it 'fails if supplied an argument' do
-        expect{api.deploy_all_environments('foo bar')}.to raise_error(ArgumentError)
-      end
+    it 'works when supplied a token' do
+      expect(api.connection).to receive_message_chain('url_prefix.port=').with(8170)
+      expect(api.connection).to receive(:post).with('/code-manager/v1/deploys?token=this_is_my_token')
+      expect{api.deploy_all_environments('this_is_my_token')}.not_to raise_error
     end
   end
 end
