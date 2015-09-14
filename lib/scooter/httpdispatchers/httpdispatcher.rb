@@ -14,7 +14,7 @@ module Scooter
     class HttpDispatcher
 
 
-      attr_accessor :connection, :host, :ssl
+      attr_accessor :connection, :host, :ssl, :token, :send_auth_token_as_query_param
       # The only required parameter for the HttpDispatcher is the host, which
       # could either be a beaker Unix::Host or a String. HttpDispatchers offer
       # support for automatically generating the required SSL components for the
@@ -54,6 +54,7 @@ module Scooter
       end
       def create_default_connection
         Faraday.new do |conn|
+          conn.request :rbac_auth_token, self
           conn.request :json
 
           # This logger will need to be configurable somehow..., maybe based on
