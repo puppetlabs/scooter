@@ -15,12 +15,12 @@ module Scooter
 
       include Scooter::HttpDispatchers::CodeManager::V1
 
-      def deploy_environments(environment_array)
-        deploys({:environments => environment_array})
+      def deploy_environments(environment_array, token = nil)
+        deploys({:environments => environment_array}, token)
       end
 
-      def deploy_all_environments
-        deploys({"all" => true})
+      def deploy_all_environments(token = nil)
+        deploys({"all" => true}, token)
       end
     end
   end
