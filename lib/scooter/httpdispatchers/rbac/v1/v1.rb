@@ -66,6 +66,14 @@ module Scooter
           @connection.get('v1/groups').env.body
         end
 
+        def import_ldap_group(group_name, role_ids=[])
+          set_rbac_path
+          @connection.post('v1/groups') do |request|
+            request.body = {'login' => group_name,
+                            'role_ids' => role_ids}
+          end
+        end
+
         def get_list_of_roles
           set_rbac_path
           @connection.get('v1/roles').env.body
