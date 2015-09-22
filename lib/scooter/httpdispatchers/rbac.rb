@@ -153,8 +153,8 @@ module Scooter
         create_password_reset_token(uuid)
       end
 
-      def acquire_token_with_credentials(expiry=nil)
-        @token = acquire_token(credentials.login, credentials.password, expiry)
+      def acquire_token_with_credentials(lifetime=nil)
+        @token = acquire_token(credentials.login, credentials.password, lifetime)
       end
     end
   end
