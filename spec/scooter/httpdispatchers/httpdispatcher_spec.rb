@@ -45,6 +45,10 @@ module Scooter
         expect(subject.connection.ssl['client_cert']).to eq('client_cert')
       end
 
+      it 'has a URI::HTTPS object for a url_prefix' do
+        expect(subject.connection.url_prefix).to be_an_instance_of(URI::HTTPS)
+      end
+
       context 'when it receives a 500 error' do
         before do
           index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
