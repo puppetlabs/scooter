@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 14 Sep, 2015 (78853bd7)](#LATEST)
+* [LATEST - 22 Sep, 2015 (92b0eca0)](#LATEST)
+* [3.1.2 - 14 Sep, 2015 (87de4129)](#3.1.2)
 * [3.1.1 - 8 Sep, 2015 (a7bc092b)](#3.1.1)
 * [3.1.0 - 4 Sep, 2015 (88954e48)](#3.1.0)
 * [3.0.0 - 24 Aug, 2015 (ca7de665)](#3.0.0)
@@ -24,7 +25,35 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 14 Sep, 2015 (78853bd7)
+### <a name = "LATEST">LATEST - 22 Sep, 2015 (92b0eca0)
+
+* (GEM) update scooter version to 3.2.0 (92b0eca0)
+
+* Merge pull request #53 from objectverbobject/add_middleware_for_https (5a5b1be4)
+
+
+```
+Merge pull request #53 from objectverbobject/add_middleware_for_https
+
+(PE-12084) Ensure URIs are subclassed from URI::HTTPS
+```
+* (PE-12084) Ensure URIs are subclassed from URI::HTTPS (66171bb2)
+
+
+```
+(PE-12084) Ensure URIs are subclassed from URI::HTTPS
+
+The http-cookie library used by faraday cookie-jar relies on the ancient
+text of http-cookie, which has not received an update for over two
+years. That cookie library erroneously demanded that all URIs must be
+subclassed from URI::HTTPS, not accepting a URI::HTTP object with a
+scheme set to https. This change hardcodes all the httpdispatchers to
+use URI::HTTPS objects for the url_prefix. This should have zero effect
+on other middleware, as URI::HTTPS is just a subclass of URI::HTTP.
+```
+### <a name = "3.1.2">3.1.2 - 14 Sep, 2015 (87de4129)
+
+* (HISTORY) update scooter history for gem release 3.1.2 (87de4129)
 
 * (GEM) update scooter version to 3.1.2 (78853bd7)
 
