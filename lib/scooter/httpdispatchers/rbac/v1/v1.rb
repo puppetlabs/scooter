@@ -93,13 +93,13 @@ module Scooter
           end
         end
 
-        def acquire_token(login, password, expiry=nil)
+        def acquire_token(login, password, lifetime=nil)
           set_rbac_path
           response = @connection.post "v1/auth/token" do |request|
             creds= {}
             creds[:login] = login
             creds[:password] = password
-            creds[:expiry] = expiry if expiry
+            creds[:lifetime] = lifetime if lifetime
             request.body = creds
           end
           response.env.body['token']
