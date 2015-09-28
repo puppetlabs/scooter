@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 22 Sep, 2015 (92b0eca0)](#LATEST)
+* [LATEST - 28 Sep, 2015 (040c5723)](#LATEST)
+* [3.2.0 - 22 Sep, 2015 (af6200dd)](#3.2.0)
 * [3.1.2 - 14 Sep, 2015 (87de4129)](#3.1.2)
 * [3.1.1 - 8 Sep, 2015 (a7bc092b)](#3.1.1)
 * [3.1.0 - 4 Sep, 2015 (88954e48)](#3.1.0)
@@ -25,7 +26,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 22 Sep, 2015 (92b0eca0)
+### <a name = "LATEST">LATEST - 28 Sep, 2015 (040c5723)
+
+* (GEM) update scooter version to 3.2.1 (040c5723)
+
+* Merge pull request #54 from pcarlisle/pe-11925-rename-expiry-to-lifetime (6e83394b)
+
+
+```
+Merge pull request #54 from pcarlisle/pe-11925-rename-expiry-to-lifetime
+
+(PE-11925) Rename expiry to lifetime for rbac tokens
+```
+* (PE-11925) Rename expiry to lifetime for rbac tokens (456b438b)
+
+### <a name = "3.2.0">3.2.0 - 22 Sep, 2015 (af6200dd)
+
+* (HISTORY) update scooter history for gem release 3.2.0 (af6200dd)
 
 * (GEM) update scooter version to 3.2.0 (92b0eca0)
 
