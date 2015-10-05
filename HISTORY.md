@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 28 Sep, 2015 (040c5723)](#LATEST)
+* [LATEST - 5 Oct, 2015 (97fb102f)](#LATEST)
+* [3.2.1 - 28 Sep, 2015 (c50045f4)](#3.2.1)
 * [3.2.0 - 22 Sep, 2015 (af6200dd)](#3.2.0)
 * [3.1.2 - 14 Sep, 2015 (87de4129)](#3.1.2)
 * [3.1.1 - 8 Sep, 2015 (a7bc092b)](#3.1.1)
@@ -26,7 +27,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 28 Sep, 2015 (040c5723)
+### <a name = "LATEST">LATEST - 5 Oct, 2015 (97fb102f)
+
+* (GEM) update scooter version to 3.2.2 (97fb102f)
+
+* Merge pull request #55 from zreichert/code_manager_wait (05804f21)
+
+
+```
+Merge pull request #55 from zreichert/code_manager_wait
+
+Add wait argument to CodeManager methods
+```
+* add wait arguement to CodeManager (0fa46bdd)
+
+### <a name = "3.2.1">3.2.1 - 28 Sep, 2015 (c50045f4)
+
+* (HISTORY) update scooter history for gem release 3.2.1 (c50045f4)
 
 * (GEM) update scooter version to 3.2.1 (040c5723)
 
