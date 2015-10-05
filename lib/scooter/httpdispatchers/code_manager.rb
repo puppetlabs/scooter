@@ -15,12 +15,16 @@ module Scooter
 
       include Scooter::HttpDispatchers::CodeManager::V1
 
-      def deploy_environments(environment_array)
-        deploys({:environments => environment_array})
+      def deploy_environments(environment_array, wait=true)
+        raise ArgumentError.new('wait must be TrueClass or FalseClass') unless !!wait == wait
+        payload = {:environments => environment_array, 'wait' => wait}
+        deploys(payload)
       end
 
-      def deploy_all_environments
-        deploys({"all" => true})
+      def deploy_all_environments(wait=true)
+        raise ArgumentError.new('wait must be TrueClass or FalseClass') unless !!wait == wait
+        payload = {'all' => true, 'wait' => wait}
+        deploys(payload)
       end
     end
   end
