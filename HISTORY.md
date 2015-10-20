@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 5 Oct, 2015 (97fb102f)](#LATEST)
+* [LATEST - 20 Oct, 2015 (45f22c39)](#LATEST)
+* [3.2.2 - 5 Oct, 2015 (6bc7e636)](#3.2.2)
 * [3.2.1 - 28 Sep, 2015 (c50045f4)](#3.2.1)
 * [3.2.0 - 22 Sep, 2015 (af6200dd)](#3.2.0)
 * [3.1.2 - 14 Sep, 2015 (87de4129)](#3.1.2)
@@ -27,7 +28,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 5 Oct, 2015 (97fb102f)
+### <a name = "LATEST">LATEST - 20 Oct, 2015 (45f22c39)
+
+* (GEM) update scooter version to 3.2.3 (45f22c39)
+
+* Merge pull request #56 from zreichert/update_deploy_all (6070262b)
+
+
+```
+Merge pull request #56 from zreichert/update_deploy_all
+
+(CODEMGMT-407) Update deploy-all payload
+```
+* (CODEMGMT-407) Update deploy-all payload (90ad2e5e)
+
+### <a name = "3.2.2">3.2.2 - 5 Oct, 2015 (6bc7e636)
+
+* (HISTORY) update scooter history for gem release 3.2.2 (6bc7e636)
 
 * (GEM) update scooter version to 3.2.2 (97fb102f)
 
