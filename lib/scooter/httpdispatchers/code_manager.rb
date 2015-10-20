@@ -23,7 +23,7 @@ module Scooter
 
       def deploy_all_environments(wait=true)
         raise ArgumentError.new('wait must be TrueClass or FalseClass') unless !!wait == wait
-        payload = {'all' => true, 'wait' => wait}
+        payload = {'deploy-all' => true, 'wait' => wait}
         deploys(payload)
       end
     end
