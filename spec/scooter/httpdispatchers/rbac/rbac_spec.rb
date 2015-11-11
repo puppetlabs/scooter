@@ -56,6 +56,38 @@ module Scooter
         end
       end
 
+      describe '.get_group_data_by_name' do
+        let(:groups_array) {
+          [{"user_ids"=>[],
+            "role_ids"=>[],
+            "display_name"=>"",
+            "is_superuser"=>false,
+            "is_remote"=>true,
+            "is_group"=>true,
+            "login"=>"group1",
+            "id"=>"09c2c1fd-ea01-4555-bc7b-a8f25c4511f8"},
+           {"user_ids"=>[],
+             "role_ids"=>[],
+             "display_name"=>"",
+             "is_superuser"=>false,
+             "is_remote"=>true,
+             "is_group"=>true,
+             "login"=>"group2",
+             "id"=>"09c2c1fd-ea01-4555-bc7b-a8f25c4511f7"}]
+        }
+        before do
+          expect(subject).to receive(:get_list_of_groups) { groups_array }
+        end
+        it 'can find group1 in the payload' do
+          expect(subject.get_group_data_by_name('group1')).to eq(groups_array[0])
+        end
+        it 'can find group2 in the payload' do
+          expect(subject.get_group_data_by_name('group2')).to eq(groups_array[1])
+        end
+        it 'returns nil for group3, who is not in the payload' do
+          expect(subject.get_group_data_by_name('group3')).to eq(nil)
+        end
+      end
     end
   end
 end
