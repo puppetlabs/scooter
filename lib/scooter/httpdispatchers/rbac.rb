@@ -112,6 +112,14 @@ module Scooter
         delete_local_user(uuid)
       end
 
+      def get_group_data_by_name(name)
+        groups = get_list_of_groups
+        groups.each do |group|
+          return group if name == group['login']
+        end
+        nil #return nil if name is not found
+      end
+
       def get_group_id(group_name)
         groups = get_list_of_groups
         groups.each do |group|
