@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 20 Oct, 2015 (45f22c39)](#LATEST)
+* [LATEST - 13 Nov, 2015 (1ea3c082)](#LATEST)
+* [3.2.3 - 20 Oct, 2015 (91992188)](#3.2.3)
 * [3.2.2 - 5 Oct, 2015 (6bc7e636)](#3.2.2)
 * [3.2.1 - 28 Sep, 2015 (c50045f4)](#3.2.1)
 * [3.2.0 - 22 Sep, 2015 (af6200dd)](#3.2.0)
@@ -28,7 +29,30 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 20 Oct, 2015 (45f22c39)
+### <a name = "LATEST">LATEST - 13 Nov, 2015 (1ea3c082)
+
+* (GEM) update scooter version to 3.2.4 (1ea3c082)
+
+* Merge pull request #57 from objectverbobject/add_ldap_group_data_search (7e1b829e)
+
+
+```
+Merge pull request #57 from objectverbobject/add_ldap_group_data_search
+
+(maint) Add functionality to find rbac groups by name
+```
+* (maint) Add functionality to find rbac groups by name (5ae9c541)
+
+
+```
+(maint) Add functionality to find rbac groups by name
+
+This change allows for simple retrieval of an rbac group's status based
+on the 'login' or name of the group.
+```
+### <a name = "3.2.3">3.2.3 - 20 Oct, 2015 (91992188)
+
+* (HISTORY) update scooter history for gem release 3.2.3 (91992188)
 
 * (GEM) update scooter version to 3.2.3 (45f22c39)
 
