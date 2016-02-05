@@ -3,6 +3,8 @@ module Scooter
 
     require 'scooter/httpdispatchers/code_manager'
     require 'scooter/middleware/rbac_auth_token'
+    require 'typhoeus'
+    require 'typhoeus/adapters/faraday'
 
     # <i>HttpDispatcher</i> is the base class to extend when constructing
     # service specific objects. It contains specific logic to extract out
@@ -72,7 +74,13 @@ module Scooter
 
           conn.use :cookie_jar
 
-          conn.adapter :net_http
+          conn.adapter :typhoeus
+
+          # This can be useful, not sure what the best way to allow switching on and off would be.
+          # Typhoeus.configure do |config|
+          #   config.verbose = true
+          # end
+
         end
       end
 
@@ -121,10 +129,8 @@ module Scooter
       end
 
       def acquire_cert_and_key(host=self.host)
-        client_key = Scooter::Utilities::BeakerUtilities.pe_private_key(host)
-        client_cert = Scooter::Utilities::BeakerUtilities.pe_hostcert(host)
-        @ssl['client_key']  = OpenSSL::PKey.read(client_key)
-        @ssl['client_cert'] = OpenSSL::X509::Certificate.new(client_cert)
+        @ssl['client_key'] = Scooter::Utilities::BeakerUtilities.pe_private_key_file(host)
+        @ssl['client_cert'] = Scooter::Utilities::BeakerUtilities.pe_hostcert_file(host)
       end
 
       def add_ssl_components_to_connection(connection=self.connection)
@@ -141,12 +147,21 @@ module Scooter
           connection.ssl[k] = v
         end
 
-        if host.is_a?(Unix::Host)
-          if connection.url_prefix.host == Scooter::Utilities::BeakerUtilities.get_public_ip(host) && connection.ssl['verify'] == nil
-            # Because we are connecting to the dashboard by IP address, SSL verification
-            # against the CA will fail. Disable verifying against it for now until a better
-            # fix can be found.
-            connection.ssl['verify'] = false
+        # Typhoeus unfortunately requires this to be set
+        connection.ssl['verify'] = false
+      end
+
+      # example - execute 3 calls to api.update_classes and 3 calls to get_list_of_node_groups in parallel:
+      # responses = []
+      # execute_in_parallel(3) do
+      #   responses << api.update_classes
+      #   responses << api.get_list_of_node_groups
+      # end
+      # assert(responses[0].status == 201 & responses[1].status[1] == 200)
+      def execute_in_parallel(times = 1)
+        @connection.in_parallel() do
+          times.times do
+            yield
           end
         end
       end

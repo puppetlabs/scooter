@@ -18,7 +18,6 @@ module Scooter
 
       before do
         expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
         expect(subject).not_to be_nil
       end
 
@@ -26,7 +25,7 @@ module Scooter
         before do
           # find the index of the default Faraday::Adapter::NetHttp handler
           # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+          index = subject.connection.builder.handlers.index(Faraday::Adapter::Typhoeus)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.post('/rbac-api/v1/auth/token') { [200, {}, 'token' =>'blah'] }
             end
@@ -45,7 +44,7 @@ module Scooter
         before do
           # find the index of the default Faraday::Adapter::NetHttp handler
           # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+          index = subject.connection.builder.handlers.index(Faraday::Adapter::Typhoeus)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.post('/rbac-api/v1/auth/token') { [401, {}, 'unauthorized'] }
           end

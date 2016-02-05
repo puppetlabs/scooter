@@ -18,7 +18,6 @@ module Scooter
       let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
       before do
         expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
         expect(subject).not_to be_nil
       end
 
@@ -32,7 +31,7 @@ module Scooter
         XCSRF_PAGE
         }
         before do
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+          index = subject.connection.builder.handlers.index(Faraday::Adapter::Typhoeus)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.post('/auth/login', "username=#{username}&password=#{password}") {[200, {}, '']}
             stub.get('/') {[200, {}, mock_page]}
@@ -58,7 +57,7 @@ module Scooter
         XCSRF_PAGE
         }
         before do
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+          index = subject.connection.builder.handlers.index(Faraday::Adapter::Typhoeus)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.post('/auth/login', "username=#{username}&password=#{password}") {[200, {}, '']}
             stub.get('/') {[200, {}, mock_page]}
