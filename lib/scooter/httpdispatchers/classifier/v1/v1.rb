@@ -55,11 +55,14 @@ module Scooter
           end
         end
 
-        def update_classes
+        def update_classes(environment=nil)
           set_classifier_path
-          @connection.post('v1/update-classes')
+          @connection.post('v1/update-classes') do |request|
+            unless environment.nil?
+              request.params['environment'] = environment
+            end
+          end
         end
-
       end
     end
   end
