@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 13 Nov, 2015 (1ea3c082)](#LATEST)
+* [LATEST - 26 Feb, 2016 (467c672c)](#LATEST)
+* [3.2.4 - 13 Nov, 2015 (60cb7ad6)](#3.2.4)
 * [3.2.3 - 20 Oct, 2015 (91992188)](#3.2.3)
 * [3.2.2 - 5 Oct, 2015 (6bc7e636)](#3.2.2)
 * [3.2.1 - 28 Sep, 2015 (c50045f4)](#3.2.1)
@@ -29,7 +30,51 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 13 Nov, 2015 (1ea3c082)
+### <a name = "LATEST">LATEST - 26 Feb, 2016 (467c672c)
+
+* (GEM) update scooter version to 3.2.5 (467c672c)
+
+* Merge pull request #60 from samwoods1/update_classes_environment (c95f7e48)
+
+
+```
+Merge pull request #60 from samwoods1/update_classes_environment
+
+Adding environment param to update_classes endpoint
+```
+* Merge pull request #61 from objectverbobject/change_env_to_2016.1 (308e656d)
+
+
+```
+Merge pull request #61 from objectverbobject/change_env_to_2016.1
+
+(MAINT) Change test beaker_pe_dir to 2016.1
+```
+* Merge pull request #58 from objectverbobject/add_upper_bound_for_ldap_version (80cf7967)
+
+
+```
+Merge pull request #58 from objectverbobject/add_upper_bound_for_ldap_version
+
+(QENG-3460) Add upper bound for net-ldap dependency
+```
+* (MAINT) Change test beaker_pe_dir to 2016.1 (6a8234c5)
+
+* Adding environment param to update_classes endpoint (845fa03e)
+
+* (QENG-3460) Add upper bound for net-ldap dependency (b94422f5)
+
+
+```
+(QENG-3460) Add upper bound for net-ldap dependency
+
+New versions of the net-ldap gem, after version 0.12.1, require ruby 2.0
+or greater. This PR adds that version as the upper bound for scooter, so
+it can run on ruby 1.9.3 systems.
+```
+### <a name = "3.2.4">3.2.4 - 13 Nov, 2015 (60cb7ad6)
+
+* (HISTORY) update scooter history for gem release 3.2.4 (60cb7ad6)
 
 * (GEM) update scooter version to 3.2.4 (1ea3c082)
 
