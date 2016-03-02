@@ -23,9 +23,9 @@ module Scooter
       end
 
       def generate_local_user(options = {})
-        email = options['email'] || "#{RandomString.generate(4)}@example.com"
-        display_name = options['display_name'] || RandomString.generate(4)
-        login = options['login'] || RandomString.generate(4)
+        email = options['email'] || "#{RandomString.generate(8)}@example.com"
+        display_name = options['display_name'] || RandomString.generate(8)
+        login = options['login'] || RandomString.generate(16)
         role_ids = options['role_ids'] || []
         password = options['password'] || 'Puppet11'
 
