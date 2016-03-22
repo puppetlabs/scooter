@@ -43,6 +43,21 @@ module Scooter
           expect(hashed_query).to eq('environment'=> ['test_environment'])
         end
       end
+
+      describe '.pin_nodes' do
+        it 'works when passed a set of nodes' do
+          expect(subject.connection).to receive(:post).with('v1/groups/group_id/pin')
+          expect{subject.pin_nodes("group_id", ["node1", "node2"])}.not_to raise_error
+        end
+      end
+
+      describe '.unpin_nodes' do
+        it 'works when passed a set of nodes' do
+          expect(subject.connection).to receive(:post).with('v1/groups/group_id/unpin')
+          expect{subject.unpin_nodes("group_id", ["node1", "node2"])}.not_to raise_error
+        end
+      end
+
     end
   end
 end
