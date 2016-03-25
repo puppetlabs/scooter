@@ -63,6 +63,20 @@ module Scooter
             end
           end
         end
+
+        def pin_nodes(node_group_id, nodes)
+          set_classifier_path
+          @connection.post("v1/groups/#{node_group_id}/pin") do |request|
+            request.body = nodes
+          end
+        end
+
+        def unpin_nodes(node_group_id, nodes)
+          set_classifier_path
+          @connection.post("v1/groups/#{node_group_id}/unpin") do |request|
+            request.body = nodes
+          end
+        end
       end
     end
   end
