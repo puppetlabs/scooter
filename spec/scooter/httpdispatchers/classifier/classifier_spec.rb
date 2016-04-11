@@ -33,7 +33,7 @@ module Scooter
         end
         it 'updates the classes for all environments' do
           expect{subject.update_classes}.not_to raise_error
-          expect(subject.update_classes('production').status).to eq(201)
+          expect(subject.update_classes.status).to eq(201)
         end
         it 'updates the classes for a single environment if specified' do
           expect{subject.update_classes('test_environment')}.not_to raise_error
