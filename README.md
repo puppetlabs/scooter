@@ -77,4 +77,4 @@ prompt:~$ yard server --gems
 
 ## Contributing
 
-You are encouraged to fork and submit PR's to Scooter. Tony Vu or Chris Cowell-Shah are your best bet for getting a PR merged in; that list will grow as QA adds more regular contributors to the repo.
+You are encouraged to fork and submit PR's to Scooter. Sam Woods or Tony Vu are your best bet for getting a PR merged in; that list will grow as QA adds more regular contributors to the repo.
