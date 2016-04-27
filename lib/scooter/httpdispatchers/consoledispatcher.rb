@@ -75,6 +75,12 @@ module Scooter
                                        credentials[:password]) if credentials
 
         @connection = create_default_connection_and_initialize if @dashboard
+        # The http-cookie library that the cookie-jar wraps requires that a
+        # URI object be specifically a URI::HTTPS object. This changes the
+        # default url_prefix in Faraday to be sub-classed from HTTPS, not plain
+        # old HTTP. This should have no effect on any other middleware, as HTTPS
+        # is just HTTP subclassed with different defaults.
+        @connection.url_prefix = URI.parse(@connection.url_prefix.to_s)
       end
 
       def create_default_connection
