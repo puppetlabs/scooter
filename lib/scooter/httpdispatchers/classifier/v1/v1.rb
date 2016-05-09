@@ -1,3 +1,5 @@
+require 'json'
+
 module Scooter
   module HttpDispatchers
     module Classifier
@@ -29,6 +31,12 @@ module Scooter
           @connection.get("v1/groups/#{uuid}").env.body
         end
 
+        def get_last_update
+          set_classifier_path
+          result = @connection.get('v1/last-class-update').env.body
+          JSON.parse(result)['last_update']
+        end
+
         def delete_node_group(uuid)
           set_classifier_path
           @connection.delete("v1/groups/#{uuid}")
@@ -55,11 +63,19 @@ module Scooter
           end
         end
 
-        def update_classes(environment=nil)
+        def update_classes(environment=nil, wait_for_update=false)
           set_classifier_path
+          last_update = get_last_update
+
           @connection.post('v1/update-classes') do |request|
             unless environment.nil?
               request.params['environment'] = environment
+            end
+          end
+
+          if wait_for_update
+            while last_update == get_last_update
+              sleep 3
             end
           end
         end
