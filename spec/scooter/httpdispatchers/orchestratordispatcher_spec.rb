@@ -1,0 +1,75 @@
+require 'spec_helper'
+
+describe Scooter::HttpDispatchers::OrchestratorDispatcher do
+
+  let(:host) {'host'}
+  let(:orchestrator_api) { Scooter::HttpDispatchers::OrchestratorDispatcher.new(host) }
+  let(:job_id) { random_string }
+
+  subject { orchestrator_api }
+
+  it 'should make requests on the correct port' do
+    expect(orchestrator_api.connection.url_prefix.port).to be(8143)
+  end
+
+  it 'should use the correct path prefix' do
+    expect(orchestrator_api.connection.url_prefix.path).to eq('/orchestator')
+  end
+
+  describe '.list_jobs' do
+
+    it { is_expected.to respond_to(:list_jobs).with(0).arguments }
+    it { is_expected.to respond_to(:list_jobs).with(1).arguments }
+    it { is_expected.not_to respond_to(:list_jobs).with(2).arguments }
+
+    it 'should take a job_id' do
+      expect(orchestrator_api.connection).to receive(:get).with('/v1/jobs')
+      expect{ orchestrator_api.list_jobs }.not_to raise_error
+    end
+  end
+
+  describe '.list_job_details' do
+
+    it { is_expected.not_to respond_to(:list_job_details).with(0).arguments }
+    it { is_expected.to respond_to(:list_job_details).with(1).arguments }
+
+    it 'should take a job_id' do
+      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}")
+      expect{ orchestrator_api.list_job_details(job_id) }.not_to raise_error
+    end
+  end
+
+  describe '.list_nodes_associated_with_job' do
+
+    it { is_expected.not_to respond_to(:list_nodes_associated_with_job).with(0).arguments }
+    it { is_expected.to respond_to(:list_nodes_associated_with_job).with(1).arguments }
+
+    it 'should take a job_id' do
+      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}/nodes")
+      expect{ orchestrator_api.list_nodes_associated_with_job(job_id) }.not_to raise_error
+    end
+  end
+
+  describe '.get_job_report' do
+
+    it { is_expected.not_to respond_to(:get_job_report).with(0).arguments }
+    it { is_expected.to respond_to(:get_job_report).with(1).arguments }
+
+
+    it 'should take a job_id' do
+      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}/report")
+      expect{ orchestrator_api.get_job_report(job_id) }.not_to raise_error
+    end
+  end
+
+  describe '.get_job_events' do
+
+    it { is_expected.not_to respond_to(:get_job_events).with(0).arguments }
+    it { is_expected.to respond_to(:get_job_events).with(1).arguments }
+
+    it 'should take a job_id' do
+      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}/events")
+      expect{ orchestrator_api.get_job_events(job_id) }.not_to raise_error
+    end
+  end
+end
