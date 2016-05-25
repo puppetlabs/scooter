@@ -4,14 +4,6 @@ end
 
 module Scooter
   module HttpDispatchers
-    # TODO update for Orchestrator ???
-    # Currently there is no httpdispatcher built for the Orchestrator module
-    # it is necessary to create one and extend this module onto it
-    #
-    # Example:
-    # orchestrator = Scooter::HttpDispatchers::HttpDispatcher.new(master)
-    # orchestrator.extend(Scooter::HttpDispatchers::Orchestrator)
-    # orchestrator.get_job_details('this is my job id')
     class OrchestratorDispatcher < HttpDispatcher
 
       include Scooter::HttpDispatchers::Orchestrator::V1
@@ -40,6 +32,18 @@ module Scooter
 
       def get_job_events(job_id)
         get_events(job_id)
+      end
+
+      def environment(environment)
+        get_environment(environment)
+      end
+
+      def list_applications(environment)
+        get_applications_in_environment(environment)
+      end
+
+      def list_app_instances(environment)
+        get_instances_in_environment(environment)
       end
     end
   end
