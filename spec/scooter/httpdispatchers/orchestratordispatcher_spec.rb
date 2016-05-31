@@ -5,6 +5,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
   let(:host) {'host'}
   let(:orchestrator_api) { Scooter::HttpDispatchers::OrchestratorDispatcher.new(host) }
   let(:job_id) { random_string }
+  let(:environment) {random_string}
 
   subject { orchestrator_api }
 
@@ -70,6 +71,36 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it 'should take a job_id' do
       expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}/events")
       expect{ orchestrator_api.get_job_events(job_id) }.not_to raise_error
+    end
+  end
+
+  describe '.environment' do
+    it { is_expected.not_to respond_to(:environment).with(0).arguments }
+    it { is_expected.to respond_to(:environment).with(1).arguments }
+
+    it 'should take a environment name' do
+      expect(orchestrator_api.connection).to receive(:get).with("/v1/environments/#{environment}")
+      expect{ orchestrator_api.environment(environment) }.not_to raise_error
+    end
+  end
+
+  describe '.list_applications' do
+    it { is_expected.not_to respond_to(:list_applications).with(0).arguments }
+    it { is_expected.to respond_to(:list_applications).with(1).arguments }
+
+    it 'should take a environment name' do
+      expect(orchestrator_api.connection).to receive(:get).with("/v1/environments/#{environment}/applications")
+      expect{ orchestrator_api.list_applications(environment) }.not_to raise_error
+    end
+  end
+
+  describe '.list_app_instances' do
+    it { is_expected.not_to respond_to(:list_app_instances).with(0).arguments }
+    it { is_expected.to respond_to(:list_app_instances).with(1).arguments }
+
+    it 'should take a environment name' do
+      expect(orchestrator_api.connection).to receive(:get).with("/v1/environments/#{environment}/instances")
+      expect{ orchestrator_api.list_app_instances(environment) }.not_to raise_error
     end
   end
 end
