@@ -103,4 +103,51 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
       expect{ orchestrator_api.list_app_instances(environment) }.not_to raise_error
     end
   end
+
+  describe '.deploy_environment' do
+    it { is_expected.not_to respond_to(:deploy_environment).with(0).arguments }
+    it { is_expected.to respond_to(:deploy_environment).with(1).arguments }
+    it { is_expected.to respond_to(:deploy_environment).with(2).arguments }
+
+    it 'should take an environment name' do
+      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/deploy")
+      expect{ orchestrator_api.deploy_environment(environment) }.not_to raise_error
+    end
+
+    it 'should take an environment and a opts hash' do
+      opts = {'noop' => true, 'concurency' => 5}
+
+      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/deploy")
+      expect{ orchestrator_api.deploy_environment(environment, opts) }.not_to raise_error
+    end
+  end
+
+  describe '.stop_job' do
+    it { is_expected.not_to respond_to(:stop_job).with(0).arguments }
+    it { is_expected.to respond_to(:stop_job).with(1).arguments }
+    it { is_expected.not_to respond_to(:stop_job).with(2).arguments }
+
+    it 'should take a job id' do
+      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/stop")
+      expect{ orchestrator_api.stop_job(job_id) }.not_to raise_error
+    end
+  end
+
+  describe '.plan_job' do
+    it { is_expected.not_to respond_to(:plan_job).with(0).arguments }
+    it { is_expected.to respond_to(:plan_job).with(1).arguments }
+    it { is_expected.to respond_to(:plan_job).with(2).arguments }
+
+    it 'should take an environment name' do
+      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/plan")
+      expect{ orchestrator_api.plan_job(environment) }.not_to raise_error
+    end
+
+    it 'should take an environment and a opts hash' do
+      opts = {'noop' => true, 'concurency' => 5}
+
+      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/plan")
+      expect{ orchestrator_api.plan_job(environment, opts) }.not_to raise_error
+    end
+  end
 end

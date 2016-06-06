@@ -45,6 +45,22 @@ module Scooter
       def list_app_instances(environment)
         get_instances_in_environment(environment)
       end
+
+      def deploy_environment(environment, opts={})
+        payload = opts
+        payload['environment'] = environment
+        post_deploy(payload)
+      end
+
+      def stop_job(job_id)
+        post_stop({'job' => "/jobs/#{job_id}"})
+      end
+
+      def plan_job(environment, opts={})
+        payload = opts
+        payload['environment'] = environment
+        post_plan(payload)
+      end
     end
   end
 end
