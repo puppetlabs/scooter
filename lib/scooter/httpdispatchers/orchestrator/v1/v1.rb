@@ -39,6 +39,25 @@ module Scooter
         def get_instances_in_environment(environment)
           @connection.get("/v1/environments/#{environment}/instances")
         end
+
+        #command endpoints
+        def post_deploy(payload)
+          @connection.post("/v1/command/deploy") do |req|
+            req.body = payload
+          end
+        end
+
+        def post_stop(payload)
+          @connection.post("/v1/command/stop") do |req|
+            req.body = payload
+          end
+        end
+
+        def post_plan(payload)
+          @connection.post("/v1/command/plan") do |req|
+            req.body = payload
+          end
+        end
       end
     end
   end
