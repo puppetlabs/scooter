@@ -77,6 +77,22 @@ module Scooter
             request.body = nodes
           end
         end
+
+        def get_list_of_classes
+          set_classifier_path
+          @connection.get('v1/classes').env.body
+        end
+
+        def get_list_of_nodes
+          set_classifier_path
+          @connection.get('v1/nodes').env.body
+        end
+
+        def get_list_of_environments
+          set_classifier_path
+          @connection.get('v1/environments').env.body
+        end
+
       end
     end
   end

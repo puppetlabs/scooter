@@ -23,22 +23,22 @@ module Scooter
       end
 
       def generate_local_user(options = {})
-        email = options['email'] || "#{RandomString.generate(8)}@example.com"
+        email        = options['email'] || "#{RandomString.generate(8)}@example.com"
         display_name = options['display_name'] || RandomString.generate(8)
-        login = options['login'] || RandomString.generate(16)
-        role_ids = options['role_ids'] || []
-        password = options['password'] || 'Puppet11'
+        login        = options['login'] || RandomString.generate(16)
+        role_ids     = options['role_ids'] || []
+        password     = options['password'] || 'Puppet11'
 
-        user_hash = { "email" => email,
+        user_hash = { "email"        => email,
                       "display_name" => display_name,
-                      "login" => login,
-                      "role_ids" => role_ids,
-                      "password" => password }
+                      "login"        => login,
+                      "role_ids"     => role_ids,
+                      "password"     => password }
 
         response = create_local_user(user_hash)
         return response if response.env.status != 200
         Scooter::HttpDispatchers::ConsoleDispatcher.new(@host,
-                                                        login: login,
+                                                        login:    login,
                                                         password: password)
       end
 
@@ -96,7 +96,7 @@ module Scooter
       end
 
       def revoke_console_dispatcher(console_dispatcher)
-        update_console_dispatcher({'is_revoked' => true}, console_dispatcher)
+        update_console_dispatcher({ 'is_revoked' => true }, console_dispatcher)
       end
 
       def get_user_id_by_login_name(name)
@@ -163,6 +163,35 @@ module Scooter
 
       def acquire_token_with_credentials(lifetime=nil)
         @token = acquire_token(credentials.login, credentials.password, lifetime)
+      end
+
+      def rbac_database_matches_self?(host_name)
+        original_host_name = self.host
+        begin
+          self.host = host_name.to_s
+          set_url_prefix
+          other_users  = get_list_of_users
+          other_groups = get_list_of_groups
+          other_roles  = get_list_of_roles
+        ensure
+          self.host = original_host_name
+          set_url_prefix
+        end
+
+        self_users  = get_list_of_users
+        self_groups = get_list_of_groups
+        self_roles  = get_list_of_roles
+
+        users_match  = (other_users == self_users)
+        groups_match = (other_groups == self_groups)
+        roles_match  = (other_roles == self_roles)
+
+        errors = ''
+        errors << "Users do not match - other_users: #{other_users.to_s}, self_users: #{self_users.to_s}\r\n" unless users_match
+        errors << "Groups do not match - other_groups: #{other_groups.to_s}, self_groups: #{self_groups.to_s}\r\n" unless groups_match
+        errors << "Roles do not match - other_roles: #{other_roles.to_s}, self_roles: #{self_roles.to_s}\r\n" unless roles_match
+
+        raise errors.chomp unless errors.empty?
       end
     end
   end
