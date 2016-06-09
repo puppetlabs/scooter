@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 26 Feb, 2016 (467c672c)](#LATEST)
+* [LATEST - 9 Jun, 2016 (363eee29)](#LATEST)
+* [3.2.5 - 26 Feb, 2016 (af4f1447)](#3.2.5)
 * [3.2.4 - 13 Nov, 2015 (60cb7ad6)](#3.2.4)
 * [3.2.3 - 20 Oct, 2015 (91992188)](#3.2.3)
 * [3.2.2 - 5 Oct, 2015 (6bc7e636)](#3.2.2)
@@ -30,7 +31,93 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 26 Feb, 2016 (467c672c)
+### <a name = "LATEST">LATEST - 9 Jun, 2016 (363eee29)
+
+* (GEM) update scooter version to 3.2.6 (363eee29)
+
+* Merge pull request #70 from zreichert/feature/master/ORCH-1350_command_endpoints_for_AO (b2cc8e35)
+
+
+```
+Merge pull request #70 from zreichert/feature/master/ORCH-1350_command_endpoints_for_AO
+
+(ORCH-1350) add command endpoints to scooter for AO
+```
+* (ORCH-1350) add command endpoints to scooter for AO (46db4a73)
+
+* Merge pull request #69 from zreichert/feature/master/ORCH-1351_environments_enpoints_for_AO (1eabddf3)
+
+
+```
+Merge pull request #69 from zreichert/feature/master/ORCH-1351_environments_enpoints_for_AO
+
+(ORCH-1351) add environment endpoints for AO
+```
+* (ORCH-1351) add environment endpoints for AO (0f3272fb)
+
+* Merge pull request #68 from zreichert/feature/master/ORCH-1349_jobs_endpoints_for_AO (2b4d9484)
+
+
+```
+Merge pull request #68 from zreichert/feature/master/ORCH-1349_jobs_endpoints_for_AO
+
+(ORCH-1349) add jobs endpoints for Application Orchestration
+```
+* (ORCH-1349) add jobs endpoints for Application Orchestration (4d306c76)
+
+* Update README.md (380f8ecb)
+
+* Merge pull request #65 from samwoods1/add_puppetdb_compare (be6f9965)
+
+
+```
+Merge pull request #65 from samwoods1/add_puppetdb_compare
+
+Add more endpoints, add methods to compare puppetdb instances
+```
+* Add more endpoints, add  methods to compare puppetdb instances (c7a5fe6d)
+
+* Merge pull request #64 from samwoods1/add_puppetdb_dispatcher (d0fb9791)
+
+
+```
+Merge pull request #64 from samwoods1/add_puppetdb_dispatcher
+
+Add puppetdb dispactcher with query_nodes endpoint
+```
+* Add puppetdb dispactcher with query_nodes endpoint (b3af86dd)
+
+* Merge pull request #63 from samwoods1/pin_and_unpin (f18bbbe3)
+
+
+```
+Merge pull request #63 from samwoods1/pin_and_unpin
+
+Add pin and unpin endpoints to classifier dispatcher
+```
+* Add pin and unpin endpoints to classifier dispatcher (15bd1c5c)
+
+* Merge pull request #62 from jonathannewman/maint-moar-login-characters-pleeeze (a767eaa0)
+
+
+```
+Merge pull request #62 from jonathannewman/maint-moar-login-characters-pleeeze
+
+(maint) avoid login collisions by using more random characters
+```
+* (maint) avoid login collisions by using more random characters (b30615f2)
+
+
+```
+(maint) avoid login collisions by using more random characters
+
+Occasionally the rbac integration tests are failing because the db is not cleared out between tests.  Attempts to create duplicate local users causes unexpected failures.
+
+Change the number of characters used for display name, email and login to be larger to attempt to avoid collisions.
+```
+### <a name = "3.2.5">3.2.5 - 26 Feb, 2016 (af4f1447)
+
+* (HISTORY) update scooter history for gem release 3.2.5 (af4f1447)
 
 * (GEM) update scooter version to 3.2.5 (467c672c)
 
