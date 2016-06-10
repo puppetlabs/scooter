@@ -45,22 +45,22 @@ module Scooter
       #    "00350026-bfb6-4ce7-bd06-1a1cfea445f9" => [],
       #    "b6400234-2a61-4417-b85e-c2dcc123686b" => [] }
       def get_node_group_trees_of_direct_descendents
-        node_groups = get_list_of_node_groups
-        groups = node_groups.map { |each| [each['id'], each['parent']] }
+        node_groups  = get_list_of_node_groups
+        groups       = node_groups.map { |each| [each['id'], each['parent']] }
 
         # Constants for the array of tuples just created.
-        id = 0
-        parent = 1
+        id           = 0
+        parent       = 1
 
         # Create root node and insert it into the tree hash.
-        rootindex = groups.find_index { |e| e[id] == e[parent] }
-        rootid = (groups.delete_at(rootindex))[id]
-        tree = Object::Hash.new
+        rootindex    = groups.find_index { |e| e[id] == e[parent] }
+        rootid       = (groups.delete_at(rootindex))[id]
+        tree         = Object::Hash.new
         tree[rootid] = Object::Array.new
 
         # Construct the rest of the tree as a hash of
         # id => [ child1, child2,...] nodes.
-        groups.each do | g |
+        groups.each do |g|
           tree[g[id]] = Object::Array.new
           if tree.has_key?(g[parent]) then
             tree[g[parent]] << g[id]
@@ -86,14 +86,14 @@ module Scooter
       # body from the server.
       def create_new_node_group_model(options={})
         # name, classes, parent are the only required keys
-        name        = options['name']    || RandomString.generate
-        classes     = options['classes'] || {}
-        parent      = options['parent']  || Rootuuid
-        rule        = options['rule']
-        id          = options['id']
-        environment = options['environment']
-        variables   = options['variables']
-        description = options['description']
+        name               = options['name'] || RandomString.generate
+        classes            = options['classes'] || {}
+        parent             = options['parent'] || Rootuuid
+        rule               = options['rule']
+        id                 = options['id']
+        environment        = options['environment']
+        variables          = options['variables']
+        description        = options['description']
         environment_trumps = options['environment_trumps']
 
         hash = { "name"    => name,
@@ -153,7 +153,7 @@ module Scooter
       # This will delete anything that inherits from the node group specified,
       # but not the actual node group itself.
       def delete_node_group_descendents(node_group_model)
-        id = node_group_model['id']
+        id   = node_group_model['id']
         tree = get_node_group_trees_of_direct_descendents
         tree[id].each do |childid|
           delete_tree_recursion(tree, childid)
@@ -219,7 +219,7 @@ module Scooter
         # TODO : This doesn't work if v is ever an array.  Needs to be
         # reimplemented a la is_deep_subset?
 
-        update_hash.each do |k,v|
+        update_hash.each do |k, v|
           if v.is_a? Hash
             group[k] ||= {}
             deep_merge(group[k], update_hash[k])
@@ -228,10 +228,11 @@ module Scooter
           end
         end
       end
+
       private :deep_merge
 
       def remove_nil_values(hash)
-        hash.each do |k,v|
+        hash.each do |k, v|
           case v
             when Hash
               remove_nil_values(v)
@@ -240,6 +241,7 @@ module Scooter
           end
         end
       end
+
       private :remove_nil_values
 
       # This uses a PUTs instead of a POST to update a node group; when using
@@ -255,7 +257,7 @@ module Scooter
       # This uses the POST method to update a node group; when using POST, it
       # will only send and update the specified keys.
       def update_node_group_with_node_group_model(node_group_model, update_hash)
-        id = node_group_model['id']
+        id       = node_group_model['id']
         response = update_node_group(id, update_hash)
 
         deep_merge(node_group_model, update_hash)
@@ -296,6 +298,78 @@ module Scooter
         # If we got this far, return the "model" hash.
         node_group_model
       end
+
+      # Used to compare replica classifier to master. Raises exception if it does not match.
+      # @param [BeakerHost] host_name
+      def classifier_database_matches_self?(host_name)
+        original_host_name = self.host
+        begin
+          self.host = host_name.to_s
+          set_url_prefix
+          other_nodes        = get_list_of_nodes
+          other_classes      = get_list_of_classes
+          other_environments = get_list_of_environments
+          other_groups       = get_list_of_node_groups
+        ensure
+          self.host = original_host_name
+          set_url_prefix
+        end
+
+        self_nodes        = get_list_of_nodes
+        self_classes      = get_list_of_classes
+        self_environments = get_list_of_environments
+        self_groups       = get_list_of_node_groups
+
+        nodes_match        = nodes_match?(other_nodes, self_nodes)
+        classes_match      = classes_match?(other_classes, self_classes)
+        environments_match = environments_match?(other_environments, self_environments)
+        groups_match       = groups_match?(other_groups, self_groups)
+
+        errors = ''
+        errors << "Nodes do not match - other_nodes: #{other_nodes.to_s}, self_nodes: #{self_nodes.to_s}\r\n" unless nodes_match
+        errors << "Classes do not match - other_classes: #{other_classes.to_s}, self_classes: #{self_classes.to_s}\r\n" unless classes_match
+        errors << "Environments do not match - other_environments: #{other_environments.to_s}, self_environments: #{self_environments.to_s}\r\n" unless environments_match
+        errors << "Groups do not match - other_groups: #{other_groups.to_s}, self_groups: #{self_groups.to_s}\r\n" unless groups_match
+
+        raise errors.chomp unless errors.empty?
+      end
+
+      # Check to see if all nodes match between two query responses
+      # @param [Object] other_nodes - response from get_list_of_nodes
+      # @param [Object] self_nodes - response from get_list_of_nodes
+      # @return [Boolean]
+      def nodes_match?(other_nodes, self_nodes=nil)
+        self_nodes = get_list_of_nodes if self_nodes.nil?
+        return other_nodes == self_nodes
+      end
+
+      # Check to see if all classes match between two query responses
+      # @param [Object] other_classes - response from get_list_of_classes
+      # @param [Object] self_classes - response from get_list_of_classes
+      # @return [Boolean]
+      def classes_match?(other_classes, self_classes=nil)
+        self_classes = get_list_of_classes if self_classes.nil?
+        return other_classes == self_classes
+      end
+
+      # Check to see if all groups match between two query responses
+      # @param [Object] other_groups - response from get_list_of_node_groups
+      # @param [Object] self_groups - response from get_list_of_node_groups
+      # @return [Boolean]
+      def groups_match?(other_groups, self_groups=nil)
+        self_groups = get_list_of_node_groups if self_groups.nil?
+        return other_groups == self_groups
+      end
+
+      # Check to see if all environments match between two query responses
+      # @param [Object] other_environments - response from get_list_of_environments
+      # @param [Object] self_environments - response from get_list_of_environments
+      # @return [Boolean]
+      def environments_match?(other_environments, self_environments=nil)
+        self_environments = get_list_of_environments if self_environments.nil?
+        return other_environments == self_environments
+      end
+
     end
   end
 end
