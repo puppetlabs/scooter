@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 9 Jun, 2016 (363eee29)](#LATEST)
+* [LATEST - 10 Jun, 2016 (5346dff2)](#LATEST)
+* [3.2.6 - 9 Jun, 2016 (c7545f8d)](#3.2.6)
 * [3.2.5 - 26 Feb, 2016 (af4f1447)](#3.2.5)
 * [3.2.4 - 13 Nov, 2015 (60cb7ad6)](#3.2.4)
 * [3.2.3 - 20 Oct, 2015 (91992188)](#3.2.3)
@@ -31,7 +32,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 9 Jun, 2016 (363eee29)
+### <a name = "LATEST">LATEST - 10 Jun, 2016 (5346dff2)
+
+* (GEM) update scooter version to 3.2.7 (5346dff2)
+
+* Merge pull request #71 from samwoods1/db_comparison_methods (970204d5)
+
+
+```
+Merge pull request #71 from samwoods1/db_comparison_methods
+
+(PE-15708) Add DB comparison methods for RBAC and Classifier
+```
+* (PE-15708) Add DB comparison methods for RBAC and Classifier (c1245620)
+
+### <a name = "3.2.6">3.2.6 - 9 Jun, 2016 (c7545f8d)
+
+* (HISTORY) update scooter history for gem release 3.2.6 (c7545f8d)
 
 * (GEM) update scooter version to 3.2.6 (363eee29)
 
