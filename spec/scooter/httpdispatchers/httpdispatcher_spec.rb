@@ -16,11 +16,8 @@ module Scooter
 
       before do
         expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_private_key).and_return('key file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_hostcert).and_return('host cert')
-        expect(OpenSSL::PKey).to receive(:read).and_return('Pkey')
-        expect(OpenSSL::X509::Certificate).to receive(:new).and_return('client_cert')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
+        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_private_key_file).and_return('key file')
+        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_hostcert_file).and_return('host cert')
         expect(subject).not_to be_nil
 
       end
@@ -38,11 +35,11 @@ module Scooter
       end
 
       it 'automatically has a defined client key' do
-        expect(subject.connection.ssl['client_key']).to eq('Pkey')
+        expect(subject.connection.ssl['client_key']).to eq('key file')
       end
 
       it 'automatically has a defined client cert' do
-        expect(subject.connection.ssl['client_cert']).to eq('client_cert')
+        expect(subject.connection.ssl['client_cert']).to eq('host cert')
       end
 
       it 'has a URI::HTTPS object for a url_prefix' do
@@ -51,7 +48,7 @@ module Scooter
 
       context 'when it receives a 500 error' do
         before do
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+          index = subject.connection.builder.handlers.index(Faraday::Adapter::Typhoeus)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.get('/test/route') {[500,
                                       {'content-type' => 'application/json;charset=UTF-8'},
@@ -64,6 +61,21 @@ module Scooter
           end
 
         end
+      end
+
+      context 'execute_in_parallel' do
+        responses = []
+        it 'does not get responses until the parallel block has completed' do
+          subject.execute_in_parallel(2) do
+            responses << subject.connection.get('test/parallel/route')
+            expect(responses[0].env).to be_nil
+          end
+          expect(responses.size).to eq(2)
+          # Can't find a really good way to return a meaningful response since the parallel code
+          # lives below the post/get/delete methods, so we can't use Faraday::Adapter::Test
+          expect(responses[0].status).to eq(0)
+        end
+
       end
     end
 
@@ -86,6 +98,7 @@ module Scooter
         expect(subject.connection.ssl['ca_file']).to eq(nil)
       end
     end
+
   end
 
 end
