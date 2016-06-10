@@ -27,13 +27,13 @@ module Scooter
       #
       # @param host(Unix::Host) The beaker host object you wish to communicate
       #   with.
-      def initialize(host)
+      def initialize(host, log_level=nil, log_body=false)
         @ssl = {}
         @host = host
         if @host.is_a?(Unix::Host)
           @connection = create_default_connection_with_beaker_host
         elsif @host.is_a?(String)
-          @connection = create_default_connection
+          @connection = create_default_connection(log_level)
           set_url_prefix
         else
           raise "Argument host must be Unix::Host or String"
@@ -58,17 +58,18 @@ module Scooter
         end
 
       end
-      def create_default_connection
+      def create_default_connection(log_level=nil, log_body=false)
         Faraday.new do |conn|
           conn.request :rbac_auth_token, self
           conn.request :json
 
-          # This logger will need to be configurable somehow..., maybe based on
-          # beaker log-level?
           conn.response :follow_redirects
           conn.response :raise_error
           conn.response :json, :content_type => /\bjson$/
-          conn.response :logger, nil, bodies: true
+          faraday_logger = Logger.new $stderr
+          # If log level is not set by Beaker, set faraday log level to debug.
+          faraday_logger.level ||= Logger::DEBUG
+          conn.response :logger, faraday_logger, bodies: (log_body)
 
           conn.use :cookie_jar
 
@@ -85,7 +86,15 @@ module Scooter
       end
 
       def create_default_connection_with_beaker_host
-        connection = create_default_connection
+        log_level = nil
+        log_body = false
+        if @host.logger
+          log_level = Logger::ERROR if @host.logger.log_level == :error
+          log_level = Logger::INFO if @host.logger.log_level == :info
+          log_body = (@host.logger.log_level == :verbose || @host.logger.log_level == :trace)
+        end
+        # If Beaker log level is verbose or trace, log body of responses
+        connection = create_default_connection(log_level, log_body)
         set_url_prefix(connection)
         acquire_ssl_components if ssl.empty?
         add_ssl_components_to_connection(connection)
