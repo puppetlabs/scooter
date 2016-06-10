@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 10 Jun, 2016 (5346dff2)](#LATEST)
+* [LATEST - 10 Jun, 2016 (e777cc91)](#LATEST)
+* [3.2.7 - 10 Jun, 2016 (1458e11f)](#3.2.7)
 * [3.2.6 - 9 Jun, 2016 (c7545f8d)](#3.2.6)
 * [3.2.5 - 26 Feb, 2016 (af4f1447)](#3.2.5)
 * [3.2.4 - 13 Nov, 2015 (60cb7ad6)](#3.2.4)
@@ -32,7 +33,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 10 Jun, 2016 (5346dff2)
+### <a name = "LATEST">LATEST - 10 Jun, 2016 (e777cc91)
+
+* (GEM) update scooter version to 3.2.8 (e777cc91)
+
+* Merge pull request #72 from samwoods1/set_log_level (a8551098)
+
+
+```
+Merge pull request #72 from samwoods1/set_log_level
+
+(QA-2518) Add ability to set log level, use beaker level if available
+```
+* (QA-2518) Add ability to set log level, and use beaker log level if available (692890a2)
+
+### <a name = "3.2.7">3.2.7 - 10 Jun, 2016 (1458e11f)
+
+* (HISTORY) update scooter history for gem release 3.2.7 (1458e11f)
 
 * (GEM) update scooter version to 3.2.7 (5346dff2)
 
