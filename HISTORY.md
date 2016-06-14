@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 10 Jun, 2016 (e777cc91)](#LATEST)
+* [LATEST - 14 Jun, 2016 (0ae9dad6)](#LATEST)
+* [3.2.8 - 10 Jun, 2016 (4b1157bb)](#3.2.8)
 * [3.2.7 - 10 Jun, 2016 (1458e11f)](#3.2.7)
 * [3.2.6 - 9 Jun, 2016 (c7545f8d)](#3.2.6)
 * [3.2.5 - 26 Feb, 2016 (af4f1447)](#3.2.5)
@@ -33,7 +34,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 10 Jun, 2016 (e777cc91)
+### <a name = "LATEST">LATEST - 14 Jun, 2016 (0ae9dad6)
+
+* (GEM) update scooter version to 3.2.9 (0ae9dad6)
+
+* Merge pull request #73 from samwoods1/db_comparison_methods (abed1bf5)
+
+
+```
+Merge pull request #73 from samwoods1/db_comparison_methods
+
+Add activity db comparison methods and specs
+```
+* Add activity db comparison methods and specs (70d02d13)
+
+### <a name = "3.2.8">3.2.8 - 10 Jun, 2016 (4b1157bb)
+
+* (HISTORY) update scooter history for gem release 3.2.8 (4b1157bb)
 
 * (GEM) update scooter version to 3.2.8 (e777cc91)
 
