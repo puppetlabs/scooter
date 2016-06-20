@@ -16,7 +16,7 @@ module Scooter
         # @option filters [String] :limit [optional; return no more than n event commits; defaults to 1000]
         # @return [Object] The events queried
         def get_classifier_events(filters = {})
-          set_activity_path
+          set_activity_service_path
           @connection.get 'v1/events' do |request|
             request.params['service_id'] = 'classifier'
             filters.each { |param, value|
@@ -36,7 +36,7 @@ module Scooter
         # @option filters [String] :limit [optional; return no more than n event commits; defaults to 1000]
         # @return [Object] The events queried
         def get_rbac_events(filters = {})
-          set_activity_path
+          set_activity_service_path
           @connection.get 'v1/events' do |request|
             request.params['service_id'] = 'rbac'
             filters.each { |param, value|

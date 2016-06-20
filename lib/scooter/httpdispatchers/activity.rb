@@ -8,7 +8,7 @@ module Scooter
       include Scooter::HttpDispatchers::Activity::V1
       include Scooter::Utilities
 
-      def set_activity_path(connection=self.connection)
+      def set_activity_service_path(connection=self.connection)
         set_url_prefix
         connection.url_prefix.path = '/activity-api'
       end
