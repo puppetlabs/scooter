@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 14 Jun, 2016 (0ae9dad6)](#LATEST)
+* [LATEST - 20 Jun, 2016 (5374ca5e)](#LATEST)
+* [3.2.9 - 14 Jun, 2016 (cb49ee1f)](#3.2.9)
 * [3.2.8 - 10 Jun, 2016 (4b1157bb)](#3.2.8)
 * [3.2.7 - 10 Jun, 2016 (1458e11f)](#3.2.7)
 * [3.2.6 - 9 Jun, 2016 (c7545f8d)](#3.2.6)
@@ -34,7 +35,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 14 Jun, 2016 (0ae9dad6)
+### <a name = "LATEST">LATEST - 20 Jun, 2016 (5374ca5e)
+
+* (GEM) update scooter version to 3.2.10 (5374ca5e)
+
+* Merge pull request #74 from samwoods1/maint (450bd886)
+
+
+```
+Merge pull request #74 from samwoods1/maint
+
+(maint) Reverting method name change to fix failing tests
+```
+* (maint) Reverting method name change to fix failing tests (d86ee60b)
+
+### <a name = "3.2.9">3.2.9 - 14 Jun, 2016 (cb49ee1f)
+
+* (HISTORY) update scooter history for gem release 3.2.9 (cb49ee1f)
 
 * (GEM) update scooter version to 3.2.9 (0ae9dad6)
 
