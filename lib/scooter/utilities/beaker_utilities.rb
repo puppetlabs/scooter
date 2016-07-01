@@ -18,7 +18,7 @@ module Scooter
       end
 
       def self.pe_ca_cert_file(master)
-        ca_cert = on(master, "cat `puppet agent --configprint localcacert`").stdout
+        ca_cert = on(master, "cat `puppet agent --configprint localcacert`", :silent => true).stdout
 
         cert_dir = Dir.mktmpdir("pe_certs")
 
@@ -30,11 +30,11 @@ module Scooter
       end
 
       def self.pe_private_key(master)
-        on(master, "cat `puppet agent --configprint hostprivkey`").stdout
+        on(master, "cat `puppet agent --configprint hostprivkey`", :silent => true).stdout
       end
 
       def self.pe_hostcert(master)
-        on(master, "cat `puppet agent --configprint hostcert`").stdout
+        on(master, "cat `puppet agent --configprint hostcert`", :silent => true).stdout
       end
     end
   end
