@@ -91,7 +91,7 @@ module Scooter
         if @host.logger
           log_level = Logger::ERROR if @host.logger.log_level == :error
           log_level = Logger::INFO if @host.logger.log_level == :info
-          log_body = (@host.logger.log_level == :verbose || @host.logger.log_level == :trace)
+          log_body = (@host.logger.log_level == :debug || @host.logger.log_level == :trace)
         end
         # If Beaker log level is verbose or trace, log body of responses
         connection = create_default_connection(log_level, log_body)
