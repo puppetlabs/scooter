@@ -187,11 +187,12 @@ module Scooter
         roles_match  = (other_roles == self_roles)
 
         errors = ''
-        errors << "Users do not match - other_users: #{other_users.to_s}, self_users: #{self_users.to_s}\r\n" unless users_match
-        errors << "Groups do not match - other_groups: #{other_groups.to_s}, self_groups: #{self_groups.to_s}\r\n" unless groups_match
-        errors << "Roles do not match - other_roles: #{other_roles.to_s}, self_roles: #{self_roles.to_s}\r\n" unless roles_match
+        errors << "Users do not match\r\n" unless users_match
+        errors << "Groups do not match\r\n" unless groups_match
+        errors << "Roles do not match\r\n" unless roles_match
 
-        raise errors.chomp unless errors.empty?
+        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        errors.empty?
       end
     end
   end

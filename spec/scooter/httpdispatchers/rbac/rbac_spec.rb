@@ -339,11 +339,12 @@ module Scooter
 
         end
         it 'compare with self' do
-          expect { subject.rbac_database_matches_self?('test.com') }.not_to raise_error
+          expect(subject.rbac_database_matches_self?('test.com')).to be_truthy
         end
 
         it 'compare with different' do
-          expect { subject.rbac_database_matches_self?('test2.com') }.to raise_error /Users do not match - other_users/
+          expect(subject.faraday_logger).to receive(:warn).with /Users do not match/
+          expect(subject.rbac_database_matches_self?('test2.com')).to be_falsey
         end
       end
     end
