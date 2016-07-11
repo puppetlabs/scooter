@@ -528,11 +528,12 @@ module Scooter
 
         end
         it 'compare with self' do
-          expect { subject.classifier_database_matches_self?('test.com') }.not_to raise_error
+          expect(subject.classifier_database_matches_self?('test.com')).to be_truthy
         end
 
         it 'compare with different' do
-          expect { subject.classifier_database_matches_self?('test2.com') }.to raise_error /Nodes do not match - other_nodes/
+          expect(subject.faraday_logger).to receive(:warn).with /Nodes do not match/
+          expect(subject.classifier_database_matches_self?('test2.com')).to be_falsey
         end
       end
     end

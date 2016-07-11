@@ -203,11 +203,12 @@ module Scooter
         end
 
         it 'compare with self' do
-          expect { subject.activity_database_matches_self?('test.com') }.not_to raise_error
+          expect(subject.activity_database_matches_self?('test.com')).to be_truthy
         end
 
         it 'compare with different' do
-          expect { subject.activity_database_matches_self?('test2.com') }.to raise_error /Rbac events do not match - other_rbac_events/
+          expect(subject.faraday_logger).to receive(:warn).with /Rbac events do not match/
+          expect(subject.activity_database_matches_self?('test2.com')).to be_falsey
         end
       end
     end

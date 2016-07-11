@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   #Documentation dependencies
   spec.add_development_dependency 'yard', '~> 0'
   spec.add_development_dependency 'markdown', '~> 0'
+  spec.add_development_dependency 'activesupport', '4.2.6'
 
   #Run time dependencies
   spec.add_runtime_dependency 'json', '~> 1.8'

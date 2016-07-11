@@ -326,12 +326,13 @@ module Scooter
         groups_match       = groups_match?(other_groups, self_groups)
 
         errors = ''
-        errors << "Nodes do not match - other_nodes: #{other_nodes.to_s}, self_nodes: #{self_nodes.to_s}\r\n" unless nodes_match
-        errors << "Classes do not match - other_classes: #{other_classes.to_s}, self_classes: #{self_classes.to_s}\r\n" unless classes_match
-        errors << "Environments do not match - other_environments: #{other_environments.to_s}, self_environments: #{self_environments.to_s}\r\n" unless environments_match
-        errors << "Groups do not match - other_groups: #{other_groups.to_s}, self_groups: #{self_groups.to_s}\r\n" unless groups_match
+        errors << "Nodes do not match\r\n" unless nodes_match
+        errors << "Classes do not match\r\n" unless classes_match
+        errors << "Environments do not match\r\n" unless environments_match
+        errors << "Groups do not match\r\n" unless groups_match
 
-        raise errors.chomp unless errors.empty?
+        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        errors.empty?
       end
 
       # Check to see if all nodes match between two query responses

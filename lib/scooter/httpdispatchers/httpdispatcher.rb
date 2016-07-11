@@ -14,7 +14,7 @@ module Scooter
     class HttpDispatcher
 
 
-      attr_accessor :connection, :host, :ssl, :token, :send_auth_token_as_query_param
+      attr_accessor :connection, :host, :ssl, :token, :send_auth_token_as_query_param, :faraday_logger
       # The only required parameter for the HttpDispatcher is the host, which
       # could either be a beaker Unix::Host or a String. HttpDispatchers offer
       # support for automatically generating the required SSL components for the
@@ -66,10 +66,10 @@ module Scooter
           conn.response :follow_redirects
           conn.response :raise_error
           conn.response :json, :content_type => /\bjson$/
-          faraday_logger = Logger.new $stderr
+          @faraday_logger = Logger.new $stderr
           # If log level is not set by Beaker, set faraday log level to debug.
-          faraday_logger.level ||= Logger::DEBUG
-          conn.response :logger, faraday_logger, bodies: (log_body)
+          @faraday_logger.level ||= Logger::DEBUG
+          conn.response :logger, @faraday_logger, bodies: (log_body)
 
           conn.use :cookie_jar
 

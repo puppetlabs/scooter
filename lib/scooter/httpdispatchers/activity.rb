@@ -34,10 +34,11 @@ module Scooter
         classifier_events_match = other_classifier_events == self_classifier_events
 
         errors = ''
-        errors << "Rbac events do not match - other_rbac_events: #{other_rbac_events.to_s}, self_rbac_events: #{self_rbac_events.to_s}\r\n" unless rbac_events_match
-        errors << "Classifier events do not match - other_classifier_events: #{other_classifier_events.to_s}, self_classifier_events: #{self_classifier_events.to_s}\r\n" unless classifier_events_match
+        errors << "Rbac events do not match\r\n" unless rbac_events_match
+        errors << "Classifier events do not match\r\n" unless classifier_events_match
 
-        raise errors.chomp unless errors.empty?
+        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        errors.empty?
       end
 
     end

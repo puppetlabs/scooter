@@ -39,12 +39,13 @@ module Scooter
         reports_match = reports_match?(other_reports, self_reports)
 
         errors = ''
-        errors << "Nodes do not match - other_nodes: #{other_nodes.to_s}, self_nodes: #{self_nodes.to_s}\r\n" unless nodes_match
-        errors << "Catalogs do not match - other_catalogs: #{other_catalogs.to_s}, self_catalogs: #{self_catalogs.to_s}\r\n" unless catalogs_match
-        errors << "Facts do not match - other_facts: #{other_facts.to_s}, self_facts: #{self_facts.to_s}\r\n" unless facts_match
-        errors << "Reports do not match - other_reports: #{other_reports.to_s}, self_reports: #{self_reports.to_s}\r\n" unless reports_match
+        errors << "Nodes do not match\r\n" unless nodes_match
+        errors << "Catalogs do not match\r\n" unless catalogs_match
+        errors << "Facts do not match\r\n" unless facts_match
+        errors << "Reports do not match\r\n" unless reports_match
 
-        raise errors.chomp unless errors.empty?
+        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        errors.empty?
       end
 
       # Check to see if all nodes match between two query responses
@@ -63,8 +64,10 @@ module Scooter
       # @param [Object] self_node - one node from query_nodes
       # @return [Boolean]
       def node_match?(other_node, self_node)
-        other_node['certname'] == self_node['certname'] && other_node['facts_timestamp'] == self_node['facts_timestamp'] &&
+        result = other_node['certname'] == self_node['certname'] && other_node['facts_timestamp'] == self_node['facts_timestamp'] &&
             other_node['report_timestamp'] == self_node['report_timestamp'] && other_node['catalog_timestamp'] == self_node['catalog_timestamp']
+        @faraday_logger.debug("Node does not match - self_node: #{self_node}, other_node: #{other_node}") unless result
+        result
       end
       private :node_match?
 
@@ -84,7 +87,9 @@ module Scooter
       # @param [Object] self_catalog - one catalog from query_catalog
       # @return [Boolean]
       def catalog_match?(other_catalog, self_catalog)
-        other_catalog['catalog_uuid'] == self_catalog['catalog_uuid'] && other_catalog['producer_timestamp'] == self_catalog['producer_timestamp']
+        result = other_catalog['catalog_uuid'] == self_catalog['catalog_uuid'] && other_catalog['producer_timestamp'] == self_catalog['producer_timestamp']
+        @faraday_logger.debug("catalog does not match - self_catalog: #{self_catalog}, other_catalog: #{other_catalog}")
+        result
       end
       private :catalog_match?
 
@@ -95,7 +100,12 @@ module Scooter
       def facts_match?(other_facts, self_facts=nil)
         self_facts = query_facts.body if self_facts.nil?
         return false unless other_facts.size == self_facts.size
-        other_facts.each_index { |index| return false unless other_facts[index] == self_facts[index] }
+        other_facts.each_index do |index|
+          unless other_facts[index] == self_facts[index]
+            @faraday_logger.debug("fact does not match - self_fact: #{self_facts[index]}, other_fact: #{other_facts[index]}")
+            return false
+          end
+        end
         true
       end
 
@@ -115,7 +125,9 @@ module Scooter
       # @param [Object] self_report - one report from query_reports
       # @return [Boolean]
       def report_match?(other_report, self_report)
-        other_report['hash'] == self_report['hash'] && other_report['producer_timestamp'] == self_report['producer_timestamp']
+        result = other_report['hash'] == self_report['hash'] && other_report['producer_timestamp'] == self_report['producer_timestamp']
+        @faraday_logger.debug("report does not match - self_report: #{self_report}, other_report: #{other_report}")
+        result
       end
       private :report_match?
     end
