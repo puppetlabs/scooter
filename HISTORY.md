@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 20 Jun, 2016 (5374ca5e)](#LATEST)
+* [LATEST - 11 Jul, 2016 (a052297b)](#LATEST)
+* [3.2.10 - 20 Jun, 2016 (e5670032)](#3.2.10)
 * [3.2.9 - 14 Jun, 2016 (cb49ee1f)](#3.2.9)
 * [3.2.8 - 10 Jun, 2016 (4b1157bb)](#3.2.8)
 * [3.2.7 - 10 Jun, 2016 (1458e11f)](#3.2.7)
@@ -35,7 +36,40 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 20 Jun, 2016 (5374ca5e)
+### <a name = "LATEST">LATEST - 11 Jul, 2016 (a052297b)
+
+* (GEM) update scooter version to 3.2.11 (a052297b)
+
+* Merge pull request #77 from samwoods1/logging (572374f7)
+
+
+```
+Merge pull request #77 from samwoods1/logging
+
+(maint) Remove noise from db comparison methods
+```
+* (maint) Remove noise from db comparison methods (543653f9)
+
+* Merge pull request #76 from pcarlisle/log-http-body (75bea8cd)
+
+
+```
+Merge pull request #76 from pcarlisle/log-http-body
+
+(maint) Log http bodies at debug and trace
+```
+* (maint) Log http bodies at debug and trace (506b3802)
+
+
+```
+(maint) Log http bodies at debug and trace
+
+This was set to log at verbose and trace, which was an error since debug sits
+between these levels.
+```
+### <a name = "3.2.10">3.2.10 - 20 Jun, 2016 (e5670032)
+
+* (HISTORY) update scooter history for gem release 3.2.10 (e5670032)
 
 * (GEM) update scooter version to 3.2.10 (5374ca5e)
 
