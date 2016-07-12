@@ -27,7 +27,10 @@ module Scooter
       #
       # @param host(Unix::Host) The beaker host object you wish to communicate
       #   with.
-      def initialize(host, log_level=nil, log_body=false)
+      # @param log_level(Int) The desired log level
+      # @param log_body(Boolean) Whether to log the body of responses
+      def initialize(host, log_level=Logger::DEBUG, log_body=true)
+        @log_body = log_body
         @ssl = {}
         @host = host
         if @host.is_a?(Unix::Host)
@@ -58,7 +61,8 @@ module Scooter
         end
 
       end
-      def create_default_connection(log_level=nil, log_body=false)
+
+      def create_default_connection(log_level=Logger::DEBUG)
         Faraday.new do |conn|
           conn.request :rbac_auth_token, self
           conn.request :json
@@ -66,10 +70,10 @@ module Scooter
           conn.response :follow_redirects
           conn.response :raise_error
           conn.response :json, :content_type => /\bjson$/
-          @faraday_logger = Logger.new $stderr
+          @faraday_logger ||= Logger.new $stderr
           # If log level is not set by Beaker, set faraday log level to debug.
-          @faraday_logger.level ||= Logger::DEBUG
-          conn.response :logger, @faraday_logger, bodies: (log_body)
+          @faraday_logger.level ||= log_level if defined? @faraday_logger.level
+          conn.response :logger, @faraday_logger, bodies: @log_body
 
           conn.use :cookie_jar
 
@@ -86,15 +90,14 @@ module Scooter
       end
 
       def create_default_connection_with_beaker_host
-        log_level = nil
-        log_body = false
-        if @host.logger
-          log_level = Logger::ERROR if @host.logger.log_level == :error
-          log_level = Logger::INFO if @host.logger.log_level == :info
-          log_body = (@host.logger.log_level == :debug || @host.logger.log_level == :trace)
+        if host.logger
+          log_level = Logger::ERROR if host.logger.log_level == :error
+          log_level = Logger.WARN if host.logger.log_level == :warn
+          log_level = Logger::INFO if (host.logger.log_level == :info || host.logger.log_level == :notify)
+          log_level ||= Logger::DEBUG
         end
-        # If Beaker log level is verbose or trace, log body of responses
-        connection = create_default_connection(log_level, log_body)
+
+        connection = create_default_connection(log_level)
         set_url_prefix(connection)
         acquire_ssl_components if ssl.empty?
         add_ssl_components_to_connection(connection)

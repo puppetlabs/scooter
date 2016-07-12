@@ -200,6 +200,8 @@ module Scooter
                 [200, [], classifier_events] :
                 [200, [], classifier_events.dup["commits"].push('another_array_item')] }
           end
+          expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
+          expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
         end
 
         it 'compare with self' do

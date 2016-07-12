@@ -336,7 +336,8 @@ module Scooter
                 [200, [], role_list] :
                 [200, [], role_list.dup.push('another_array_item')] }
           end
-
+          expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
+          expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
         end
         it 'compare with self' do
           expect(subject.rbac_database_matches_self?('test.com')).to be_truthy

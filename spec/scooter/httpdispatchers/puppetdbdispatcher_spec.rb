@@ -222,7 +222,8 @@ module Scooter
                 [200, [], [{'hash' => 'hash_value', 'producer_timestamp' => 'time'}]] :
                 [200, [], [{'hash' => 'hash_value2', 'producer_timestamp' => 'time2'}]] }
           end
-
+          expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
+          expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
         end
         it 'compare with self' do
           expect(subject.database_matches_self?('test.com')).to be_truthy

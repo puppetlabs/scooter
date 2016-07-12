@@ -60,10 +60,10 @@ module Scooter
       #
       # @param credentials(Hash optional) Provide credentials if you wish to
       #   communicate through the UI proxy.
-      def initialize(host, credentials=nil)
+      def initialize(host, credentials=nil, log_level=Logger::DEBUG, log_body=true)
         @credentials = Credentials.new(credentials[:login],
                                        credentials[:password]) if credentials
-        super(host)
+        super(host, log_level, log_body)
       end
 
       def set_url_prefix(connection=self.connection)
