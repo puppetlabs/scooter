@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 11 Jul, 2016 (a052297b)](#LATEST)
+* [LATEST - 12 Jul, 2016 (743d2b00)](#LATEST)
+* [3.2.11 - 11 Jul, 2016 (0ff8959d)](#3.2.11)
 * [3.2.10 - 20 Jun, 2016 (e5670032)](#3.2.10)
 * [3.2.9 - 14 Jun, 2016 (cb49ee1f)](#3.2.9)
 * [3.2.8 - 10 Jun, 2016 (4b1157bb)](#3.2.8)
@@ -36,7 +37,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 11 Jul, 2016 (a052297b)
+### <a name = "LATEST">LATEST - 12 Jul, 2016 (743d2b00)
+
+* (GEM) update scooter version to 3.2.12 (743d2b00)
+
+* Merge pull request #78 from samwoods1/logging (bc20f038)
+
+
+```
+Merge pull request #78 from samwoods1/logging
+
+(maint) Fix comparison methods since replica has different certs
+```
+* (maint) Fix comparison methods since replica has different certs, remove more logging (b6147dfb)
+
+### <a name = "3.2.11">3.2.11 - 11 Jul, 2016 (0ff8959d)
+
+* (HISTORY) update scooter history for gem release 3.2.11 (0ff8959d)
 
 * (GEM) update scooter version to 3.2.11 (a052297b)
 
