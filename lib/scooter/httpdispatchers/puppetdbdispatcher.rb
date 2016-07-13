@@ -20,12 +20,14 @@ module Scooter
         original_host_name = self.host
         begin
           self.host = host_name
+          initialize_connection
           other_nodes = query_nodes.body
           other_catalogs = query_catalogs.body
           other_facts = query_facts.body
           other_reports = query_reports.body
         ensure
           self.host = original_host_name
+          initialize_connection
         end
 
         self_nodes = query_nodes.body
@@ -66,7 +68,6 @@ module Scooter
       def node_match?(other_node, self_node)
         result = other_node['certname'] == self_node['certname'] && other_node['facts_timestamp'] == self_node['facts_timestamp'] &&
             other_node['report_timestamp'] == self_node['report_timestamp'] && other_node['catalog_timestamp'] == self_node['catalog_timestamp']
-        @faraday_logger.debug("Node does not match - self_node: #{self_node}, other_node: #{other_node}") unless result
         result
       end
       private :node_match?
@@ -88,7 +89,6 @@ module Scooter
       # @return [Boolean]
       def catalog_match?(other_catalog, self_catalog)
         result = other_catalog['catalog_uuid'] == self_catalog['catalog_uuid'] && other_catalog['producer_timestamp'] == self_catalog['producer_timestamp']
-        @faraday_logger.debug("catalog does not match - self_catalog: #{self_catalog}, other_catalog: #{other_catalog}")
         result
       end
       private :catalog_match?
@@ -102,7 +102,6 @@ module Scooter
         return false unless other_facts.size == self_facts.size
         other_facts.each_index do |index|
           unless other_facts[index] == self_facts[index]
-            @faraday_logger.debug("fact does not match - self_fact: #{self_facts[index]}, other_fact: #{other_facts[index]}")
             return false
           end
         end
@@ -126,7 +125,6 @@ module Scooter
       # @return [Boolean]
       def report_match?(other_report, self_report)
         result = other_report['hash'] == self_report['hash'] && other_report['producer_timestamp'] == self_report['producer_timestamp']
-        @faraday_logger.debug("report does not match - self_report: #{self_report}, other_report: #{other_report}")
         result
       end
       private :report_match?

@@ -305,14 +305,14 @@ module Scooter
         original_host_name = self.host
         begin
           self.host = host_name.to_s
-          set_url_prefix
+          initialize_connection
           other_nodes        = get_list_of_nodes
           other_classes      = get_list_of_classes
           other_environments = get_list_of_environments
           other_groups       = get_list_of_node_groups
         ensure
           self.host = original_host_name
-          set_url_prefix
+          initialize_connection
         end
 
         self_nodes        = get_list_of_nodes

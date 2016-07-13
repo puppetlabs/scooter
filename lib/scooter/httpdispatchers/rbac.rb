@@ -169,13 +169,13 @@ module Scooter
         original_host_name = self.host
         begin
           self.host = host_name.to_s
-          set_url_prefix
+          initialize_connection
           other_users  = get_list_of_users
           other_groups = get_list_of_groups
           other_roles  = get_list_of_roles
         ensure
           self.host = original_host_name
-          set_url_prefix
+          initialize_connection
         end
 
         self_users  = get_list_of_users

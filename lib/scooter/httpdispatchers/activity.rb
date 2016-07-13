@@ -19,12 +19,12 @@ module Scooter
         original_host_name = self.host
         begin
           self.host = host_name.to_s
-          set_url_prefix
+          initialize_connection
           other_rbac_events       = get_rbac_events.env.body
           other_classifier_events = get_classifier_events.env.body
         ensure
           self.host = original_host_name
-          set_url_prefix
+          initialize_connection
         end
 
         self_rbac_events       = get_rbac_events.env.body
