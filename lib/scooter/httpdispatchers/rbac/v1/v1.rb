@@ -93,6 +93,13 @@ module Scooter
           end
         end
 
+				def delete_role(role)
+					set_rbac_path
+					@connection.delete("v1/roles/#{role['id']}") do |request|
+						request.body = role
+					end
+				end
+
         def acquire_token(login, password, lifetime=nil)
           set_rbac_path
           response = @connection.post "v1/auth/token" do |request|
