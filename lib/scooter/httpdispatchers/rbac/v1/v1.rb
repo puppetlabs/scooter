@@ -47,7 +47,7 @@ module Scooter
         def create_password_reset_token(uuid)
           set_rbac_path
           begin
-          token = @connection.post("v1/users/#{uuid}/password/reset").env.body
+            token = @connection.post("v1/users/#{uuid}/password/reset").env.body
           rescue Faraday::ParsingError => error
             # Use a regex to parse the token from the ParsingError object
             regex = /\'(.+)\'/
@@ -93,11 +93,9 @@ module Scooter
           end
         end
 
-        def delete_role(role)
+        def delete_role(role_id)
           set_rbac_path
-          @connection.delete("v1/roles/#{role['id']}") do |request|
-            request.body = role
-          end
+          @connection.delete("v1/roles/#{role_id}")
         end
 
         def acquire_token(login, password, lifetime=nil)
