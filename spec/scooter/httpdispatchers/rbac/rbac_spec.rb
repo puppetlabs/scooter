@@ -8,229 +8,243 @@ module Scooter
     let(:credentials) { double('credentials') }
     let(:user_list) {
       [
-          {
-              :email        => "",
-              :is_revoked   => false,
-              :last_login   => nil,
-              :is_remote    => false,
-              :login        => "api_user",
-              :is_superuser => true,
-              :id           => "af94921f-bd76-4b58-b5ce-e17c029a2790",
-              :role_ids     => [
-                  1
-              ],
-              :display_name => "API User",
-              :is_group     => false
-          },
-          {
-              :email        => "",
-              :is_revoked   => false,
-              :last_login   => "2016-06-09T19 =>14 =>25.923Z",
-              :is_remote    => false,
-              :login        => "admin",
-              :is_superuser => true,
-              :id           => "42bf351c-f9ec-40af-84ad-e976fec7f4bd",
-              :role_ids     => [
-                  1
-              ],
-              :display_name => "Administrator",
-              :is_group     => false
-          }
+        {
+          :email        => "",
+          :is_revoked   => false,
+          :last_login   => nil,
+          :is_remote    => false,
+          :login        => "api_user",
+          :is_superuser => true,
+          :id           => "af94921f-bd76-4b58-b5ce-e17c029a2790",
+          :role_ids     => [
+            1
+          ],
+          :display_name => "API User",
+          :is_group     => false
+        },
+        {
+          :email        => "",
+          :is_revoked   => false,
+          :last_login   => "2016-06-09T19 =>14 =>25.923Z",
+          :is_remote    => false,
+          :login        => "admin",
+          :is_superuser => true,
+          :id           => "42bf351c-f9ec-40af-84ad-e976fec7f4bd",
+          :role_ids     => [
+            1
+          ],
+          :display_name => "Administrator",
+          :is_group     => false
+        }
       ]
     }
     let(:role_list) {
       [
-          {
-              :description  => "Manage users and their permissions, and create and modify node groups and other objects.",
-              :user_ids     => [
-                  "42bf351c-f9ec-40af-84ad-e976fec7f4bd",
-                  "af94921f-bd76-4b58-b5ce-e17c029a2790"
-              ],
-              :group_ids    => [],
-              :display_name => "Administrators",
-              :id           => 1,
-              :permissions  => [
-                  {
-                      :object_type => "console_page",
-                      :action      => "view",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "modify_children",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "puppet_agent",
-                      :action      => "run",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "users",
-                      :action      => "edit",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "roles",
-                      :action      => "edit",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "users",
-                      :action      => "create",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "set_environment",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "user_groups",
-                      :action      => "import",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "roles",
-                      :action      => "create",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "users",
-                      :action      => "reset_password",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "directory_service",
-                      :action      => "edit",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "cert_requests",
-                      :action      => "accept_reject",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "roles",
-                      :action      => "edit_members",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "edit_classification",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "users",
-                      :action      => "disable",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "tokens",
-                      :action      => "override_lifetime",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "nodes",
-                      :action      => "view_data",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "environment",
-                      :action      => "deploy_code",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "nodes",
-                      :action      => "edit_data",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "edit_child_rules",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "orchestration",
-                      :action      => "use",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "user_groups",
-                      :action      => "delete",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "view",
-                      :instance    => "*"
-                  }
-              ]
-          },
-          {
-              :description  => "Create and modify node groups and other objects.",
-              :user_ids     => [],
-              :group_ids    => [],
-              :display_name => "Operators",
-              :id           => 2,
-              :permissions  => [
-                  {
-                      :object_type => "tokens",
-                      :action      => "override_lifetime",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "cert_requests",
-                      :action      => "accept_reject",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "view",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "edit_classification",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "modify_children",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "puppet_agent",
-                      :action      => "run",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "environment",
-                      :action      => "deploy_code",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "set_environment",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "orchestration",
-                      :action      => "use",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "console_page",
-                      :action      => "view",
-                      :instance    => "*"
-                  },
-                  {
-                      :object_type => "node_groups",
-                      :action      => "edit_child_rules",
-                      :instance    => "*"
-                  }
-              ]
-          }]
+        {
+          :description  => "Manage users and their permissions, and create and modify node groups and other objects.",
+          :user_ids     => [
+            "42bf351c-f9ec-40af-84ad-e976fec7f4bd",
+            "af94921f-bd76-4b58-b5ce-e17c029a2790"
+          ],
+          :group_ids    => [],
+          :display_name => "Administrators",
+          :id           => 1,
+          :permissions  => [
+            {
+              :object_type => "console_page",
+              :action      => "view",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "modify_children",
+              :instance    => "*"
+            },
+            {
+              :object_type => "puppet_agent",
+              :action      => "run",
+              :instance    => "*"
+            },
+            {
+              :object_type => "users",
+              :action      => "edit",
+              :instance    => "*"
+            },
+            {
+              :object_type => "roles",
+              :action      => "edit",
+              :instance    => "*"
+            },
+            {
+              :object_type => "users",
+              :action      => "create",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "set_environment",
+              :instance    => "*"
+            },
+            {
+              :object_type => "user_groups",
+              :action      => "import",
+              :instance    => "*"
+            },
+            {
+              :object_type => "roles",
+              :action      => "create",
+              :instance    => "*"
+            },
+            {
+              :object_type => "users",
+              :action      => "reset_password",
+              :instance    => "*"
+            },
+            {
+              :object_type => "directory_service",
+              :action      => "edit",
+              :instance    => "*"
+            },
+            {
+              :object_type => "cert_requests",
+              :action      => "accept_reject",
+              :instance    => "*"
+            },
+            {
+              :object_type => "roles",
+              :action      => "edit_members",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "edit_classification",
+              :instance    => "*"
+            },
+            {
+              :object_type => "users",
+              :action      => "disable",
+              :instance    => "*"
+            },
+            {
+              :object_type => "tokens",
+              :action      => "override_lifetime",
+              :instance    => "*"
+            },
+            {
+              :object_type => "nodes",
+              :action      => "view_data",
+              :instance    => "*"
+            },
+            {
+              :object_type => "environment",
+              :action      => "deploy_code",
+              :instance    => "*"
+            },
+            {
+              :object_type => "nodes",
+              :action      => "edit_data",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "edit_child_rules",
+              :instance    => "*"
+            },
+            {
+              :object_type => "orchestration",
+              :action      => "use",
+              :instance    => "*"
+            },
+            {
+              :object_type => "user_groups",
+              :action      => "delete",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "view",
+              :instance    => "*"
+            }
+          ]
+        },
+        {
+          :description  => "Create and modify node groups and other objects.",
+          :user_ids     => [],
+          :group_ids    => [],
+          :display_name => "Operators",
+          :id           => 2,
+          :permissions  => [
+            {
+              :object_type => "tokens",
+              :action      => "override_lifetime",
+              :instance    => "*"
+            },
+            {
+              :object_type => "cert_requests",
+              :action      => "accept_reject",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "view",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "edit_classification",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "modify_children",
+              :instance    => "*"
+            },
+            {
+              :object_type => "puppet_agent",
+              :action      => "run",
+              :instance    => "*"
+            },
+            {
+              :object_type => "environment",
+              :action      => "deploy_code",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "set_environment",
+              :instance    => "*"
+            },
+            {
+              :object_type => "orchestration",
+              :action      => "use",
+              :instance    => "*"
+            },
+            {
+              :object_type => "console_page",
+              :action      => "view",
+              :instance    => "*"
+            },
+            {
+              :object_type => "node_groups",
+              :action      => "edit_child_rules",
+              :instance    => "*"
+            }
+          ]
+        },
+        {
+          :description  => "Test delete role functionality",
+          :user_ids     => [],
+          :group_ids    => [],
+          :display_name => "Dummy role",
+          :id           => 13,
+          :permissions  => [
+            {
+              :object_type => "console_page",
+              :action      => "view",
+              :instance    => "*"
+            }]
+        }
+      ]
     }
     let(:group_list) {
       []
@@ -285,6 +299,26 @@ module Scooter
         end
       end
 
+      describe '.delete_role_by_name' do
+        before do
+          # find the index of the default Faraday::Adapter::NetHttp handler
+          # and replace it with the Test adapter
+          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
+            stub.get('rbac-api/v1/roles') { [200, {}, role_list] }
+            stub.delete('rbac-api/v1/roles/') { [200, {}] }
+          end
+        end
+        it 'returns 200 when deleting role' do
+          response = subject.delete_role_by_name('Dummy role')
+          expect(response.status).to eq(200)
+        end
+        it 'returns 400 when getting deleted role' do
+          response = subject.get_role_by_name('Dummy role')
+          expect(response).to be_nil
+        end
+      end
+
       describe '.get_group_data_by_name' do
         let(:groups_array) {
           [{ "user_ids"     => [],
@@ -295,14 +329,14 @@ module Scooter
              "is_group"     => true,
              "login"        => "group1",
              "id"           => "09c2c1fd-ea01-4555-bc7b-a8f25c4511f8" },
-           { "user_ids"     => [],
-             "role_ids"     => [],
-             "display_name" => "",
-             "is_superuser" => false,
-             "is_remote"    => true,
-             "is_group"     => true,
-             "login"        => "group2",
-             "id"           => "09c2c1fd-ea01-4555-bc7b-a8f25c4511f7" }]
+             { "user_ids"     => [],
+               "role_ids"     => [],
+               "display_name" => "",
+               "is_superuser" => false,
+               "is_remote"    => true,
+               "is_group"     => true,
+               "login"        => "group2",
+               "id"           => "09c2c1fd-ea01-4555-bc7b-a8f25c4511f7" }]
         }
         before do
           expect(subject).to receive(:get_list_of_groups) { groups_array }
@@ -327,14 +361,14 @@ module Scooter
           index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.get('rbac-api/v1/users') { |env| env[:url].to_s == "https://test.com:4433/rbac-api/v1/users" ?
-                [200, [], user_list] :
-                [200, [], user_list.dup.push('another_array_item')] }
+                                            [200, [], user_list] :
+                                            [200, [], user_list.dup.push('another_array_item')] }
             stub.get('rbac-api/v1/groups') { |env| env[:url].to_s == "https://test.com:4433/rbac-api/v1/groups" ?
-                [200, [], group_list] :
-                [200, [], group_list.dup.push('another_array_item')] }
+                                             [200, [], group_list] :
+                                             [200, [], group_list.dup.push('another_array_item')] }
             stub.get('rbac-api/v1/roles') { |env| env[:url].to_s == "https://test.com:4433/rbac-api/v1/roles" ?
-                [200, [], role_list] :
-                [200, [], role_list.dup.push('another_array_item')] }
+                                            [200, [], role_list] :
+                                            [200, [], role_list.dup.push('another_array_item')] }
           end
           expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
           expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
