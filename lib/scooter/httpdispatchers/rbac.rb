@@ -60,6 +60,11 @@ module Scooter
         response.env.body
       end
 
+      def delete_role_by_name(role_name)
+        role_id = get_role_id(role_name)
+        delete_role(role_id)
+      end
+
       def add_user_to_role(console_dispatcher, role)
         user_id = get_user_id_of_console_dispatcher(console_dispatcher)
         role['user_ids'].push(user_id)
