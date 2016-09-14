@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 12 Jul, 2016 (743d2b00)](#LATEST)
+* [LATEST - 14 Sep, 2016 (36d4e676)](#LATEST)
+* [3.2.12 - 12 Jul, 2016 (0c39c3db)](#3.2.12)
 * [3.2.11 - 11 Jul, 2016 (0ff8959d)](#3.2.11)
 * [3.2.10 - 20 Jun, 2016 (e5670032)](#3.2.10)
 * [3.2.9 - 14 Jun, 2016 (cb49ee1f)](#3.2.9)
@@ -37,7 +38,29 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 12 Jul, 2016 (743d2b00)
+### <a name = "LATEST">LATEST - 14 Sep, 2016 (36d4e676)
+
+* (GEM) update scooter version to 3.2.13 (36d4e676)
+
+* Merge pull request #79 from lucywyman/lucyw/delete-role (d400f3e6)
+
+
+```
+Merge pull request #79 from lucywyman/lucyw/delete-role
+
+(PE-17083) Add endpoint to delete user role
+```
+* Add rspec tests for delete_role method (27282dd9)
+
+* Add delete_role_by_name (4c3e75f2)
+
+* Fix indent (9a1547a2)
+
+* Add endpoint to delete user role (a130379e)
+
+### <a name = "3.2.12">3.2.12 - 12 Jul, 2016 (0c39c3db)
+
+* (HISTORY) update scooter history for gem release 3.2.12 (0c39c3db)
 
 * (GEM) update scooter version to 3.2.12 (743d2b00)
 
