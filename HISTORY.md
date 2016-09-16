@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 14 Sep, 2016 (36d4e676)](#LATEST)
+* [LATEST - 16 Sep, 2016 (191abc06)](#LATEST)
+* [3.2.13 - 14 Sep, 2016 (a92fa5a9)](#3.2.13)
 * [3.2.12 - 12 Jul, 2016 (0c39c3db)](#3.2.12)
 * [3.2.11 - 11 Jul, 2016 (0ff8959d)](#3.2.11)
 * [3.2.10 - 20 Jun, 2016 (e5670032)](#3.2.10)
@@ -38,7 +39,33 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 14 Sep, 2016 (36d4e676)
+### <a name = "LATEST">LATEST - 16 Sep, 2016 (191abc06)
+
+* (GEM) update scooter version to 3.2.14 (191abc06)
+
+* Merge pull request #80 from cwcowellshah/ignore_timestamps_when_comparing_dbs (e3615708)
+
+
+```
+Merge pull request #80 from cwcowellshah/ignore_timestamps_when_comparing_dbs
+
+make db comparison logic more granular and allow certain fields (like…
+```
+* make db comparison logic more granular and allow certain fields (like timestamps) to differ when comparing (ebf7d7fc)
+
+* Merge pull request #75 from pcarlisle/silence-certs (79743e75)
+
+
+```
+Merge pull request #75 from pcarlisle/silence-certs
+
+(maint) Don't print certs all the time
+```
+* (maint) Don't print certs all the time (ed07ff43)
+
+### <a name = "3.2.13">3.2.13 - 14 Sep, 2016 (a92fa5a9)
+
+* (HISTORY) update scooter history for gem release 3.2.13 (a92fa5a9)
 
 * (GEM) update scooter version to 3.2.13 (36d4e676)
 
