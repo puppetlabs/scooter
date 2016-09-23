@@ -10,7 +10,7 @@ module Scooter
 
       def initialize(host)
         super(host)
-        @connection.url_prefix.path = '/orchestator'
+        @connection.url_prefix.path = '/orchestrator'
         @connection.url_prefix.port = 8143
       end
 
