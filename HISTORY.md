@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 16 Sep, 2016 (191abc06)](#LATEST)
+* [LATEST - 23 Sep, 2016 (a77b57b2)](#LATEST)
+* [3.2.14 - 16 Sep, 2016 (08f79ca9)](#3.2.14)
 * [3.2.13 - 14 Sep, 2016 (a92fa5a9)](#3.2.13)
 * [3.2.12 - 12 Jul, 2016 (0c39c3db)](#3.2.12)
 * [3.2.11 - 11 Jul, 2016 (0ff8959d)](#3.2.11)
@@ -39,7 +40,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 16 Sep, 2016 (191abc06)
+### <a name = "LATEST">LATEST - 23 Sep, 2016 (a77b57b2)
+
+* (GEM) update scooter version to 3.2.15 (a77b57b2)
+
+* Merge pull request #81 from zreichert/maint/master/update_orchestrator_endpoints (3ab67f1a)
+
+
+```
+Merge pull request #81 from zreichert/maint/master/update_orchestrator_endpoints
+
+(MAINT) move url prefix to orchestrator v1
+```
+* (MAINT) fix typo in orchestrator dispatcher (322aaa93)
+
+### <a name = "3.2.14">3.2.14 - 16 Sep, 2016 (08f79ca9)
+
+* (HISTORY) update scooter history for gem release 3.2.14 (08f79ca9)
 
 * (GEM) update scooter version to 3.2.14 (191abc06)
 
