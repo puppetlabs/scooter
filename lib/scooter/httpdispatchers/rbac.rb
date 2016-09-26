@@ -29,11 +29,11 @@ module Scooter
         role_ids     = options['role_ids'] || []
         password     = options['password'] || 'Puppet11'
 
-        user_hash = { "email"        => email,
-                      "display_name" => display_name,
-                      "login"        => login,
-                      "role_ids"     => role_ids,
-                      "password"     => password }
+        user_hash = { 'email'        => email,
+                      'display_name' => display_name,
+                      'login'        => login,
+                      'role_ids'     => role_ids,
+                      'password'     => password }
 
         response = create_local_user(user_hash)
         return response if response.env.status != 200
@@ -49,11 +49,11 @@ module Scooter
         display_name = options['display_name'] || RandomString.generate
         description  = options['description'] || RandomString.generate
 
-        role_hash = { "permissions"  => permissions,
-                      "user_ids"     => user_ids,
-                      "group_ids"    => group_ids,
-                      "display_name" => display_name,
-                      "description"  => description }
+        role_hash = { 'permissions'  => permissions,
+                      'user_ids'     => user_ids,
+                      'group_ids'    => group_ids,
+                      'display_name' => display_name,
+                      'description'  => description }
 
         response = create_role(role_hash)
         return response if response.env.status != 200
@@ -187,17 +187,45 @@ module Scooter
         self_groups = get_list_of_groups
         self_roles  = get_list_of_roles
 
-        users_match  = (other_users == self_users)
-        groups_match = (other_groups == self_groups)
-        roles_match  = (other_roles == self_roles)
-
         errors = ''
-        errors << "Users do not match\r\n" unless users_match
-        errors << "Groups do not match\r\n" unless groups_match
-        errors << "Roles do not match\r\n" unless roles_match
+        errors << "Users do not match\r\n" unless users_match?(self_users, other_users)
+        errors << "Groups do not match\r\n" unless groups_match?(self_groups, other_groups)
+        errors << "Roles do not match\r\n" unless roles_match?(self_roles, other_roles)
 
         @faraday_logger.warn(errors.chomp) unless errors.empty?
         errors.empty?
+      end
+
+      private
+
+      def users_match?(other_users, self_users)
+        other_users == self_users
+      end
+
+      def groups_match?(other_groups, self_groups)
+        other_groups == self_groups
+      end
+
+      def roles_match?(other_roles, self_roles)
+        return false unless other_roles.size == self_roles.size
+        other_roles.each_index { |idx| return false unless role_matches?(other_roles[idx], self_roles[idx]) }
+        true
+      end
+
+      def role_matches?(role1, role2)
+        keys_with_expected_diffs = ['permissions']
+        same_num_fields          = (role1.size == role2.size)
+        same_byte_length         = (role1.to_s.size == role2.to_s.size)
+        same_num_fields && same_byte_length && same_role_contents?(role1, role2, keys_with_expected_diffs)
+      end
+
+      def same_role_contents?(role1, role2, keys_to_ignore)
+        role1.keys.each do |key|
+          next if keys_to_ignore.include?(key)
+          puts "comparing role contents using key '#{key}': #{role1[key]} should match #{role2[key]}"
+          return false unless role1[key] == role2[key]
+        end
+        true
       end
     end
   end
