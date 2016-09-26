@@ -14,7 +14,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
   end
 
   it 'should use the correct path prefix' do
-    expect(orchestrator_api.connection.url_prefix.path).to eq('/orchestator')
+    expect(orchestrator_api.connection.url_prefix.path).to eq('/orchestrator')
   end
 
   describe '.list_jobs' do
@@ -24,7 +24,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.not_to respond_to(:list_jobs).with(2).arguments }
 
     it 'should take a job_id' do
-      expect(orchestrator_api.connection).to receive(:get).with('/v1/jobs')
+      expect(orchestrator_api.connection).to receive(:get).with('v1/jobs')
       expect{ orchestrator_api.list_jobs }.not_to raise_error
     end
   end
@@ -35,7 +35,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:list_job_details).with(1).arguments }
 
     it 'should take a job_id' do
-      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}")
+      expect(orchestrator_api.connection).to receive(:get).with("v1/jobs/#{job_id}")
       expect{ orchestrator_api.list_job_details(job_id) }.not_to raise_error
     end
   end
@@ -46,7 +46,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:list_nodes_associated_with_job).with(1).arguments }
 
     it 'should take a job_id' do
-      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}/nodes")
+      expect(orchestrator_api.connection).to receive(:get).with("v1/jobs/#{job_id}/nodes")
       expect{ orchestrator_api.list_nodes_associated_with_job(job_id) }.not_to raise_error
     end
   end
@@ -58,7 +58,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
 
 
     it 'should take a job_id' do
-      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}/report")
+      expect(orchestrator_api.connection).to receive(:get).with("v1/jobs/#{job_id}/report")
       expect{ orchestrator_api.get_job_report(job_id) }.not_to raise_error
     end
   end
@@ -69,7 +69,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:get_job_events).with(1).arguments }
 
     it 'should take a job_id' do
-      expect(orchestrator_api.connection).to receive(:get).with("/v1/jobs/#{job_id}/events")
+      expect(orchestrator_api.connection).to receive(:get).with("v1/jobs/#{job_id}/events")
       expect{ orchestrator_api.get_job_events(job_id) }.not_to raise_error
     end
   end
@@ -79,7 +79,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:environment).with(1).arguments }
 
     it 'should take a environment name' do
-      expect(orchestrator_api.connection).to receive(:get).with("/v1/environments/#{environment}")
+      expect(orchestrator_api.connection).to receive(:get).with("v1/environments/#{environment}")
       expect{ orchestrator_api.environment(environment) }.not_to raise_error
     end
   end
@@ -89,7 +89,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:list_applications).with(1).arguments }
 
     it 'should take a environment name' do
-      expect(orchestrator_api.connection).to receive(:get).with("/v1/environments/#{environment}/applications")
+      expect(orchestrator_api.connection).to receive(:get).with("v1/environments/#{environment}/applications")
       expect{ orchestrator_api.list_applications(environment) }.not_to raise_error
     end
   end
@@ -99,7 +99,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:list_app_instances).with(1).arguments }
 
     it 'should take a environment name' do
-      expect(orchestrator_api.connection).to receive(:get).with("/v1/environments/#{environment}/instances")
+      expect(orchestrator_api.connection).to receive(:get).with("v1/environments/#{environment}/instances")
       expect{ orchestrator_api.list_app_instances(environment) }.not_to raise_error
     end
   end
@@ -110,14 +110,14 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:deploy_environment).with(2).arguments }
 
     it 'should take an environment name' do
-      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/deploy")
+      expect(orchestrator_api.connection).to receive(:post).with("v1/command/deploy")
       expect{ orchestrator_api.deploy_environment(environment) }.not_to raise_error
     end
 
     it 'should take an environment and a opts hash' do
       opts = {'noop' => true, 'concurency' => 5}
 
-      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/deploy")
+      expect(orchestrator_api.connection).to receive(:post).with("v1/command/deploy")
       expect{ orchestrator_api.deploy_environment(environment, opts) }.not_to raise_error
     end
   end
@@ -128,7 +128,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.not_to respond_to(:stop_job).with(2).arguments }
 
     it 'should take a job id' do
-      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/stop")
+      expect(orchestrator_api.connection).to receive(:post).with("v1/command/stop")
       expect{ orchestrator_api.stop_job(job_id) }.not_to raise_error
     end
   end
@@ -139,14 +139,14 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:plan_job).with(2).arguments }
 
     it 'should take an environment name' do
-      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/plan")
+      expect(orchestrator_api.connection).to receive(:post).with("v1/command/plan")
       expect{ orchestrator_api.plan_job(environment) }.not_to raise_error
     end
 
     it 'should take an environment and a opts hash' do
       opts = {'noop' => true, 'concurency' => 5}
 
-      expect(orchestrator_api.connection).to receive(:post).with("/v1/command/plan")
+      expect(orchestrator_api.connection).to receive(:post).with("v1/command/plan")
       expect{ orchestrator_api.plan_job(environment, opts) }.not_to raise_error
     end
   end
