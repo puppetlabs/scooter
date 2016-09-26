@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 23 Sep, 2016 (a77b57b2)](#LATEST)
+* [LATEST - 26 Sep, 2016 (1f060b4d)](#LATEST)
+* [3.2.15 - 23 Sep, 2016 (4877e1a2)](#3.2.15)
 * [3.2.14 - 16 Sep, 2016 (08f79ca9)](#3.2.14)
 * [3.2.13 - 14 Sep, 2016 (a92fa5a9)](#3.2.13)
 * [3.2.12 - 12 Jul, 2016 (0c39c3db)](#3.2.12)
@@ -40,7 +41,40 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 23 Sep, 2016 (a77b57b2)
+### <a name = "LATEST">LATEST - 26 Sep, 2016 (1f060b4d)
+
+* (GEM) update scooter version to 3.2.16 (1f060b4d)
+
+* Merge pull request #84 from tvpartytonight/maint_loosen_beaker_dependency (d5910783)
+
+
+```
+Merge pull request #84 from tvpartytonight/maint_loosen_beaker_dependency
+
+(maint) loosen beaker dependency
+```
+* Merge pull request #83 from zreichert/maint/master/fix_orchestratordispatcher_spec_tests (3e2ccaaa)
+
+
+```
+Merge pull request #83 from zreichert/maint/master/fix_orchestratordispatcher_spec_tests
+
+(MAINT) fix OrchestratorDispatcher spec tests
+```
+* (maint) loosen beaker dependency (c38bb6e0)
+
+
+```
+(maint) loosen beaker dependency
+
+Now that beaker 3.0.0 is out and available, we need to loosen this
+strict on the beaker major of 2.
+```
+* (MAINT) fix OrchestratorDispatcher spec tests (0c9458c5)
+
+### <a name = "3.2.15">3.2.15 - 23 Sep, 2016 (4877e1a2)
+
+* (HISTORY) update scooter history for gem release 3.2.15 (4877e1a2)
 
 * (GEM) update scooter version to 3.2.15 (a77b57b2)
 
