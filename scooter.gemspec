@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
 
   #Run time dependencies
   spec.add_runtime_dependency 'json', '~> 1.8'
+  spec.add_runtime_dependency 'test-unit'
   spec.add_runtime_dependency 'net-ldap', '~> 0.6', '>= 0.6.1', '<= 0.12.1'
   spec.add_runtime_dependency 'beaker', '>= 2.1.0'
   spec.add_runtime_dependency 'faraday', '~> 0.9', '>= 0.9.1'
