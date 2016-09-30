@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 26 Sep, 2016 (1f060b4d)](#LATEST)
+* [LATEST - 29 Sep, 2016 (32122c3a)](#LATEST)
+* [3.2.16 - 26 Sep, 2016 (febe204c)](#3.2.16)
 * [3.2.15 - 23 Sep, 2016 (4877e1a2)](#3.2.15)
 * [3.2.14 - 16 Sep, 2016 (08f79ca9)](#3.2.14)
 * [3.2.13 - 14 Sep, 2016 (a92fa5a9)](#3.2.13)
@@ -41,7 +42,33 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 26 Sep, 2016 (1f060b4d)
+### <a name = "LATEST">LATEST - 29 Sep, 2016 (32122c3a)
+
+* (GEM) update scooter version to 3.2.17 (32122c3a)
+
+* Merge pull request #82 from cwcowellshah/fix_comparing_rbac_dbs (13f55363)
+
+
+```
+Merge pull request #82 from cwcowellshah/fix_comparing_rbac_dbs
+
+PE-16632 verify matching RBAC roles more accurately
+```
+* Merge pull request #85 from samwoods1/update_pe_ver (1de604a8)
+
+
+```
+Merge pull request #85 from samwoods1/update_pe_ver
+
+(maint) update pe version to current everett
+```
+* (maint) update pe version to current everett (bba1ce99)
+
+* verify matching RBAC roles more accurately (797efa04)
+
+### <a name = "3.2.16">3.2.16 - 26 Sep, 2016 (febe204c)
+
+* (HISTORY) update scooter history for gem release 3.2.16 (febe204c)
 
 * (GEM) update scooter version to 3.2.16 (1f060b4d)
 
