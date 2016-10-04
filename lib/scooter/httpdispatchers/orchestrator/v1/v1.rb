@@ -58,6 +58,19 @@ module Scooter
             req.body = payload
           end
         end
+
+        #inventory endpoints
+        def get_inventory(node=nil)
+          url = "v1/inventory"
+          url << "/#{node}" if node
+          @connection.get(url)
+        end
+
+        def post_inventory(payload)
+          @connection.post('v1/inventory') do |req|
+            req.body = payload
+          end
+        end
       end
     end
   end

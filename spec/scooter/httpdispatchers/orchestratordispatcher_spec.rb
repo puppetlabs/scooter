@@ -150,4 +150,35 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
       expect{ orchestrator_api.plan_job(environment, opts) }.not_to raise_error
     end
   end
+
+  describe '.get_inventory' do
+    let(:certname) {'thisismycertname'}
+
+    it {is_expected.to respond_to(:get_inventory).with(0).arguments }
+    it {is_expected.to respond_to(:get_inventory).with(1).arguments }
+    it {is_expected.not_to respond_to(:get_inventory).with(2).arguments }
+
+    it 'should take a single certname' do
+      expect(orchestrator_api.connection).to receive(:get).with("v1/inventory/#{certname}")
+      expect{ orchestrator_api.get_inventory(certname) }.not_to raise_error
+    end
+
+    it 'should take no argument' do
+      expect(orchestrator_api.connection).to receive(:get).with("v1/inventory")
+      expect{ orchestrator_api.get_inventory }.not_to raise_error
+    end
+  end
+
+  describe '.nodes_connected_to_broker' do
+    let(:certnames) {['certnameone', 'certnametwo', 'certnamethree']}
+
+    it {is_expected.not_to respond_to(:nodes_connected_to_broker).with(0).arguments }
+    it {is_expected.to respond_to(:nodes_connected_to_broker).with(1).arguments }
+    it {is_expected.not_to respond_to(:nodes_connected_to_broker).with(2).arguments }
+
+    it 'should take an array of certnames' do
+      expect(orchestrator_api.connection).to receive(:post).with("v1/inventory")
+      expect{ orchestrator_api.nodes_connected_to_broker(certnames) }.not_to raise_error
+    end
+  end
 end
