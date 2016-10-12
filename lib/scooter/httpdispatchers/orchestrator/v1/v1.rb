@@ -76,6 +76,11 @@ module Scooter
             req.body = payload
           end
         end
+
+        #status endpoint
+        def get_status
+          @connection.get("#{@version}/status")
+        end
       end
     end
   end
