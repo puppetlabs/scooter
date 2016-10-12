@@ -222,7 +222,6 @@ module Scooter
       def same_role_contents?(role1, role2, keys_to_ignore)
         role1.keys.each do |key|
           next if keys_to_ignore.include?(key)
-          puts "comparing role contents using key '#{key}': #{role1[key]} should match #{role2[key]}"
           return false unless role1[key] == role2[key]
         end
         true

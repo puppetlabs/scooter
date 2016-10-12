@@ -11,9 +11,8 @@ module Scooter
         def query_nodes(ast_query_string=nil)
           set_puppetdb_path
           @connection.post('query/v4/nodes') do |request|
-            unless ast_query_string.nil?
-              request.params['query'] = ast_query_string
-            end
+            request.params['query']         = ast_query_string unless ast_query_string.nil?
+            request.headers['Content-Type'] = 'application/json'
           end
         end
 
@@ -22,9 +21,8 @@ module Scooter
         def query_catalogs(ast_query_string=nil)
           set_puppetdb_path
           @connection.post('query/v4/catalogs') do |request|
-            unless ast_query_string.nil?
-              request.params['query'] = ast_query_string
-            end
+            request.params['query']         = ast_query_string unless ast_query_string.nil?
+            request.headers['Content-Type'] = 'application/json'
           end
         end
 
@@ -33,9 +31,8 @@ module Scooter
         def query_reports(ast_query_string=nil)
           set_puppetdb_path
           @connection.post('query/v4/reports') do |request|
-            unless ast_query_string.nil?
-              request.params['query'] = ast_query_string
-            end
+            request.params['query']         = ast_query_string unless ast_query_string.nil?
+            request.headers['Content-Type'] = 'application/json'
           end
         end
 
@@ -44,9 +41,8 @@ module Scooter
         def query_facts(ast_query_string=nil)
           set_puppetdb_path
           @connection.post('query/v4/facts') do |request|
-            unless ast_query_string.nil?
-              request.params['query'] = ast_query_string
-            end
+            request.params['query']         = ast_query_string unless ast_query_string.nil?
+            request.headers['Content-Type'] = 'application/json'
           end
         end
       end
