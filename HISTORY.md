@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 29 Sep, 2016 (32122c3a)](#LATEST)
+* [LATEST - 17 Oct, 2016 (36422c16)](#LATEST)
+* [3.2.17 - 29 Sep, 2016 (532a4f4a)](#3.2.17)
 * [3.2.16 - 26 Sep, 2016 (febe204c)](#3.2.16)
 * [3.2.15 - 23 Sep, 2016 (4877e1a2)](#3.2.15)
 * [3.2.14 - 16 Sep, 2016 (08f79ca9)](#3.2.14)
@@ -42,7 +43,55 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 29 Sep, 2016 (32122c3a)
+### <a name = "LATEST">LATEST - 17 Oct, 2016 (36422c16)
+
+* (GEM) update scooter version to 3.2.18 (36422c16)
+
+* Merge pull request #89 from cwcowellshah/fix_puppetdb_sync_check (c5e9e44e)
+
+
+```
+Merge pull request #89 from cwcowellshah/fix_puppetdb_sync_check
+
+fix PuppetDB sync checking code, and micro-fixes
+```
+* Merge pull request #88 from zreichert/maint/master/add_status_endpoint_for_orchestrator (11f99912)
+
+
+```
+Merge pull request #88 from zreichert/maint/master/add_status_endpoint_for_orchestrator
+
+Maint/master/add status endpoint for orchestrator
+```
+* Merge pull request #86 from samwoods1/maint_ruby_2_fix (6732743d)
+
+
+```
+Merge pull request #86 from samwoods1/maint_ruby_2_fix
+
+(maint) attempt to fix Scooter issue in pipeline
+```
+* fix PuppetDB sync checking code, and micro-fixes (7eb56bdc)
+
+* Merge pull request #87 from zreichert/feature/master/ORCH-1542_add_inventory_endpoint_to_scooter (568762c4)
+
+
+```
+Merge pull request #87 from zreichert/feature/master/ORCH-1542_add_inventory_endpoint_to_scooter
+
+(ORCH-1542) add orchestrator/inventory endpoints
+```
+* (MAINT) add status endpoint for orchestrator (871dd003)
+
+* (MAINT) abstract orchestrator verison into module initialize (4f54a17b)
+
+* (ORCH-1542) add orchestrator/inventory endpoints (eb6acdf2)
+
+* (maint) attempt to fix Scooter issue in pipeline (609dc24f)
+
+### <a name = "3.2.17">3.2.17 - 29 Sep, 2016 (532a4f4a)
+
+* (HISTORY) update scooter history for gem release 3.2.17 (532a4f4a)
 
 * (GEM) update scooter version to 3.2.17 (32122c3a)
 
