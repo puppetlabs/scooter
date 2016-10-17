@@ -181,4 +181,15 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
       expect{ orchestrator_api.nodes_connected_to_broker(certnames) }.not_to raise_error
     end
   end
+
+  describe '.get_status' do
+
+    it {is_expected.to respond_to(:get_status).with(0).arguments }
+    it {is_expected.not_to respond_to(:get_status).with(1).arguments }
+
+    it 'should take no argument' do
+      expect(orchestrator_api.connection).to receive(:get).with("v1/status")
+      expect{ orchestrator_api.get_status }.not_to raise_error
+    end
+  end
 end
