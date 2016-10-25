@@ -267,7 +267,15 @@ module Scooter
       # @return [Boolean]
       def facts_synced?(replica_facts, master_facts=nil)
         master_facts = query_facts.body if master_facts.nil?
-        replica_facts.each { |replica_fact| return false unless fact_synced?(replica_fact, master_facts) }
+        replica_facts.each do |replica_fact|
+          # TECH DEBT: the 'agent_specified_environment' fact is set on the scheduled agent by Beaker when created,
+          # but then is unset after the scheduled agent first checks in. This makes a gap between replica and master facts.
+          # We don't want to wait 2 mins for that fact to sync over to the replica, so for now, ignore it.
+          # NOTE: this *might* be caused by PE-18113, and when that's resolved we might be able to start paying attention
+          # to the agent_specified_environment fact again. We'll have to test and find out.
+          next if replica_fact['name'] == 'agent_specified_environment'
+          return false unless fact_synced?(replica_fact, master_facts)
+        end
         true
       end
 
@@ -281,6 +289,7 @@ module Scooter
         master_facts.each do |master_fact|
           return true if ['certname', 'name', 'environment'].all? { |key| replica_fact[key] == master_fact[key] }
         end
+        @faraday_logger.warn("*** fact sync failure: no Master fact matches Replica fact: #{replica_fact}")
         false
       end
 
@@ -339,8 +348,8 @@ module Scooter
       def master_has_report?(replica_report, master_reports)
         keys_with_expected_diffs = ['receive_time', 'resource_events']
         master_reports.each do |master_report|
-          same_hash          = (replica_report['hash'] == master_report['hash'])
-          same_contents      = same_contents?(replica_report, master_report, keys_with_expected_diffs)
+          same_hash     = (replica_report['hash'] == master_report['hash'])
+          same_contents = same_contents?(replica_report, master_report, keys_with_expected_diffs)
           return true if same_hash && same_contents
         end
         @faraday_logger.warn("master doesn't have report with hash '#{replica_report['hash']}', which is on replica")
