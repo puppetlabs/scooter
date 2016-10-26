@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 17 Oct, 2016 (36422c16)](#LATEST)
+* [LATEST - 26 Oct, 2016 (9ecf11fe)](#LATEST)
+* [3.2.18 - 17 Oct, 2016 (7f704a74)](#3.2.18)
 * [3.2.17 - 29 Sep, 2016 (532a4f4a)](#3.2.17)
 * [3.2.16 - 26 Sep, 2016 (febe204c)](#3.2.16)
 * [3.2.15 - 23 Sep, 2016 (4877e1a2)](#3.2.15)
@@ -43,7 +44,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 17 Oct, 2016 (36422c16)
+### <a name = "LATEST">LATEST - 26 Oct, 2016 (9ecf11fe)
+
+* (GEM) update scooter version to 3.2.19 (9ecf11fe)
+
+* Merge pull request #90 from cwcowellshah/pe-18117_fix_facts_sync_tests (6ac05a41)
+
+
+```
+Merge pull request #90 from cwcowellshah/pe-18117_fix_facts_sync_tests
+
+PE-18117 fix facts sync helper method
+```
+* PE-18117 fix facts sync helper method (2c9430a2)
+
+### <a name = "3.2.18">3.2.18 - 17 Oct, 2016 (7f704a74)
+
+* (HISTORY) update scooter history for gem release 3.2.18 (7f704a74)
 
 * (GEM) update scooter version to 3.2.18 (36422c16)
 
