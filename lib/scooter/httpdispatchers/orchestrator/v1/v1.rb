@@ -33,6 +33,10 @@ module Scooter
         end
 
         #environments endpoints
+        def get_environments
+          @connection.get("v1/environments")
+        end
+
         def get_environment(environment)
           @connection.get("#{@version}/environments/#{environment}")
         end
