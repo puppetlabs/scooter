@@ -22,20 +22,19 @@ module Scooter
         expect(subject).not_to be_nil
       end
 
-      context '.signin with a page that returns an xcsrf token' do
-        let(:mock_page) { <<-XCSRF_PAGE
-            <!doctype html>
-              <head>
-                <meta name="__anti-forgery-token" content="xcsrf-token" />
-              </head>
-            </html>
-        XCSRF_PAGE
-        }
+      context '"signin with a page that returns a token' do
         before do
           index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/auth/login', "username=#{username}&password=#{password}") {[200, {}, '']}
-            stub.get('/') {[200, {}, mock_page]}
+            head = {"server"=>"nginx/1.8.1", 
+                    "date"=>"Tue, 29 Nov 2016 22:05:41 GMT", 
+                    "content-length"=>"0", 
+                    "connection"=>"close", 
+                    "set-cookie"=>"JSESSIONID=b05e9b11-5e9f-4d6a-9faf-e28a0415197d; Path=/; Secure; HttpOnly, rememberMe=deleteMe; Path=/auth; Max-Age=0; Expires=Mon, 28-Nov-2016 22:05:41 GMT, pl_ssti=0CeHhpz5PPLna7kpaEMcTHjJ62z9eizHTzsxEXNK8W20;Secure;Path=/", 
+                    "location"=>"/", 
+                    "x-frame-options"=>"DENY"}
+            stub.post('/auth/login', "username=#{username}&password=#{password}") {[200, head, '']}
+            stub.get('/') {[200, {}, '']}
           end
         end
 
@@ -43,38 +42,11 @@ module Scooter
           expect{subject.signin}.to_not raise_error
         end
 
-        it 'sets the xcsrf token in the header' do
+        it 'sets the token in the header' do
           subject.signin
-          expect(subject.connection.headers['X-CSRF-Token']).to eq('xcsrf-token')
-        end
-      end
-
-      context '.signin with a page that has no xcsrf token' do
-        let(:mock_page) { <<-XCSRF_PAGE
-            <!doctype html>
-              <head>
-              </head>
-            </html>
-        XCSRF_PAGE
-        }
-        before do
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/auth/login', "username=#{username}&password=#{password}") {[200, {}, '']}
-            stub.get('/') {[200, {}, mock_page]}
-          end
-        end
-
-        it 'does not raise an error' do
-          expect{subject.signin}.to_not raise_error
-        end
-
-        it 'There is no xcsrf token set' do
-          subject.signin
-          expect(subject.connection.headers['X-CSRF-Token']).to eq(nil)
+          expect(subject.connection.headers['Cookie']).to include('pl_ssti=')
         end
       end
     end
   end
 end
-

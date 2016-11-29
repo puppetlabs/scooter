@@ -83,7 +83,7 @@ module Scooter
           if !host.is_a?(Unix::Host)
             raise 'Can only acquire SSL certs if the host is a Unix::Host'
           end
-         acquire_ca_cert(host)
+          acquire_ca_cert(host)
         end
       end
 
@@ -94,16 +94,12 @@ module Scooter
           connection.port = 443
         end
         return response if response.status != 200
-        begin
-          # This just had to be a string...*sigh*
-          expiration = response.headers['Set-Cookie'].split(';')[6]
-          pl_ssti = expiration.split(',')[2]
-          pl_ssti_value = pl_ssti.split('=')[1]
-          @connection.headers['Cookie'] = response.headers['Set-Cookie']
-          @connection.headers['X-Authentication'] = pl_ssti_value
-        rescue
-          # do nothing in the rescue
-        end
+        # This just had to be a string...*sigh*
+        header_array = response.headers['Set-Cookie'].split(';')
+        pl_ssti = header_array.select{|s| s =~ /pl_ssti/}
+        pl_ssti_value = pl_ssti[0].partition('pl_ssti=').last
+        @connection.headers['Cookie'] = response.headers['Set-Cookie']
+        @connection.headers['X-Authentication'] = pl_ssti_value
         # Reset the connection port, since we have to hardcode it to 443 signin
         set_url_prefix
       end
