@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 26 Oct, 2016 (9ecf11fe)](#LATEST)
+* [LATEST - 30 Nov, 2016 (a82821a0)](#LATEST)
+* [3.2.19 - 26 Oct, 2016 (0edc4754)](#3.2.19)
 * [3.2.18 - 17 Oct, 2016 (7f704a74)](#3.2.18)
 * [3.2.17 - 29 Sep, 2016 (532a4f4a)](#3.2.17)
 * [3.2.16 - 26 Sep, 2016 (febe204c)](#3.2.16)
@@ -44,7 +45,35 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 26 Oct, 2016 (9ecf11fe)
+### <a name = "LATEST">LATEST - 30 Nov, 2016 (a82821a0)
+
+* (GEM) update scooter version to 4.0.0 (a82821a0)
+
+* Merge pull request #92 from lucywyman/maint-refactor-auth (93357ebc)
+
+
+```
+Merge pull request #92 from lucywyman/maint-refactor-auth
+
+(maint) Fix how scooter authenticates with pe console
+```
+* Fix up for merge (86b55d1c)
+
+* Merge pull request #91 from lucywyman/ORCH-1556-add-environments-endpoint (c1ef8994)
+
+
+```
+Merge pull request #91 from lucywyman/ORCH-1556-add-environments-endpoint
+
+(ORCH-1556) Add /environments endpoint to scooter
+```
+* (maint) Fix how scooter authenticates with pe console (0884bbb1)
+
+* (ORCH-1556) add /environments endpoint (a92abcb5)
+
+### <a name = "3.2.19">3.2.19 - 26 Oct, 2016 (0edc4754)
+
+* (HISTORY) update scooter history for gem release 3.2.19 (0edc4754)
 
 * (GEM) update scooter version to 3.2.19 (9ecf11fe)
 
