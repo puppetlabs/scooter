@@ -83,7 +83,7 @@ module Scooter
           if !host.is_a?(Unix::Host)
             raise 'Can only acquire SSL certs if the host is a Unix::Host'
           end
-         acquire_ca_cert(host)
+          acquire_ca_cert(host)
         end
       end
 
@@ -93,28 +93,14 @@ module Scooter
           request.body = "username=#{login}&password=#{CGI.escape(password)}"
           connection.port = 443
         end
-        #return the response if the status code was not 200
         return response if response.status != 200
-        # try to be helpful and acquire the xcsrf; catch any error that occurs
-        # in the acquire_xcsrf method
-        begin
-          acquire_xcsrf
-        rescue
-          # do nothing in the rescue
-        end
+        # This just had to be a string...*sigh*
+        header_array = response.headers['Set-Cookie'].split(';')
+        pl_ssti = header_array.select{|s| s =~ /pl_ssti/}
+        pl_ssti_value = pl_ssti[0].partition('pl_ssti=').last
+        @connection.headers['Cookie'] = response.headers['Set-Cookie']
+        @connection.headers['X-Authentication'] = pl_ssti_value
         # Reset the connection port, since we have to hardcode it to 443 signin
-        # here
-        set_url_prefix
-      end
-
-      def acquire_xcsrf
-        # This simply makes a call to the base_uri and extracts out an
-        # anti-forgery-token and adds that token to the headers for the
-        # connection object
-        response_body = @connection.get('/') { |req| connection.port = 443 }.env.body
-        parsed_body = Nokogiri::HTML(response_body)
-        token = parsed_body.css("meta[name='__anti-forgery-token']")[0].attributes['content'].value
-        @connection.headers['X-CSRF-Token'] = token
         set_url_prefix
       end
 
