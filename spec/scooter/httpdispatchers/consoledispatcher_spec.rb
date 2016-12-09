@@ -13,13 +13,19 @@ module Scooter
     subject { HttpDispatchers::ConsoleDispatcher.new(host, credentials) }
 
     context 'with a beaker host passed in' do
+      let(:logger) { double('logger')}
       unixhost = { roles:     ['test_role'],
                    'platform' => 'debian-7-x86_64' }
-      let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
+      let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
       before do
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
-        expect(subject).not_to be_nil
+        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
+        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) { true }
+        expect(OpenSSL::PKey).to receive(:read).and_return('Pkey')
+        expect(OpenSSL::X509::Certificate).to receive(:new).and_return('client_cert')
+        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cert) {'host cert'}
+        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_private_key) {'key file'}
+        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cacert) {'cert file'}
+        expect(subject).to be_kind_of(HttpDispatchers::ConsoleDispatcher)
       end
 
       context '"signin with a page that returns a token' do

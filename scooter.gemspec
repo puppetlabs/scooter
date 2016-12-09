@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'activesupport', '4.2.6'
 
   #Run time dependencies
+  spec.add_runtime_dependency 'beaker-http', '~> 0.1'
   spec.add_runtime_dependency 'json', '~> 1.8'
   spec.add_runtime_dependency 'test-unit'
   spec.add_runtime_dependency 'net-ldap', '~> 0.6', '>= 0.6.1', '<= 0.12.1'

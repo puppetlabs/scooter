@@ -17,17 +17,19 @@ module Scooter
       # Used to compare replica puppetdb to master. Raises exception if it does not match.
       # @param [BeakerHost] host_name
       def database_matches_self?(host_name)
-        original_host_name = self.host
+        # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
+        # and then set it back to the original at the end of the ensure. The :vmhostname
+        #overrides the host.hostname, and nothing should win out over it.
+        original_host_name = host.host_hash[:vmhostname]
         begin
-          self.host = host_name
-          initialize_connection
+          host.host_hash[:vmhostname] = host_name
+
           other_nodes    = query_nodes.body
           other_catalogs = query_catalogs.body
           other_facts    = query_facts.body
           other_reports  = query_reports.body
         ensure
-          self.host = original_host_name
-          initialize_connection
+          host.host_hash[:vmhostname] = original_host_name
         end
 
         self_nodes    = query_nodes.body
@@ -46,7 +48,7 @@ module Scooter
         errors << "Facts do not match\r\n" unless facts_match
         errors << "Reports do not match\r\n" unless reports_match
 
-        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        host.logger.warn(errors.chomp) unless errors.empty?
         errors.empty?
       end
 
@@ -59,17 +61,19 @@ module Scooter
       # @param [BeakerHost] replica_host_name
       # @param [Array] agents all the agents in the SUT, in the form of BeakerHost instances
       def replica_db_synced_with_master_db?(replica_host_name, agents)
-        master_host_name = self.host
+        # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
+        # and then set it back to the original at the end of the ensure. The :vmhostname
+        #overrides the host.hostname, and nothing should win out over it.
+        original_host_name = host.host_hash[:vmhostname]
         begin
-          self.host = replica_host_name
-          initialize_connection
+          host.host_hash[:vmhostname] = host_name
+
           replica_nodes    = query_nodes.body
           replica_catalogs = query_catalogs.body
           replica_facts    = query_facts.body
           replica_reports  = query_reports.body
         ensure
-          self.host = master_host_name
-          initialize_connection
+          host.host_hash[:vmhostname] = original_host_name
         end
         master_nodes    = query_nodes.body
         master_catalogs = query_catalogs.body
@@ -87,7 +91,7 @@ module Scooter
         errors << "Facts not synced\r\n" unless facts_synced
         errors << "Reports not synced\r\n" unless reports_synced
 
-        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        host.logger.warn(errors.chomp) unless errors.empty?
         errors.empty?
       end
 

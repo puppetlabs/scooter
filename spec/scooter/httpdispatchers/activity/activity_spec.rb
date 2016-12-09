@@ -127,15 +127,21 @@ module Scooter
 
     context 'with a beaker host passed in' do
 
+      let(:logger) { double('logger')}
       unixhost = { roles:     ['test_role'],
                    'platform' => 'debian-7-x86_64' }
-      let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
+      let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
       let(:credentials) { { login: 'Ziggy', password: 'Stardust' } }
 
       before do
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
-        expect(subject).not_to be_nil
+        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
+        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) { true }
+        allow_any_instance_of(HttpDispatchers::ConsoleDispatcher).to receive(:configure_private_key_and_cert_with_puppet) { true }
+        # Since we mocked the cert configuration action, we need to fixup the url_prefix
+        # to be the proper scheme and object class, HTTPS instead of HTTP
+        subject.url_prefix.scheme = 'https'
+        subject.url_prefix = URI.parse(subject.connection.url_prefix.to_s)
+        expect(subject).to be_kind_of(HttpDispatchers::ConsoleDispatcher)
       end
 
       describe '.get_classifier_events' do
@@ -195,13 +201,14 @@ module Scooter
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.get('activity-api/v1/events?service_id=rbac') { |env| env[:url].to_s == "https://test.com:4433/activity-api/v1/events?service_id=rbac" ?
                 [200, [], rbac_events] :
-                [200, [], rbac_events.dup["commits"].push('another_array_item')] }
+                [200, [], rbac_events['commits'].dup.push('another_array_item')] }
             stub.get('activity-api/v1/events?service_id=classifier') { |env| env[:url].to_s == "https://test.com:4433/activity-api/v1/events?service_id=classifier" ?
                 [200, [], classifier_events] :
                 [200, [], classifier_events.dup["commits"].push('another_array_item')] }
           end
-          expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
-          expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
+          expect(subject).to receive(:is_resolvable).exactly(4).times.and_return(true)
+          # expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
+          # expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
         end
 
         it 'compare with self' do
@@ -209,7 +216,7 @@ module Scooter
         end
 
         it 'compare with different' do
-          expect(subject.faraday_logger).to receive(:warn).with /Rbac events do not match/
+          expect(subject.host.logger).to receive(:warn).with /Rbac events do not match/
           expect(subject.activity_database_matches_self?('test2.com')).to be_falsey
         end
       end

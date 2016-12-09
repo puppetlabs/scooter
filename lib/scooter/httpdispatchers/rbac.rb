@@ -171,16 +171,18 @@ module Scooter
       end
 
       def rbac_database_matches_self?(host_name)
-        original_host_name = self.host
+        # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
+        # and then set it back to the original at the end of the ensure. The :vmhostname
+        #overrides the host.hostname, and nothing should win out over it.
+        original_host_name = host.host_hash[:vmhostname]
         begin
-          self.host = host_name.to_s
-          initialize_connection
+          host.host_hash[:vmhostname] = host_name
+
           other_users  = get_list_of_users
           other_groups = get_list_of_groups
           other_roles  = get_list_of_roles
         ensure
-          self.host = original_host_name
-          initialize_connection
+          host.host_hash[:vmhostname] = original_host_name
         end
 
         self_users  = get_list_of_users
@@ -192,7 +194,7 @@ module Scooter
         errors << "Groups do not match\r\n" unless groups_match?(self_groups, other_groups)
         errors << "Roles do not match\r\n" unless roles_match?(self_roles, other_roles)
 
-        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        host.logger.warn(errors.chomp) unless errors.empty?
         errors.empty?
       end
 

@@ -2,12 +2,25 @@ require 'spec_helper'
 
 describe Scooter::HttpDispatchers::OrchestratorDispatcher do
 
-  let(:host) {'host'}
   let(:orchestrator_api) { Scooter::HttpDispatchers::OrchestratorDispatcher.new(host) }
   let(:job_id) { random_string }
   let(:environment) {random_string}
 
+
+  unixhost = { roles:     ['test_role'],
+                   'platform' => 'debian-7-x86_64' }
+  let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
+
   subject { orchestrator_api }
+
+  before do
+    expect(OpenSSL::PKey).to receive(:read).and_return('Pkey')
+    expect(OpenSSL::X509::Certificate).to receive(:new).and_return('client_cert')
+    allow_any_instance_of(Scooter::HttpDispatchers::OrchestratorDispatcher).to receive(:get_host_cert) {'host cert'}
+    allow_any_instance_of(Scooter::HttpDispatchers::OrchestratorDispatcher).to receive(:get_host_private_key) {'key file'}
+    allow_any_instance_of(Scooter::HttpDispatchers::OrchestratorDispatcher).to receive(:get_host_cacert) {'cert file'}
+    expect(subject).to be_kind_of(Scooter::HttpDispatchers::OrchestratorDispatcher)
+  end
 
   it 'should make requests on the correct port' do
     expect(orchestrator_api.connection.url_prefix.port).to be(8143)

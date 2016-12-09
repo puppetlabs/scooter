@@ -15,14 +15,12 @@ module Scooter
       let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
 
       before do
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_private_key).and_return('key file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_hostcert).and_return('host cert')
         expect(OpenSSL::PKey).to receive(:read).and_return('Pkey')
         expect(OpenSSL::X509::Certificate).to receive(:new).and_return('client_cert')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
-        expect(subject).not_to be_nil
-
+        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cert) {'host cert'}
+        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_private_key) {'key file'}
+        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cacert) {'cert file'}
+        expect(subject).to be_kind_of(HttpDispatchers::HttpDispatcher)
       end
 
       it 'sets the hostname correctly' do
@@ -51,6 +49,8 @@ module Scooter
 
       context 'when it receives a 500 error' do
         before do
+          allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
+          allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) { true }
           index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.get('/test/route') {[500,
@@ -66,26 +66,5 @@ module Scooter
         end
       end
     end
-
-    context 'with a string passed in for initialization' do
-      let(:host) {'test.com'}
-      before do
-        expect(subject).not_to be_nil
-      end
-
-      it 'sets the hostname correctly for the dispatcher object' do
-        expect(subject.connection.url_prefix.host).to eq('test.com')
-
-      end
-
-      it 'does not set ssl when there are no ssl components to add' do
-        expect(subject.add_ssl_components_to_connection).to eq(nil)
-        expect(subject.connection.url_prefix.scheme).to eq('http')
-        expect(subject.connection.ssl['client_key']).to eq(nil)
-        expect(subject.connection.ssl['client_cert']).to eq(nil)
-        expect(subject.connection.ssl['ca_file']).to eq(nil)
-      end
-    end
   end
-
 end
