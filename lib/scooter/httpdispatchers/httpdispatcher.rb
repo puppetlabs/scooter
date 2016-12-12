@@ -35,6 +35,7 @@ module Scooter
         @host = host
         configure_private_key_and_cert_with_puppet(host)
 
+        set_url_prefix
         # In this conditional, if we are unable to resolve the hostname, we get the public IP address;
         # because public IP addresses will fail ssl verification, we explicitly turn that off. There
         # should be a better solution, but this has worked so far...

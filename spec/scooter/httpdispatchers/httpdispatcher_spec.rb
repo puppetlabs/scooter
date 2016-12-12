@@ -43,6 +43,10 @@ module Scooter
         expect(subject.connection.ssl['client_cert']).to eq('client_cert')
       end
 
+      it 'calls set_url_prefix during initialization' do
+        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:set_url_prefix)
+      end
+
       it 'has a URI::HTTPS object for a url_prefix' do
         expect(subject.connection.url_prefix).to be_an_instance_of(URI::HTTPS)
       end
