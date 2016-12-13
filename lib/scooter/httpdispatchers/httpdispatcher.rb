@@ -11,10 +11,10 @@ module Scooter
     # low level functionality. Otherwise, the primary function of this class
     # is to allow more specific Dispatchers, such as the ConsoleDispatcher, to
     # extend it and write higher level functionality.
-    class HttpDispatcher
+    class HttpDispatcher < Beaker::Http::Connection
 
 
-      attr_accessor :connection, :host, :ssl, :token, :send_auth_token_as_query_param, :faraday_logger
+      attr_accessor :connection, :host, :token, :send_auth_token_as_query_param, :faraday_logger
       # The only required parameter for the HttpDispatcher is the host, which
       # could either be a beaker Unix::Host or a String. HttpDispatchers offer
       # support for automatically generating the required SSL components for the
@@ -30,17 +30,20 @@ module Scooter
       # @param log_level(Int) The desired log level
       # @param log_body(Boolean) Whether to log the body of responses
       def initialize(host, log_level=Logger::DEBUG, log_body=true)
+        @connection = create_default_connection(host.options, log_body)
         @log_body = log_body
-        @ssl = {}
         @host = host
-        if @host.is_a?(Unix::Host)
-          @connection = create_default_connection_with_beaker_host
-        elsif @host.is_a?(String)
-          @connection = create_default_connection(log_level)
-          set_url_prefix
-        else
-          raise "Argument host must be Unix::Host or String"
+        configure_private_key_and_cert_with_puppet(host)
+
+        set_url_prefix
+        # In this conditional, if we are unable to resolve the hostname, we get the public IP address;
+        # because public IP addresses will fail ssl verification, we explicitly turn that off. There
+        # should be a better solution, but this has worked so far...
+        if !is_resolvable
+          connection.url_prefix.host = Scooter::Utilities::BeakerUtilities.get_public_ip(host)
+          connection.ssl['verify'] = false
         end
+
         # The http-cookie library that the cookie-jar wraps requires that a
         # URI object be specifically a URI::HTTPS object. This changes the
         # default url_prefix in Faraday to be sub-classed from HTTPS, not plain
@@ -49,20 +52,7 @@ module Scooter
         @connection.url_prefix = URI.parse(@connection.url_prefix.to_s)
       end
 
-      def initialize_connection
-        if @host.is_a?(Unix::Host)
-          @connection = create_default_connection_with_beaker_host
-        elsif @host.is_a?(String)
-          @connection = create_default_connection
-          set_url_prefix
-          add_ssl_components_to_connection
-        else
-          raise "Argument host must be Unix::Host or String"
-        end
-
-      end
-
-      def create_default_connection(log_level=Logger::DEBUG)
+      def create_default_connection(options, log_body)
         Faraday.new do |conn|
           conn.request :rbac_auth_token, self
           conn.request :json
@@ -70,10 +60,7 @@ module Scooter
           conn.response :follow_redirects
           conn.response :raise_error
           conn.response :json, :content_type => /\bjson$/
-          @faraday_logger ||= Logger.new $stderr
-          # If log level is not set by Beaker, set faraday log level to debug.
-          @faraday_logger.level ||= log_level if defined? @faraday_logger.level
-          conn.response :logger, @faraday_logger, bodies: @log_body
+          conn.response :faraday_beaker_logger, options[:logger], { :bodies => log_body }
 
           conn.use :cookie_jar
 
@@ -89,21 +76,6 @@ module Scooter
         end
       end
 
-      def create_default_connection_with_beaker_host
-        if host.logger
-          log_level = Logger::ERROR if host.logger.log_level == :error
-          log_level = Logger.WARN if host.logger.log_level == :warn
-          log_level = Logger::INFO if (host.logger.log_level == :info || host.logger.log_level == :notify)
-          log_level ||= Logger::DEBUG
-        end
-
-        connection = create_default_connection(log_level)
-        set_url_prefix(connection)
-        acquire_ssl_components if ssl.empty?
-        add_ssl_components_to_connection(connection)
-        connection
-      end
-
       # See if we can reach the host by hostname
       def is_resolvable(host=self.host)
         begin
@@ -113,56 +85,6 @@ module Scooter
           false
         end
       end
-
-      # If you would like to run tests that expect 400 or even 500 responses,
-      # apply this method to remove the <tt>:raise_error</tt> middleware.
-      def remove_error_checking(connection=self.connection)
-        connection.builder.delete(Faraday::Response::RaiseError)
-      end
-
-      def acquire_ssl_components(host=self.host)
-        if !host.is_a?(Unix::Host)
-          raise 'Can only acquire SSL certs if the host is a Unix::Host'
-        end
-        acquire_ca_cert(host)
-        acquire_cert_and_key(host)
-      end
-
-      def acquire_ca_cert(host=self.host)
-        @ssl['ca_file'] = Scooter::Utilities::BeakerUtilities.pe_ca_cert_file(host)
-      end
-
-      def acquire_cert_and_key(host=self.host)
-        client_key = Scooter::Utilities::BeakerUtilities.pe_private_key(host)
-        client_cert = Scooter::Utilities::BeakerUtilities.pe_hostcert(host)
-        @ssl['client_key']  = OpenSSL::PKey.read(client_key)
-        @ssl['client_cert'] = OpenSSL::X509::Certificate.new(client_cert)
-      end
-
-      def add_ssl_components_to_connection(connection=self.connection)
-        # return immediately if the ssl object is empty
-        if ssl.empty?
-          warn 'no ssl keys defined, the connection object will not be modified'
-          return
-        end
-        # enforce the scheme to be https, since we are adding ssl components to
-        # the connection object
-        connection.url_prefix.scheme = 'https'
-
-        @ssl.each do |k, v|
-          connection.ssl[k] = v
-        end
-
-        if host.is_a?(Unix::Host)
-          if connection.url_prefix.host == Scooter::Utilities::BeakerUtilities.get_public_ip(host) && connection.ssl['verify'] == nil
-            # Because we are connecting to the dashboard by IP address, SSL verification
-            # against the CA will fail. Disable verifying against it for now until a better
-            # fix can be found.
-            connection.ssl['verify'] = false
-          end
-        end
-      end
-
     end
   end
 end

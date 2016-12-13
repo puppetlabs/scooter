@@ -323,15 +323,21 @@ module Scooter
 
     context 'with a beaker host passed in' do
 
+      let(:logger) { double('logger')}
       unixhost = { roles:     ['test_role'],
                    'platform' => 'debian-7-x86_64' }
-      let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
+      let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
       let(:credentials) { { login: 'Ziggy', password: 'Stardust' } }
 
       before do
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-        expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
-        expect(subject).not_to be_nil
+        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
+        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) { true }
+        allow_any_instance_of(HttpDispatchers::ConsoleDispatcher).to receive(:configure_private_key_and_cert_with_puppet) { true }
+        # Since we mocked the cert configuration action, we need to fixup the url_prefix
+        # to be the proper scheme and object class, HTTPS instead of HTTP
+        subject.url_prefix.scheme = 'https'
+        subject.url_prefix = URI.parse(subject.connection.url_prefix.to_s)
+        expect(subject).to be_kind_of(HttpDispatchers::ConsoleDispatcher)
       end
 
       describe '.update_classes' do
@@ -525,15 +531,14 @@ module Scooter
                 [200, [], class_list] :
                 [200, [], class_list.dup.push('another_array_item')] }
           end
-          expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
-          expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
+          expect(subject).to receive(:is_resolvable).exactly(8).times.and_return(true)
         end
         it 'compare with self' do
           expect(subject.classifier_database_matches_self?('test.com')).to be_truthy
         end
 
         it 'compare with different' do
-          expect(subject.faraday_logger).to receive(:warn).with /Nodes do not match/
+          expect(subject.host.logger).to receive(:warn).with /Nodes do not match/
           expect(subject.classifier_database_matches_self?('test2.com')).to be_falsey
         end
       end

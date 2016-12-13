@@ -300,19 +300,18 @@ module Scooter
       end
 
       # Used to compare replica classifier to master. Raises exception if it does not match.
-      # @param [BeakerHost] host_name
+      # @param [String] host_name
       def classifier_database_matches_self?(host_name)
-        original_host_name = self.host
+        original_host_name = host.host_hash[:vmhostname]
         begin
-          self.host = host_name.to_s
-          initialize_connection
+          host.host_hash[:vmhostname] = host_name
+
           other_nodes        = get_list_of_nodes
           other_classes      = get_list_of_classes
           other_environments = get_list_of_environments
           other_groups       = get_list_of_node_groups
         ensure
-          self.host = original_host_name
-          initialize_connection
+          host.host_hash[:vmhostname] = original_host_name
         end
 
         self_nodes        = get_list_of_nodes
@@ -331,7 +330,7 @@ module Scooter
         errors << "Environments do not match\r\n" unless environments_match
         errors << "Groups do not match\r\n" unless groups_match
 
-        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        host.logger.warn(errors.chomp) unless errors.empty?
         errors.empty?
       end
 

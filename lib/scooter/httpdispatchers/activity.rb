@@ -14,17 +14,19 @@ module Scooter
       end
 
       # Used to compare replica activity to master. Raises exception if it does not match.
-      # @param [BeakerHost] host_name
+      # @param [String] host_name
       def activity_database_matches_self?(host_name)
-        original_host_name = self.host
+        # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
+        # and then set it back to the original at the end of the ensure. The :vmhostname
+        #overrides the host.hostname, and nothing should win out over it.
+        original_host_name = host.host_hash[:vmhostname]
         begin
-          self.host = host_name.to_s
-          initialize_connection
+          host.host_hash[:vmhostname] = host_name
+
           other_rbac_events       = get_rbac_events.env.body
           other_classifier_events = get_classifier_events.env.body
         ensure
-          self.host = original_host_name
-          initialize_connection
+          host.host_hash[:vmhostname] = original_host_name
         end
 
         self_rbac_events       = get_rbac_events.env.body
@@ -37,7 +39,7 @@ module Scooter
         errors << "Rbac events do not match\r\n" unless rbac_events_match
         errors << "Classifier events do not match\r\n" unless classifier_events_match
 
-        @faraday_logger.warn(errors.chomp) unless errors.empty?
+        host.logger.warn(errors.chomp) unless errors.empty?
         errors.empty?
       end
 

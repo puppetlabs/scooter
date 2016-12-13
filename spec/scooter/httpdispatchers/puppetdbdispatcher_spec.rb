@@ -4,6 +4,7 @@ module Scooter
   describe HttpDispatchers::PuppetdbDispatcher do
 
     let(:host) { double('host') }
+    let(:logger) { double('logger')}
     let(:credentials) { double('credentials') }
     let(:credentials) { { login: 'Ziggy', password: 'Stardust' } }
 
@@ -11,16 +12,17 @@ module Scooter
 
     unixhost = { roles:     ['test_role'],
                  'platform' => 'debian-7-x86_64' }
-    let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
+    let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
 
     before do
-      expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_ca_cert_file).and_return('cert file')
-      expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_private_key).and_return('key file')
-      expect(Scooter::Utilities::BeakerUtilities).to receive(:pe_hostcert).and_return('host cert')
+      allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
+      allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) { true }
       expect(OpenSSL::PKey).to receive(:read).and_return('Pkey')
       expect(OpenSSL::X509::Certificate).to receive(:new).and_return('client_cert')
-      expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
-      expect(subject).not_to be_nil
+      allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cert) {'host cert'}
+      allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_private_key) {'key file'}
+      allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cacert) {'cert file'}
+      expect(subject).to be_kind_of(HttpDispatchers::PuppetdbDispatcher)
     end
 
     context 'with a beaker host passed in' do
@@ -228,15 +230,14 @@ module Scooter
                 [200, [], [{ 'hash' => 'hash_value', 'producer_timestamp' => 'time' }]] :
                 [200, [], [{ 'hash' => 'hash_value2', 'producer_timestamp' => 'time2' }]] }
           end
-          expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
-          expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
+          expect(subject).to receive(:is_resolvable).exactly(8).times.and_return(true)
         end
         it 'compare with self' do
           expect(subject.database_matches_self?('test.com')).to be_truthy
         end
 
         it 'compare with different' do
-          expect(subject.faraday_logger).to receive(:warn).with /Nodes do not match/
+          expect(subject.host.logger).to receive(:warn).with /Nodes do not match/
           expect(subject.database_matches_self?('test2.com')).to be_falsey
         end
       end
