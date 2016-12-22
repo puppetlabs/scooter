@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 30 Nov, 2016 (a82821a0)](#LATEST)
+* [LATEST - 22 Dec, 2016 (c16ca347)](#LATEST)
+* [4.0.0 - 30 Nov, 2016 (e47d6d40)](#4.0.0)
 * [3.2.19 - 26 Oct, 2016 (0edc4754)](#3.2.19)
 * [3.2.18 - 17 Oct, 2016 (7f704a74)](#3.2.18)
 * [3.2.17 - 29 Sep, 2016 (532a4f4a)](#3.2.17)
@@ -45,7 +46,80 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 30 Nov, 2016 (a82821a0)
+### <a name = "LATEST">LATEST - 22 Dec, 2016 (c16ca347)
+
+* (GEM) update scooter version to 4.0.1 (c16ca347)
+
+* Merge pull request #95 from lucywyman/maint-fix-jobs-endpoint (98a5021e)
+
+
+```
+Merge pull request #95 from lucywyman/maint-fix-jobs-endpoint
+
+(maint) Fix undefined variable in jobs endpoint
+```
+* (maint) Fix undefined variable in jobs endpoint (7be068bc)
+
+* Merge pull request #94 from nicklewis/properly-limit-job-queries (268288df)
+
+
+```
+Merge pull request #94 from nicklewis/properly-limit-job-queries
+
+(maint) Properly limit jobs queries
+```
+* (maint) Properly limit jobs queries (00b1c8b4)
+
+
+```
+(maint) Properly limit jobs queries
+
+The limit parameter to /jobs is expected to be sent as a query parameter
+rather than as part of the body of the request.
+```
+* Merge pull request #93 from tvpartytonight/add_beaker-http (0e0ce731)
+
+
+```
+Merge pull request #93 from tvpartytonight/add_beaker-http
+
+(BKR-775) Replace httpdispatcher with beaker-http
+```
+* (BKR-775) Ensure httpdispatchers call set_url_prefix (03ec44d8)
+
+
+```
+(BKR-775) Ensure httpdispatchers call set_url_prefix
+
+This commit makes sure that the httpdispatcher initialize method calls
+set_url_prefix; without this behavior, subclasses couldn't rely on this
+method being called in super like the consoledispatcher class currently
+does.
+```
+* (maint) Remove nokogiri dependency (96aba484)
+
+
+```
+(maint) Remove nokogiri dependency
+
+The change to the signin method in merge 93357eb means that we can
+remove nokogiri, as that was the only section of scooter that utilized
+it to parse html.
+```
+* (BKR-775) Replace httpdispatcher with beaker-http (167e2c9f)
+
+
+```
+(BKR-775) Replace httpdispatcher with beaker-http
+
+This commit removes the base class HttpDispatcher implementation and
+replaces it with HttpDispatcher inheriting from beaker-http. This moves
+much of the useful functionality in that HttpDispatcher to a more
+generalized library.
+```
+### <a name = "4.0.0">4.0.0 - 30 Nov, 2016 (e47d6d40)
+
+* (HISTORY) update scooter history for gem release 4.0.0 (e47d6d40)
 
 * (GEM) update scooter version to 4.0.0 (a82821a0)
 
