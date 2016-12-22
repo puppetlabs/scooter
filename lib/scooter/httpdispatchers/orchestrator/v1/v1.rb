@@ -11,7 +11,7 @@ module Scooter
 
         #jobs endpoints
         def get_last_jobs(n_jobs)
-          @connection.get("#{@version}/jobs#{query_string}") do |req|
+          @connection.get("#{@version}/jobs") do |req|
             req.params['limit'] = n_jobs if n_jobs
           end
         end
