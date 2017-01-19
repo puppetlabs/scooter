@@ -1,6 +1,7 @@
 # default - History
 ## Tags
-* [LATEST - 22 Dec, 2016 (c16ca347)](#LATEST)
+* [LATEST - 19 Jan, 2017 (b7a9554a)](#LATEST)
+* [4.0.1 - 22 Dec, 2016 (58aef2e2)](#4.0.1)
 * [4.0.0 - 30 Nov, 2016 (e47d6d40)](#4.0.0)
 * [3.2.19 - 26 Oct, 2016 (0edc4754)](#3.2.19)
 * [3.2.18 - 17 Oct, 2016 (7f704a74)](#3.2.18)
@@ -46,7 +47,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 22 Dec, 2016 (c16ca347)
+### <a name = "LATEST">LATEST - 19 Jan, 2017 (b7a9554a)
+
+* (GEM) update scooter version to 4.0.2 (b7a9554a)
+
+* Merge pull request #96 from zreichert/maint/master/fix_jobs_limit_request (c363d075)
+
+
+```
+Merge pull request #96 from zreichert/maint/master/fix_jobs_limit_request
+
+(MAINT) switch job limit to query param
+```
+* (MAINT) switch job limit to query param (840b75c5)
+
+### <a name = "4.0.1">4.0.1 - 22 Dec, 2016 (58aef2e2)
+
+* (HISTORY) update scooter history for gem release 4.0.1 (58aef2e2)
 
 * (GEM) update scooter version to 4.0.1 (c16ca347)
 
