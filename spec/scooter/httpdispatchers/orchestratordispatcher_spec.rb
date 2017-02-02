@@ -5,11 +5,12 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
   let(:orchestrator_api) { Scooter::HttpDispatchers::OrchestratorDispatcher.new(host) }
   let(:job_id) { random_string }
   let(:environment) {random_string}
+  let(:logger) { double('logger')}
 
 
   unixhost = { roles:     ['test_role'],
                    'platform' => 'debian-7-x86_64' }
-  let(:host) { Beaker::Host.create('test.com', unixhost, {}) }
+  let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
 
   subject { orchestrator_api }
 
@@ -20,6 +21,8 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     allow_any_instance_of(Scooter::HttpDispatchers::OrchestratorDispatcher).to receive(:get_host_private_key) {'key file'}
     allow_any_instance_of(Scooter::HttpDispatchers::OrchestratorDispatcher).to receive(:get_host_cacert) {'cert file'}
     expect(subject).to be_kind_of(Scooter::HttpDispatchers::OrchestratorDispatcher)
+    allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) {true}
+    allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) {true}
   end
 
   it 'should make requests on the correct port' do
@@ -203,6 +206,39 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it 'should take no argument' do
       expect(orchestrator_api.connection).to receive(:get).with("v1/status")
       expect{ orchestrator_api.get_status }.not_to raise_error
+    end
+  end
+
+  describe '.get_last_jobs' do
+
+    it {is_expected.to respond_to(:get_last_jobs).with(0).arguments }
+    it {is_expected.to respond_to(:get_last_jobs).with(1).arguments }
+    it {is_expected.to respond_to(:get_last_jobs).with(2).arguments }
+    it {is_expected.to respond_to(:get_last_jobs).with(3).arguments }
+    it {is_expected.to respond_to(:get_last_jobs).with(4).arguments }
+
+    before do
+      # find the index of the default Faraday::Adapter::NetHttp handler
+      # and replace it with the Test adapter
+      index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+      subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
+        stub.get('/orchestrator/v1/jobs') { [200, {}] }
+      end
+    end
+
+    it 'should make a request with query params' do
+      expect { subject.get_last_jobs(1, 3, 'name', 'asc') }.not_to raise_error
+      response = subject.get_last_jobs(1, 3, 'name', 'asc')
+      expect(response.status).to eq(200)
+      hashed_query = CGI.parse(response.env.url.query)
+      expect(hashed_query).to eq({"limit"=>["1"], "offset"=>["3"], "order"=>["asc"], "order_by"=>["name"]})
+    end
+
+    it 'should make a request with no query params' do
+      expect { subject.get_last_jobs}.not_to raise_error
+      response = subject.get_last_jobs
+      expect(response.status).to eq(200)
+      expect(response.env.url.query).to be(nil)
     end
   end
 end

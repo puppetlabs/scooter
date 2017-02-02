@@ -10,10 +10,14 @@ module Scooter
         end
 
         #jobs endpoints
-        def get_last_jobs(limit=nil)
+        def get_last_jobs(limit=nil, offset=nil, order_by=nil, order=nil)
           path = "#{@version}/jobs"
-          path << "?limit=#{limit}" if limit
-          @connection.get(path)
+          @connection.get(path) do |request|
+            request.params['limit'] = limit if limit
+            request.params['offset'] = offset if offset
+            request.params['order_by'] = order_by if order_by
+            request.params['order'] = order if order
+          end
         end
 
         def get_job(job_id)
