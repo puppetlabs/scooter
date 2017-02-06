@@ -211,37 +211,40 @@ module Scooter
 
       end
 
-      describe '.database_matches_self?' do
+      describe '.replica_db_synced_with_master_db?' do
         before do
           # find the index of the default Faraday::Adapter::NetHttp handler
           # and replace it with the Test adapter
           index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
             stub.post('/pdb/query/v4/nodes') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/nodes" ?
-                [200, [], [{ 'certname' => 'name', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }]] :
-                [200, [], [{ 'certname' => 'name2', 'facts_timestamp' => 'facts_time', 'report_timestamp2' => 'reports_time', 'catalog_timestamp' => 'catalog_time2' }]] }
+                [200, [], [{ 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }, { 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }]] :
+                [200, [], [{ 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }, { 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }]] }
             stub.post('/pdb/query/v4/catalogs') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/catalogs" ?
-                [200, [], [{ 'catalog_uuid' => 'catalog_uuid_1', 'producer_timestamp' => 'time' }]] :
-                [200, [], [{ 'catalog_uuid' => 'catalog_uuid_2', 'producer_timestamp' => 'time2' }]] }
+                [200, [], [{ 'certname' => 'test.com', 'catalog_uuid' => 'catalog_uuid_1', 'producer_timestamp' => 'time' }]] :
+                [200, [], [{ 'certname' => 'test2.com', 'catalog_uuid' => 'catalog_uuid_2', 'producer_timestamp' => 'time2' }]] }
             stub.post('/pdb/query/v4/facts') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/facts" ?
                 [200, [], [{ 'name' => 'name', 'value' => 'value' }]] :
                 [200, [], [{ 'name' => 'name2', 'value' => 'value2' }]] }
             stub.post('/pdb/query/v4/reports') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/reports" ?
-                [200, [], [{ 'hash' => 'hash_value', 'producer_timestamp' => 'time' }]] :
-                [200, [], [{ 'hash' => 'hash_value2', 'producer_timestamp' => 'time2' }]] }
+                [200, [], [{ 'certname' => 'test.com', 'hash' => 'hash_value', 'producer_timestamp' => 'time' }]] :
+                [200, [], [{ 'certname' => 'test2.com', 'hash' => 'hash_value2', 'producer_timestamp' => 'time2' }]] }
           end
           expect(subject).to receive(:is_resolvable).exactly(8).times.and_return(true)
+          expect(subject).to receive(:master_has_node?).twice.and_return(true)
         end
         it 'compare with self' do
-          expect(subject.database_matches_self?('test.com')).to be_truthy
+          expect(subject.replica_db_synced_with_master_db?('test.com', [subject.host])).to be_truthy
         end
 
         it 'compare with different' do
-          expect(subject.host.logger).to receive(:warn).with /Nodes do not match/
-          expect(subject.database_matches_self?('test2.com')).to be_falsey
+          expect(subject.host.logger).to receive(:warn).with /master doesn't have catalog with hash/
+          expect(subject.host.logger).to receive(:warn).with /\*\*\* fact sync failure: no Master fact matches Replica fact:/
+          expect(subject.host.logger).to receive(:warn).with /master doesn't have report with hash/
+          expect(subject.host.logger).to receive(:warn).with /Catalogs not synced\r\nFacts not synced\r\nReports not synced/
+          expect(subject.replica_db_synced_with_master_db?('test2.com', [subject.host])).to be_falsey
         end
       end
-
     end
   end
 end
