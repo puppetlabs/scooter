@@ -1,6 +1,7 @@
-# default - History
+# worker - History
 ## Tags
-* [LATEST - 19 Jan, 2017 (b7a9554a)](#LATEST)
+* [LATEST - 6 Feb, 2017 (2c10f65c)](#LATEST)
+* [4.0.2 - 19 Jan, 2017 (74790ad4)](#4.0.2)
 * [4.0.1 - 22 Dec, 2016 (58aef2e2)](#4.0.1)
 * [4.0.0 - 30 Nov, 2016 (e47d6d40)](#4.0.0)
 * [3.2.19 - 26 Oct, 2016 (0edc4754)](#3.2.19)
@@ -47,7 +48,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 19 Jan, 2017 (b7a9554a)
+### <a name = "LATEST">LATEST - 6 Feb, 2017 (2c10f65c)
+
+* (GEM) update scooter version to 4.0.3 (2c10f65c)
+
+* Merge pull request #97 from zreichert/feature/master/add_more_query_params_to_jobs_endpoint (7f80e23a)
+
+
+```
+Merge pull request #97 from zreichert/feature/master/add_more_query_params_to_jobs_endpoint
+
+add query params to get_last_jobs
+```
+* (ORCH-1605) add query params to get_last_jobs (545be55a)
+
+### <a name = "4.0.2">4.0.2 - 19 Jan, 2017 (74790ad4)
+
+* (HISTORY) update scooter history for gem release 4.0.2 (74790ad4)
 
 * (GEM) update scooter version to 4.0.2 (b7a9554a)
 
