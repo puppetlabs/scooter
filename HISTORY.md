@@ -1,6 +1,7 @@
 # worker - History
 ## Tags
-* [LATEST - 6 Feb, 2017 (2c10f65c)](#LATEST)
+* [LATEST - 8 Feb, 2017 (61ac5ebb)](#LATEST)
+* [4.0.3 - 6 Feb, 2017 (6698535d)](#4.0.3)
 * [4.0.2 - 19 Jan, 2017 (74790ad4)](#4.0.2)
 * [4.0.1 - 22 Dec, 2016 (58aef2e2)](#4.0.1)
 * [4.0.0 - 30 Nov, 2016 (e47d6d40)](#4.0.0)
@@ -48,7 +49,28 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 6 Feb, 2017 (2c10f65c)
+### <a name = "LATEST">LATEST - 8 Feb, 2017 (61ac5ebb)
+
+* (GEM) update scooter version to 4.0.4 (61ac5ebb)
+
+* Merge pull request #98 from samwoods1/maint_ha_fix (da1eee42)
+
+
+```
+Merge pull request #98 from samwoods1/maint_ha_fix
+
+(maint) Fix host_name var in replica_db_synced_with_master_db
+```
+* (maint) Fix host_name var in replica_db_synced_with_master_db (01e35d95)
+
+
+```
+(maint) Fix host_name var in replica_db_synced_with_master_db
+Also add spec test for replica_db_synced_with_master_db
+```
+### <a name = "4.0.3">4.0.3 - 6 Feb, 2017 (6698535d)
+
+* (HISTORY) update scooter history for gem release 4.0.3 (6698535d)
 
 * (GEM) update scooter version to 4.0.3 (2c10f65c)
 
