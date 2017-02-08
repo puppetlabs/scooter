@@ -20,15 +20,15 @@ module Scooter
       # We're just checking that the replica DB doesn't contain any records that aren't also in the master, and that
       # the replica has at least one report from each node. We do this because there's a race condition-y window where
       # an agent may have delivered a report to the Master PuppetDB, but the Replica PuppetDB hasn't picked it up yet.
-      # @param [BeakerHost] replica_host_name
+      # @param [BeakerHost] replica_host
       # @param [Array] agents all the agents in the SUT, in the form of BeakerHost instances
-      def replica_db_synced_with_master_db?(replica_host_name, agents)
+      def replica_db_synced_with_master_db?(replica_host, agents)
         # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
         # and then set it back to the original at the end of the ensure. The :vmhostname
         #overrides the host.hostname, and nothing should win out over it.
         original_host_name = host.host_hash[:vmhostname]
         begin
-          host.host_hash[:vmhostname] = replica_host_name
+          host.host_hash[:vmhostname] = replica_host.hostname
 
           replica_nodes    = query_nodes.body
           replica_catalogs = query_catalogs.body

@@ -13,6 +13,7 @@ module Scooter
     unixhost = { roles:     ['test_role'],
                  'platform' => 'debian-7-x86_64' }
     let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
+    let(:host2) { Beaker::Host.create('test2.com', unixhost, {:logger => logger}) }
 
     before do
       allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
@@ -234,7 +235,7 @@ module Scooter
           expect(subject).to receive(:master_has_node?).twice.and_return(true)
         end
         it 'compare with self' do
-          expect(subject.replica_db_synced_with_master_db?('test.com', [subject.host])).to be_truthy
+          expect(subject.replica_db_synced_with_master_db?(host, [subject.host])).to be_truthy
         end
 
         it 'compare with different' do
@@ -242,7 +243,7 @@ module Scooter
           expect(subject.host.logger).to receive(:warn).with /\*\*\* fact sync failure: no Master fact matches Replica fact:/
           expect(subject.host.logger).to receive(:warn).with /master doesn't have report with hash/
           expect(subject.host.logger).to receive(:warn).with /Catalogs not synced\r\nFacts not synced\r\nReports not synced/
-          expect(subject.replica_db_synced_with_master_db?('test2.com', [subject.host])).to be_falsey
+          expect(subject.replica_db_synced_with_master_db?(host2, [subject.host])).to be_falsey
         end
       end
     end
