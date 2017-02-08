@@ -14,44 +14,6 @@ module Scooter
         connection.url_prefix.port = 8081
       end
 
-      # Used to compare replica puppetdb to master. Raises exception if it does not match.
-      # @param [BeakerHost] host_name
-      def database_matches_self?(host_name)
-        # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
-        # and then set it back to the original at the end of the ensure. The :vmhostname
-        #overrides the host.hostname, and nothing should win out over it.
-        original_host_name = host.host_hash[:vmhostname]
-        begin
-          host.host_hash[:vmhostname] = host_name
-
-          other_nodes    = query_nodes.body
-          other_catalogs = query_catalogs.body
-          other_facts    = query_facts.body
-          other_reports  = query_reports.body
-        ensure
-          host.host_hash[:vmhostname] = original_host_name
-        end
-
-        self_nodes    = query_nodes.body
-        self_catalogs = query_catalogs.body
-        self_facts    = query_facts.body
-        self_reports  = query_reports.body
-
-        nodes_match    = nodes_match?(other_nodes, self_nodes)
-        catalogs_match = catalogs_match?(other_catalogs, self_catalogs)
-        facts_match    = facts_match?(other_facts, self_facts)
-        reports_match  = reports_match?(other_reports, self_reports)
-
-        errors = ''
-        errors << "Nodes do not match\r\n" unless nodes_match
-        errors << "Catalogs do not match\r\n" unless catalogs_match
-        errors << "Facts do not match\r\n" unless facts_match
-        errors << "Reports do not match\r\n" unless reports_match
-
-        host.logger.warn(errors.chomp) unless errors.empty?
-        errors.empty?
-      end
-
       # Compares Replica PuppetDB with Master PuppetDB, to make sure Master PuppetDB has synced to Replica PuppetDB.
       #
       # N.B.: this uses a weird definition of "synced". We're NOT making sure the two PuppetDBs are exactly the same.
@@ -66,7 +28,7 @@ module Scooter
         #overrides the host.hostname, and nothing should win out over it.
         original_host_name = host.host_hash[:vmhostname]
         begin
-          host.host_hash[:vmhostname] = host_name
+          host.host_hash[:vmhostname] = replica_host_name
 
           replica_nodes    = query_nodes.body
           replica_catalogs = query_catalogs.body
@@ -293,7 +255,7 @@ module Scooter
         master_facts.each do |master_fact|
           return true if ['certname', 'name', 'environment'].all? { |key| replica_fact[key] == master_fact[key] }
         end
-        @faraday_logger.warn("*** fact sync failure: no Master fact matches Replica fact: #{replica_fact}")
+        host.logger.warn("*** fact sync failure: no Master fact matches Replica fact: #{replica_fact}")
         false
       end
 
@@ -325,7 +287,7 @@ module Scooter
       # @return [Boolean]
       def master_has_catalog?(replica_catalog, master_catalogs)
         master_catalogs.each { |master_catalog| return true if replica_catalog['certname'] == master_catalog['certname'] }
-        @faraday_logger.warn("master doesn't have catalog with hash '#{replica_catalog['certname']}', which is on replica")
+        host.logger.warn("master doesn't have catalog with hash '#{replica_catalog['certname']}', which is on replica")
         false
       end
 
@@ -341,7 +303,7 @@ module Scooter
       # @return [Boolean]
       def master_has_node?(replica_node, master_nodes)
         master_nodes.each { |master_node| return true if replica_node['certname'] == master_node['certname'] }
-        @faraday_logger.warn("master doesn't have node with certname '#{replica_node['certname']}', which is on replica")
+        host.logger.warn("master doesn't have node with certname '#{replica_node['certname']}', which is on replica")
         false
       end
 
@@ -356,7 +318,7 @@ module Scooter
           same_contents = same_contents?(replica_report, master_report, keys_with_expected_diffs)
           return true if same_hash && same_contents
         end
-        @faraday_logger.warn("master doesn't have report with hash '#{replica_report['hash']}', which is on replica")
+        host.logger.warn("master doesn't have report with hash '#{replica_report['hash']}', which is on replica")
         false
       end
 
@@ -366,7 +328,7 @@ module Scooter
       # @return [Boolean]
       def replica_has_node_for_agent?(replica_nodes, agent)
         replica_nodes.each { |replica_node| return true if replica_node['certname'] == agent.hostname }
-        @faraday_logger.warn("replica doesn't have any nodes for certname '#{agent.hostname}'")
+        host.logger.warn("replica doesn't have any nodes for certname '#{agent.hostname}'")
         false
       end
 
@@ -376,7 +338,7 @@ module Scooter
       # @return [Boolean]
       def replica_has_report_for_agent?(replica_reports, agent)
         replica_reports.each { |replica_report| return true if replica_report['certname'] == agent.hostname }
-        @faraday_logger.warn("replica doesn't have any reports for certname '#{agent.hostname}'")
+        host.logger.warn("replica doesn't have any reports for certname '#{agent.hostname}'")
         false
       end
 
@@ -386,7 +348,7 @@ module Scooter
       # @return [Boolean]
       def replica_has_catalog_for_agent?(replica_catalogs, agent)
         replica_catalogs.each { |replica_catalog| return true if replica_catalog['certname'] == agent.hostname }
-        @faraday_logger.warn("replica doesn't have any catalogs for certname '#{agent.hostname}'")
+        host.logger.warn("replica doesn't have any catalogs for certname '#{agent.hostname}'")
         false
       end
     end
