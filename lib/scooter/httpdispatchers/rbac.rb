@@ -170,13 +170,13 @@ module Scooter
         @token = acquire_token(credentials.login, credentials.password, lifetime)
       end
 
-      def rbac_database_matches_self?(host_name)
+      def rbac_database_matches_self?(replica_host)
         # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
         # and then set it back to the original at the end of the ensure. The :vmhostname
         #overrides the host.hostname, and nothing should win out over it.
         original_host_name = host.host_hash[:vmhostname]
         begin
-          host.host_hash[:vmhostname] = host_name
+          host.host_hash[:vmhostname] = replica_host.hostname
 
           other_users  = get_list_of_users
           other_groups = get_list_of_groups

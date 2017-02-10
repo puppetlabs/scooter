@@ -327,6 +327,7 @@ module Scooter
       unixhost = { roles:     ['test_role'],
                    'platform' => 'debian-7-x86_64' }
       let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
+      let(:host2) { Beaker::Host.create('test2.com', unixhost, {:logger => logger}) }
       let(:credentials) { { login: 'Ziggy', password: 'Stardust' } }
 
       before do
@@ -534,12 +535,12 @@ module Scooter
           expect(subject).to receive(:is_resolvable).exactly(8).times.and_return(true)
         end
         it 'compare with self' do
-          expect(subject.classifier_database_matches_self?('test.com')).to be_truthy
+          expect(subject.classifier_database_matches_self?(host)).to be_truthy
         end
 
         it 'compare with different' do
           expect(subject.host.logger).to receive(:warn).with /Nodes do not match/
-          expect(subject.classifier_database_matches_self?('test2.com')).to be_falsey
+          expect(subject.classifier_database_matches_self?(host2)).to be_falsey
         end
       end
     end

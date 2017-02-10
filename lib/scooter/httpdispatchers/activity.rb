@@ -15,13 +15,13 @@ module Scooter
 
       # Used to compare replica activity to master. Raises exception if it does not match.
       # @param [String] host_name
-      def activity_database_matches_self?(host_name)
+      def activity_database_matches_self?(replica_host)
         # Save a beaker host_hash[:vmhostname], set it to the supplied host_name param,
         # and then set it back to the original at the end of the ensure. The :vmhostname
         #overrides the host.hostname, and nothing should win out over it.
         original_host_name = host.host_hash[:vmhostname]
         begin
-          host.host_hash[:vmhostname] = host_name
+          host.host_hash[:vmhostname] = replica_host.hostname
 
           other_rbac_events       = get_rbac_events.env.body
           other_classifier_events = get_classifier_events.env.body

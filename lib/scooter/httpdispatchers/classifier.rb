@@ -301,10 +301,10 @@ module Scooter
 
       # Used to compare replica classifier to master. Raises exception if it does not match.
       # @param [String] host_name
-      def classifier_database_matches_self?(host_name)
+      def classifier_database_matches_self?(replica_host)
         original_host_name = host.host_hash[:vmhostname]
         begin
-          host.host_hash[:vmhostname] = host_name
+          host.host_hash[:vmhostname] = replica_host.hostname
 
           other_nodes        = get_list_of_nodes
           other_classes      = get_list_of_classes
