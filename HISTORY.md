@@ -1,6 +1,7 @@
 # worker - History
 ## Tags
-* [LATEST - 8 Feb, 2017 (a926ff06)](#LATEST)
+* [LATEST - 9 Feb, 2017 (8d80e1de)](#LATEST)
+* [4.0.5 - 8 Feb, 2017 (3405835b)](#4.0.5)
 * [4.0.4 - 8 Feb, 2017 (3f6b7263)](#4.0.4)
 * [4.0.3 - 6 Feb, 2017 (6698535d)](#4.0.3)
 * [4.0.2 - 19 Jan, 2017 (74790ad4)](#4.0.2)
@@ -50,7 +51,23 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 8 Feb, 2017 (a926ff06)
+### <a name = "LATEST">LATEST - 9 Feb, 2017 (8d80e1de)
+
+* (GEM) update scooter version to 4.0.6 (8d80e1de)
+
+* Merge pull request #100 from samwoods1/maint_ha_fix (9103716a)
+
+
+```
+Merge pull request #100 from samwoods1/maint_ha_fix
+
+(maint) Update HA validationvto take host instead of hostname
+```
+* (maint) Update HA validationvto take host instead of hostname (e46e66db)
+
+### <a name = "4.0.5">4.0.5 - 8 Feb, 2017 (3405835b)
+
+* (HISTORY) update scooter history for gem release 4.0.5 (3405835b)
 
 * (GEM) update scooter version to 4.0.5 (a926ff06)
 
