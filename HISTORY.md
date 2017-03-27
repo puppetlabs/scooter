@@ -1,6 +1,7 @@
 # worker - History
 ## Tags
-* [LATEST - 9 Feb, 2017 (8d80e1de)](#LATEST)
+* [LATEST - 27 Mar, 2017 (57402d24)](#LATEST)
+* [4.0.6 - 9 Feb, 2017 (0f01ca39)](#4.0.6)
 * [4.0.5 - 8 Feb, 2017 (3405835b)](#4.0.5)
 * [4.0.4 - 8 Feb, 2017 (3f6b7263)](#4.0.4)
 * [4.0.3 - 6 Feb, 2017 (6698535d)](#4.0.3)
@@ -51,7 +52,33 @@
 * [0.0.0 - 22 Dec, 2014 (9307ec38)](#0.0.0)
 
 ## Details
-### <a name = "LATEST">LATEST - 9 Feb, 2017 (8d80e1de)
+### <a name = "LATEST">LATEST - 27 Mar, 2017 (57402d24)
+
+* (GEM) update scooter version to 4.1.0 (57402d24)
+
+* Merge pull request #102 from tvpartytonight/maint_fixup_readme (462fd57d)
+
+
+```
+Merge pull request #102 from tvpartytonight/maint_fixup_readme
+
+(maint) Fixup README for open source release
+```
+* (maint) Fixup README for open source release (408367f6)
+
+* Merge pull request #101 from tvpartytonight/maint_add_license (3fe662aa)
+
+
+```
+Merge pull request #101 from tvpartytonight/maint_add_license
+
+(maint) Add license file
+```
+* (maint) Add license file (62a12f3d)
+
+### <a name = "4.0.6">4.0.6 - 9 Feb, 2017 (0f01ca39)
+
+* (HISTORY) update scooter history for gem release 4.0.6 (0f01ca39)
 
 * (GEM) update scooter version to 4.0.6 (8d80e1de)
 
