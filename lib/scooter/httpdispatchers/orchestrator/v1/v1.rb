@@ -89,6 +89,21 @@ module Scooter
         def get_status
           @connection.get("#{@version}/status")
         end
+
+        #task endpoints
+        def get_task(mod, task)
+          @connection.get("#{@version}/tasks/#{mod}/#{task}")
+        end
+
+        def get_tasks
+          @connection.get("#{@version}/tasks")
+        end
+
+        def post_task(payload)
+          @connection.post("#{@version}/command/task") do |req|
+            req.body = payload
+          end
+        end
       end
     end
   end
