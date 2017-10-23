@@ -57,10 +57,14 @@ module Scooter
 
         def update_classes(environment=nil)
           set_classifier_path
-          @connection.post('v1/update-classes') do |request|
+          response = @connection.post('v1/update-classes') do |request|
             unless environment.nil?
               request.params['environment'] = environment
             end
+          end
+          if response.status == 500 and response.env.body['msg'] == "ERROR: could not obtain lock on relation \"environment_classes\"" and try < 2
+            try += 1
+            update_classes(environment, try)
           end
         end
 
