@@ -1,5 +1,5 @@
 module Scooter
   module Version
-    STRING = '4.1.1'
+    STRING = '4.2.0'
   end
 end
