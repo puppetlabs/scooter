@@ -104,6 +104,10 @@ module Scooter
         set_url_prefix
       end
 
+      def log_out
+        response = @connection.get "/auth/logout"
+      end
+
       def reset_local_user_password(token, new_password)
         @connection.post "https://#{host}/auth/reset" do |request|
           request.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'

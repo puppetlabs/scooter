@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source ENV['GEM_SOURCE'] || 'https://rubygems.delivery.puppetlabs.net'
 #this will probably not be available on rubygems, at least initially
 #will probably be only available at https://rubygems.delivery.puppetlabs.net
 #TODO: Change this line when it is actually available internally
