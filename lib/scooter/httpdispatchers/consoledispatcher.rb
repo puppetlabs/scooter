@@ -105,7 +105,7 @@ module Scooter
       end
 
       def log_out
-        response = @connection.get "/auth/logout"
+        response = @connection.get "https://#{host}/auth/logout"
       end
 
       def reset_local_user_password(token, new_password)
