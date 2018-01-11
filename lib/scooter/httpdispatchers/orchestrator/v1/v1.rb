@@ -104,6 +104,13 @@ module Scooter
             req.body = payload
           end
         end
+
+        #dumpling endpoints
+        def post_dumpling(payload)
+          @connection.post("#{@version}/dumplings") do |req|
+            req.body = payload
+          end
+        end
       end
     end
   end
