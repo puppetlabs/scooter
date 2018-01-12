@@ -241,4 +241,21 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
       expect(response.env.url.query).to be(nil)
     end
   end
+
+  describe '.create_dumpling' do
+    let(:dumpling) {{
+      'display-name' => 'dumplings two',
+      'tasks'         => ['echo', 'package::status'],
+      'nodes'        => ['node2']
+    }}
+
+    it {is_expected.not_to respond_to(:create_dumpling).with(0).arguments }
+    it {is_expected.to respond_to(:create_dumpling).with(1).arguments }
+    it {is_expected.not_to respond_to(:create_dumpling).with(2).arguments }
+
+    it 'should take a single dumpling object' do
+      expect(orchestrator_api.connection).to receive(:post).with("v1/dumplings")
+      expect{ orchestrator_api.create_dumpling(dumpling) }.not_to raise_error
+    end
+  end
 end

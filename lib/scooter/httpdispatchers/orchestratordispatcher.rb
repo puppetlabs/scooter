@@ -78,6 +78,11 @@ module Scooter
         payload = {'nodes' => node_list}
         post_inventory(payload)
       end
+
+      # @return [Faraday::Response] response object from Faraday http client
+      def create_dumpling(dumpling)
+        post_dumpling(dumpling)
+      end
     end
   end
 end
