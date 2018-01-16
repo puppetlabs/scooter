@@ -22,10 +22,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry', '~> 0.9.12'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '>= 3.0.0'
-  spec.add_development_dependency 'beaker-abs, '~>0.3.0'
+  spec.add_development_dependency 'beaker-abs', '~>0.3.0'
 
   #Documentation dependencies
-  spec.add_development_dependency 'yard', '~> 0'
+  spec.add_development_dependency 'yard', '~> 0.9.11'
   spec.add_development_dependency 'markdown', '~> 0'
   spec.add_development_dependency 'activesupport', '4.2.6'
 
