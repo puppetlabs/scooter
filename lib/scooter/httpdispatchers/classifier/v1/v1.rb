@@ -36,6 +36,7 @@ module Scooter
 
         def replace_node_group(node_group_id, node_group_model)
           set_classifier_path
+          node_group_model.delete('serial_number')
           @connection.put("v1/groups/#{node_group_id}") do |request|
             request.body = node_group_model
           end
@@ -43,6 +44,7 @@ module Scooter
 
         def update_node_group(node_group_id, update_hash)
           set_classifier_path
+          update_hash.delete('serial_number')
           @connection.post("v1/groups/#{node_group_id}") do |request|
             request.body = update_hash
           end
