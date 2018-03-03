@@ -291,6 +291,8 @@ module Scooter
           node_group_model.delete('deleted') if node_group_model['deleted'] == {}
         end
 
+        response.env.body.delete('serial_number')
+        response.env.body.delete('last_edited')
         if node_group_model != response.env.body
           raise "node_group_model did not match the server response:\n#{node_group_model}\n#{response.env.body}"
         end
