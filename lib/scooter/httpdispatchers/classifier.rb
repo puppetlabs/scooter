@@ -291,6 +291,9 @@ module Scooter
           node_group_model.delete('deleted') if node_group_model['deleted'] == {}
         end
 
+        node_group_model.delete('serial_number')
+        node_group_model.delete('last_edited')
+
         response.env.body.delete('serial_number')
         response.env.body.delete('last_edited')
         if node_group_model != response.env.body
