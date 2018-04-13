@@ -111,6 +111,25 @@ module Scooter
             req.body = payload
           end
         end
+
+        #task plan endpoints
+        def start_plan(payload)
+          @connection.post("#{@version}/command/plan_start") do |req|
+            req.body = payload
+          end
+        end
+
+        def finish_plan(payload)
+          @connection.post("#{@version}/command/plan_finish") do |req|
+            req.body = payload
+          end
+        end
+
+        def plan_task(payload)
+          @connection.post("#{@version}/command/plan_task") do |req|
+            req.body = payload
+          end
+        end
       end
     end
   end
