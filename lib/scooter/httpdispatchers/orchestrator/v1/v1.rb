@@ -130,6 +130,10 @@ module Scooter
             req.body = payload
           end
         end
+
+        def get_plan_job(plan_job_id)
+          @connection.get("#{@version}/plan_jobs/#{plan_job_id}")
+        end
       end
     end
   end
