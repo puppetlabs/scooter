@@ -167,6 +167,17 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     end
   end
 
+  describe '.create_scheduled_job' do
+    it { is_expected.not_to respond_to(:create_scheduled_job).with(0).arguments }
+    it { is_expected.to respond_to(:create_scheduled_job).with(1).arguments }
+    it { is_expected.not_to respond_to(:create_scheduled_job).with(2).arguments }
+
+    it 'should take a job id' do
+      expect(orchestrator_api.connection).to receive(:post).with("v1/command/schedule_task")
+      expect{ orchestrator_api.create_scheduled_job(job_id) }.not_to raise_error
+    end
+  end
+
   describe '.get_inventory' do
     let(:certname) {'thisismycertname'}
 
@@ -256,6 +267,47 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it 'should take a single dumpling object' do
       expect(orchestrator_api.connection).to receive(:post).with("v1/dumplings")
       expect{ orchestrator_api.create_dumpling(dumpling) }.not_to raise_error
+    end
+  end
+
+  describe '.list_scheduled_jobs' do
+    it {is_expected.to respond_to(:list_scheduled_jobs).with(0).arguments }
+    it {is_expected.to respond_to(:list_scheduled_jobs).with(1).arguments }
+    it {is_expected.to respond_to(:list_scheduled_jobs).with(2).arguments }
+
+    before do
+      # find the index of the default Faraday::Adapter::NetHttp handler
+      # and replace it with the Test adapter
+      index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+      subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
+        stub.get('/orchestrator/v1/scheduled_jobs') { [200, {}] }
+      end
+    end
+
+    it 'should make a request with query params' do
+      expect { subject.list_scheduled_jobs(50, 100) }.not_to raise_error
+      response = subject.list_scheduled_jobs(50, 100)
+      expect(response.status).to eq(200)
+      hashed_query = CGI.parse(response.env.url.query)
+      expect(hashed_query).to eq({"limit"=>["50"], "offset"=>["100"]})
+    end
+
+    it 'should make a request with no query params' do
+      expect { subject.list_scheduled_jobs}.not_to raise_error
+      response = subject.list_scheduled_jobs
+      expect(response.status).to eq(200)
+      expect(response.env.url.query).to be(nil)
+    end
+  end
+
+  describe '.remove_scheduled_job' do
+    it { is_expected.not_to respond_to(:remove_scheduled_job).with(0).arguments }
+    it { is_expected.to respond_to(:remove_scheduled_job).with(1).arguments }
+    it { is_expected.not_to respond_to(:remove_scheduled_job).with(2).arguments }
+
+    it 'should take a job id' do
+      expect(orchestrator_api.connection).to receive(:delete).with("v1/scheduled_jobs/#{job_id}")
+      expect{ orchestrator_api.remove_scheduled_job(job_id) }.not_to raise_error
     end
   end
 end

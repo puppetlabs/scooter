@@ -83,6 +83,21 @@ module Scooter
       def create_dumpling(dumpling)
         post_dumpling(dumpling)
       end
+
+      # @return [Faraday::Response] response object from Faraday http client
+      def create_scheduled_job(payload)
+        post_schedule_task(payload)
+      end
+
+      # @return [Faraday::Response] response object from Faraday http client
+      def remove_scheduled_job(job_id)
+        delete_scheduled_job(job_id)
+      end
+
+      # @return [Faraday::Response] response object from Faraday http client
+      def list_scheduled_jobs(limit=nil, offset=nil)
+        get_scheduled_jobs(limit, offset)
+      end
     end
   end
 end

@@ -72,6 +72,12 @@ module Scooter
           end
         end
 
+        def post_schedule_task(payload)
+          @connection.post("#{@version}/command/schedule_task") do |req|
+            req.body = payload
+          end
+        end
+
         #inventory endpoints
         def get_inventory(node=nil)
           url = "#{@version}/inventory"
@@ -133,6 +139,18 @@ module Scooter
 
         def get_plan_job(plan_job_id)
           @connection.get("#{@version}/plan_jobs/#{plan_job_id}")
+        end
+
+        def get_scheduled_jobs(limit=nil, offset=nil)
+          path = "#{@version}/scheduled_jobs"
+          @connection.get(path) do |request|
+            request.params['limit'] = limit if limit
+            request.params['offset'] = offset if offset
+          end
+        end
+
+        def delete_scheduled_job(job_id)
+          @connection.delete("#{@version}/scheduled_jobs/#{job_id}")
         end
       end
     end
