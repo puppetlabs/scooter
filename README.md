@@ -24,10 +24,16 @@ $ gem install scooter
 
 Scooter is currently divvied into the following sections:
 
- - [HttpDispatchers](docs/http_dispatchers.md) – These are modules that can be mixed into classes that represent real users: whitelisted certificate users, local console users, or users connected through an LDAP directory. Check out [HttpDispatchers](lib/scooter/httpdispatchers) for a list of the modules currently supported. 
+ - [HttpDispatchers](docs/http_dispatchers.md) – These are modules that can be mixed into classes that represent real users: whitelisted certificate users, local console users, or users connected through an LDAP directory. Check out [HttpDispatchers](lib/scooter/httpdispatchers) for a list of the modules currently supported.
 
  - LDAPdispatcher – This class extends the Net::LDAP library, which is a requirement to for RBAC testing with LDAP fixtures.
  - Utilities – Currently, this houses random string generators and convenience methods to use beaker to acquire certificates to impersonate whitelisted certificate users.
+
+## Running the tests
+
+```
+bundle exec rake test
+```
 
 ## Versioning
 
@@ -35,7 +41,7 @@ Scooter's development began with Puppet Enterprise 3.7, but that was only availa
 
 ## Rdocs
 
-Please view the [RubyDocs](http://rubydoc.info/github/puppetlabs/scooter) for further documentation. 
+Please view the [RubyDocs](http://rubydoc.info/github/puppetlabs/scooter) for further documentation.
 
 ## Contributing
 
