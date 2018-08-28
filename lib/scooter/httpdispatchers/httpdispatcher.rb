@@ -16,16 +16,11 @@ module Scooter
 
       attr_accessor :connection, :host, :token, :send_auth_token_as_query_param, :faraday_logger
       # The only required parameter for the HttpDispatcher is the host, which
-      # could either be a beaker Unix::Host or a String. HttpDispatchers offer
+      # must be a Beaker::Host object. HttpDispatchers offer
       # support for automatically generating the required SSL components for the
       # Dispatcher if it is passed a Unix Host.
       #
-      # If it is only passed a String, than it is up to the caller to correctly
-      # configure the connection object to be configured correctly. Support for
-      # Strings is experimental for now; it may be deprecated if there is no
-      # feedback indicating that this functionality is being used.
-      #
-      # @param host(Unix::Host) The beaker host object you wish to communicate
+      # @param host(Beaker::Host) The beaker host object you wish to communicate
       #   with.
       # @param log_level(Int) The desired log level
       # @param log_body(Boolean) Whether to log the body of responses
