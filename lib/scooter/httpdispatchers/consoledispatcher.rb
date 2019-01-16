@@ -76,14 +76,14 @@ module Scooter
       # not a certificate dispatcher, but representing an LDAP or local user. If
       # credentials are supplied during initialization, then this overrides the
       # parent class and only acquires a ca_cert.
-      def acquire_ssl_components(host=self.host)
+      def configure_private_key_and_cert_with_puppet(host=self.host)
         if credentials == nil
           super(host)
         else
           if !host.is_a?(Unix::Host)
             raise 'Can only acquire SSL certs if the host is a Unix::Host'
           end
-          acquire_ca_cert(host)
+          configure_cacert_with_puppet(host)
         end
       end
 

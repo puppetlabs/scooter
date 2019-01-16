@@ -9,22 +9,20 @@ module Scooter
     let(:username) {'Ziggy'}
     let(:password) {'Stardust'}
     let(:mock_page) {double('mock_page')}
+    let(:logger) { double('logger')}
 
     subject { HttpDispatchers::ConsoleDispatcher.new(host, credentials) }
 
     context 'with a beaker host passed in' do
-      let(:logger) { double('logger')}
       unixhost = { roles:     ['test_role'],
                    'platform' => 'debian-7-x86_64' }
       let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
       before do
-        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
-        allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) { true }
-        expect(OpenSSL::PKey).to receive(:read).and_return('Pkey')
-        expect(OpenSSL::X509::Certificate).to receive(:new).and_return('client_cert')
-        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cert) {'host cert'}
-        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_private_key) {'key file'}
-        allow_any_instance_of(HttpDispatchers::HttpDispatcher).to receive(:get_host_cacert) {'cert file'}
+        allow(logger).to receive(:info) {true}
+        allow(logger).to receive(:debug) {true}
+        expect(OpenSSL::PKey).not_to receive(:read)
+        expect(OpenSSL::X509::Certificate).not_to receive(:new)
+        allow_any_instance_of(HttpDispatchers::ConsoleDispatcher).to receive(:configure_cacert_with_puppet).and_return('cacert')
         expect(subject).to be_kind_of(HttpDispatchers::ConsoleDispatcher)
       end
 
