@@ -1,3 +1,5 @@
+require 'resolv'
+
 module Scooter
   module HttpDispatchers
 
