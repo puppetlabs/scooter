@@ -4,12 +4,18 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
 
   let(:orchestrator_api) { Scooter::HttpDispatchers::OrchestratorDispatcher.new(host) }
   let(:job_id) { random_string }
+  let(:schedule_task_payload) { 
+    { 'task' => 'foo' }
+  }
+  let(:schedule_plan_payload) { 
+    { 'plan' => 'foo' }
+  }
   let(:environment) {random_string}
   let(:logger) { double('logger')}
 
 
-  unixhost = { roles:     ['test_role'],
-                   'platform' => 'debian-7-x86_64' }
+  unixhost = { roles: ['test_role'],
+               'platform' => 'debian-7-x86_64' }
   let(:host) { Beaker::Host.create('test.com', unixhost, {:logger => logger}) }
 
   subject { orchestrator_api }
@@ -39,9 +45,21 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:list_jobs).with(1).arguments }
     it { is_expected.not_to respond_to(:list_jobs).with(2).arguments }
 
-    it 'should take a job_id' do
+    it 'should accept a max jobs argument' do
       expect(orchestrator_api.connection).to receive(:get).with('v1/jobs')
-      expect{ orchestrator_api.list_jobs }.not_to raise_error
+      expect{ orchestrator_api.list_jobs(1) }.not_to raise_error
+    end
+  end
+
+  describe '.list_plan_jobs' do
+
+    it { is_expected.to respond_to(:list_jobs).with(0).arguments }
+    it { is_expected.to respond_to(:list_jobs).with(1).arguments }
+    it { is_expected.not_to respond_to(:list_jobs).with(2).arguments }
+
+    it 'should take accept a max plan_jobs argument' do
+      expect(orchestrator_api.connection).to receive(:get).with('v1/plan_jobs')
+      expect{ orchestrator_api.list_plan_jobs(1) }.not_to raise_error
     end
   end
 
@@ -71,7 +89,6 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
 
     it { is_expected.not_to respond_to(:get_job_report).with(0).arguments }
     it { is_expected.to respond_to(:get_job_report).with(1).arguments }
-
 
     it 'should take a job_id' do
       expect(orchestrator_api.connection).to receive(:get).with("v1/jobs/#{job_id}/report")
@@ -172,9 +189,14 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.to respond_to(:create_scheduled_job).with(1).arguments }
     it { is_expected.not_to respond_to(:create_scheduled_job).with(2).arguments }
 
-    it 'should take a job id' do
+    it 'should schedule a task' do
       expect(orchestrator_api.connection).to receive(:post).with("v1/command/schedule_task")
-      expect{ orchestrator_api.create_scheduled_job(job_id) }.not_to raise_error
+      expect{ orchestrator_api.create_scheduled_job(schedule_task_payload) }.not_to raise_error
+    end
+
+    it 'should schedule a plan' do
+      expect(orchestrator_api.connection).to receive(:post).with("v1/command/schedule_plan")
+      expect{ orchestrator_api.create_scheduled_job(schedule_plan_payload) }.not_to raise_error
     end
   end
 

@@ -20,6 +20,11 @@ module Scooter
       end
 
       # @return [Faraday::Response] response object from Faraday http client
+      def list_plan_jobs(n_jobs=nil)
+        get_last_plan_jobs(n_jobs)
+      end
+
+      # @return [Faraday::Response] response object from Faraday http client
       def list_job_details(job_id)
         get_job(job_id)
       end

@@ -9,7 +9,7 @@ module Scooter
           @version = 'v1'
         end
 
-        #jobs endpoints
+        # jobs endpoints
         def get_last_jobs(limit=nil, offset=nil, order_by=nil, order=nil)
           path = "#{@version}/jobs"
           @connection.get(path) do |request|
@@ -17,6 +17,16 @@ module Scooter
             request.params['offset'] = offset if offset
             request.params['order_by'] = order_by if order_by
             request.params['order'] = order if order
+          end
+        end
+
+        # plan_jobs endpoints
+        def get_last_plan_jobs(limit=nil, offset=nil, results=nil)
+          path = "#{@version}/plan_jobs"
+          @connection.get(path) do |request|
+            request.params['limit'] = limit if limit
+            request.params['offset'] = offset if offset
+            request.params['results'] = results if results
           end
         end
 
