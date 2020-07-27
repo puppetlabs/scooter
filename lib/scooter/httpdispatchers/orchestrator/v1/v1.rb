@@ -78,6 +78,12 @@ module Scooter
           end
         end
 
+        def post_schedule_plan(payload)
+          @connection.post("#{@version}/command/schedule_plan") do |req|
+            req.body = payload
+          end
+        end
+
         #inventory endpoints
         def get_inventory(node=nil)
           url = "#{@version}/inventory"

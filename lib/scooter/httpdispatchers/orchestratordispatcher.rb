@@ -84,9 +84,14 @@ module Scooter
         post_dumpling(dumpling)
       end
 
+      # Schedule a task or plan
       # @return [Faraday::Response] response object from Faraday http client
       def create_scheduled_job(payload)
-        post_schedule_task(payload)
+        if payload.include?('task')
+          post_schedule_task(payload)
+        else
+          post_schedule_plan(payload)
+        end
       end
 
       # @return [Faraday::Response] response object from Faraday http client
