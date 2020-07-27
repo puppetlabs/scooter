@@ -1,0 +1,24 @@
+name: Unit
+on:
+  push:
+    branches: [master]
+  pull_request:
+    type: [opened, reopened, edited]
+
+jobs:
+  unit:
+    name: Unit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.5.x'
+      - name: Install bundler
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+      - name: Run unit tests
+        run: bundle exec rspec
