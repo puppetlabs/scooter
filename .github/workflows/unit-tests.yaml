@@ -20,5 +20,7 @@ jobs:
         run: |
           gem install bundler
           bundle config path vendor/bundle
+      - name: Install gems
+        run: bundle install
       - name: Run unit tests
         run: bundle exec rspec
