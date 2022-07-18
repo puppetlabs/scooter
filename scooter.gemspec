@@ -27,14 +27,13 @@ Gem::Specification.new do |spec|
   #Documentation dependencies
   spec.add_development_dependency 'yard', '~> 0.9.11'
   spec.add_development_dependency 'markdown', '~> 0'
-  spec.add_development_dependency 'activesupport', '4.2.6'
+  spec.add_development_dependency 'activesupport', '4.2.8'
 
   #Run time dependencies
   spec.add_runtime_dependency 'beaker', '>= 3.0', '< 5.0' # known support for beaker 3.x and 4.x
-  spec.add_runtime_dependency 'beaker-http', '~> 0.0'
-  spec.add_runtime_dependency 'json', '~> 1.8'
+  spec.add_runtime_dependency 'json', '>= 2.3.0'
   spec.add_runtime_dependency 'test-unit'
-  spec.add_runtime_dependency 'net-ldap', '~> 0.6', '>= 0.6.1', '<= 0.12.1'
+  spec.add_runtime_dependency 'net-ldap', '~> 0.16.0'
   spec.add_runtime_dependency 'faraday', '~> 0.17'
   spec.add_runtime_dependency 'faraday_middleware', '~> 0.9'
   spec.add_runtime_dependency 'faraday-cookie_jar', '~> 0.0', '>= 0.0.6'
