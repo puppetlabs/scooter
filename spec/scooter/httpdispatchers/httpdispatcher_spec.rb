@@ -55,18 +55,14 @@ module Scooter
         before do
           allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:info) { true }
           allow_any_instance_of(Beaker::Http::FaradayBeakerLogger).to receive(:debug) { true }
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('/test/route') {[500,
-                                      {'content-type' => 'application/json;charset=UTF-8'},
-                                      "{ \"key\" : \"value\" }"]}
-          end
+
+          stub_request(:get, /test\/route/).
+            to_return(status: 500, body: {"key" => "value"}.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'has a correctly parsed body in the error' do
           expect{subject.connection.get('/test/route')}.to raise_error do |error|
             expect(error.response[:body]).to be_a(Hash)
           end
-
         end
       end
     end

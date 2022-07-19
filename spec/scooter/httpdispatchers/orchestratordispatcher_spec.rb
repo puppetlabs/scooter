@@ -4,10 +4,10 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
 
   let(:orchestrator_api) { Scooter::HttpDispatchers::OrchestratorDispatcher.new(host) }
   let(:job_id) { random_string }
-  let(:schedule_task_payload) { 
+  let(:schedule_task_payload) {
     { 'task' => 'foo' }
   }
-  let(:schedule_plan_payload) { 
+  let(:schedule_plan_payload) {
     { 'plan' => 'foo' }
   }
   let(:environment) {random_string}
@@ -251,12 +251,8 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it {is_expected.to respond_to(:get_last_jobs).with(4).arguments }
 
     before do
-      # find the index of the default Faraday::Adapter::NetHttp handler
-      # and replace it with the Test adapter
-      index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-      subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-        stub.get('/orchestrator/v1/jobs') { [200, {}] }
-      end
+      stub_request(:get, /orchestrator\/v1\/jobs/).
+        to_return(status: 200, body: {}.to_json, headers: {"Content-Type"=> "application/json"})
     end
 
     it 'should make a request with query params' do
@@ -298,12 +294,8 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it {is_expected.to respond_to(:list_scheduled_jobs).with(2).arguments }
 
     before do
-      # find the index of the default Faraday::Adapter::NetHttp handler
-      # and replace it with the Test adapter
-      index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-      subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-        stub.get('/orchestrator/v1/scheduled_jobs') { [200, {}] }
-      end
+      stub_request(:get, /orchestrator\/v1\/scheduled_jobs/).
+        to_return(status: 200, body: {}.to_json, headers: {"Content-Type"=> "application/json"})
     end
 
     it 'should make a request with query params' do

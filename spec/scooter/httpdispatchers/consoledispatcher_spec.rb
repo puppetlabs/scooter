@@ -28,18 +28,19 @@ module Scooter
 
       context '"signin with a page that returns a token' do
         before do
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            head = {"server"=>"nginx/1.8.1", 
-                    "date"=>"Tue, 29 Nov 2016 22:05:41 GMT", 
-                    "content-length"=>"0", 
-                    "connection"=>"close", 
-                    "set-cookie"=>"JSESSIONID=b05e9b11-5e9f-4d6a-9faf-e28a0415197d; Path=/; Secure; HttpOnly, rememberMe=deleteMe; Path=/auth; Max-Age=0; Expires=Mon, 28-Nov-2016 22:05:41 GMT, pl_ssti=0CeHhpz5PPLna7kpaEMcTHjJ62z9eizHTzsxEXNK8W20;Secure;Path=/", 
-                    "location"=>"/", 
-                    "x-frame-options"=>"DENY"}
-            stub.post('/auth/login', "username=#{username}&password=#{password}") {[200, head, '']}
-            stub.get('/') {[200, {}, '']}
-          end
+          stub_request(:post, /auth\/login/).
+            to_return(status: 200,
+                      body: '',
+                      headers: {"server"=>"nginx/1.8.1",
+                                "date"=>"Tue, 29 Nov 2016 22:05:41 GMT",
+                                "content-length"=>"0",
+                                "connection"=>"close",
+                                "set-cookie"=>"JSESSIONID=b05e9b11-5e9f-4d6a-9faf-e28a0415197d; Path=/; Secure; HttpOnly, rememberMe=deleteMe; Path=/auth; Max-Age=0; Expires=Mon, 28-Nov-2016 22:05:41 GMT, pl_ssti=0CeHhpz5PPLna7kpaEMcTHjJ62z9eizHTzsxEXNK8W20;Secure;Path=/",
+                                "location"=>"/",
+                                "x-frame-options"=>"DENY"})
+
+          stub_request(:get, 'https://test.com/').
+            to_return(status: 200, body: '', headers: {})
         end
 
         it 'sends the credentials' do

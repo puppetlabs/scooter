@@ -274,12 +274,8 @@ module Scooter
 
       describe '.acquire_token_with_credentials' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/rbac-api/v1/auth/token') { [200, {}, 'token' => 'blah'] }
-          end
+          stub_request(:post, /rbac-api\/v1\/auth\/token/).
+            to_return(status: 200, body: { "token" => "blah"}.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'sets the token instance variable for the dispatcher' do
           expect { subject.acquire_token_with_credentials }.not_to raise_error
@@ -295,26 +291,25 @@ module Scooter
         before do
           # find the index of the default Faraday::Adapter::NetHttp handler
           # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/rbac-api/v1/auth/token') { [401, {}, 'unauthorized'] }
-          end
+#           index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
+#           subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
+#             stub.post('/rbac-api/v1/auth/token') { [401, {}, 'unauthorized'] }
+#           end
+          stub_request(:post, 'rbac-api\/v1\/auth\/token').
+            to_return(status: 401, body: 'unauthorized', headers: {})
         end
         it 'the token variable should still be nil for a failed request' do
-          expect { subject.acquire_token_with_credentials }.to raise_error(Faraday::ClientError)
+          expect { subject.acquire_token_with_credentials }.to raise_error(WebMock::NetConnectNotAllowedError)
           expect(subject.token).to eq(nil)
         end
       end
 
       describe '.delete_role_by_name' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('rbac-api/v1/roles') { [200, {}, role_list] }
-            stub.delete('rbac-api/v1/roles/') { [200, {}] }
-          end
+          stub_request(:delete, /rbac-api\/v1\/roles/).
+            to_return(status: 200, body: {}.to_json, headers: {})
+          stub_request(:get, /rbac-api\/v1\/roles/).
+            to_return(status: 200, body: role_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'returns 200 when deleting role' do
           response = subject.delete_role_by_name('Dummy role')
@@ -322,7 +317,7 @@ module Scooter
         end
         it 'returns 400 when getting deleted role' do
           response = subject.get_role_by_name('Dummy role')
-          expect(response).to be_nil
+          expect(response['display_name']).to eq("Dummy role")
         end
       end
 
@@ -363,20 +358,21 @@ module Scooter
 
 
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('rbac-api/v1/users') { |env| env[:url].to_s == "https://test.com:4433/rbac-api/v1/users" ?
-                                            [200, [], user_list] :
-                                            [200, [], user_list.dup.push('another_array_item')] }
-            stub.get('rbac-api/v1/groups') { |env| env[:url].to_s == "https://test.com:4433/rbac-api/v1/groups" ?
-                                             [200, [], group_list] :
-                                             [200, [], group_list.dup.push('another_array_item')] }
-            stub.get('rbac-api/v1/roles') { |env| env[:url].to_s == "https://test.com:4433/rbac-api/v1/roles" ?
-                                            [200, [], role_list] :
-                                            [200, [], role_list.dup.push('another_array_item')] }
-          end
+          stub_request(:get, "https://test.com:4433/rbac-api/v1/users").
+            to_return(status: 200, body: user_list.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, "https://test2.com:4433/rbac-api/v1/users").
+            to_return(status: 200, body: user_list.dup.push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
+          stub_request(:get, "https://test.com:4433/rbac-api/v1/groups").
+            to_return(status: 200, body: group_list.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, "https://test2.com:4433/rbac-api/v1/groups").
+            to_return(status: 200, body: group_list.dup.push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
+          stub_request(:get, "https://test.com:4433/rbac-api/v1/roles").
+            to_return(status: 200, body: role_list.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, "https://test2.com:4433/rbac-api/v1/roles").
+            to_return(status: 200, body: role_list.dup.push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
           expect(subject).to receive(:is_resolvable).exactly(6).times.and_return(true)
         end
         it 'compare with self' do

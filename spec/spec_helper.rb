@@ -1,4 +1,6 @@
 require 'scooter'
+require 'webmock/rspec'
+
 RSpec.configure do |c|
 
 end
