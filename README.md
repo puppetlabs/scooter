@@ -32,17 +32,14 @@ Scooter is currently divvied into the following sections:
 ## Running the tests
 
 ```
-bundle exec rake test
+bundle exec rake spec
 ```
 
 ## Versioning
 
 Scooter's development began with Puppet Enterprise 3.7, but that was only available for internal testing at that time; Scooter is open-sourced and available on [rubygems.org](https://rubygems.org) at version 4.x to support the LTS version of Puppet Enterprise, 2016.4.0.
 
-## Rdocs
-
-Please view the [RubyDocs](http://rubydoc.info/github/puppetlabs/scooter) for further documentation.
 
 ## Contributing
 
-Scooter is very closely related to [Beaker](https://github.com/puppetlabs/beaker); if you wish to contribute to this project, please follow the [outline](https://github.com/puppetlabs/beaker/blob/master/CONTRIBUTING.md) there for contributing to this repo.
+Scooter is very closely related to [Beaker](https://github.com/voxpupuli/beaker); if you wish to contribute to this project, please follow the [outline](https://github.com/voxpupuli/beaker/blob/master/CONTRIBUTING.md) there for contributing to this repo.
