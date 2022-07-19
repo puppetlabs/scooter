@@ -343,12 +343,8 @@ module Scooter
 
       describe '.update_classes' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/classifier-api/v1/update-classes') { [201, {}] }
-          end
+          stub_request(:post, /classifier-api\/v1\/update-classes/).
+            to_return(status: 201, body: {}.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'updates the classes for all environments' do
           expect { subject.update_classes }.not_to raise_error
@@ -379,12 +375,8 @@ module Scooter
 
       describe '.get_list_of_node_groups' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/groups') { |env| [200, {}, group_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/groups/).
+            to_return(status: 200, body: group_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'returns list of groups' do
           expect { subject.get_list_of_node_groups }.not_to raise_error
@@ -395,12 +387,8 @@ module Scooter
 
       describe '.get_list_of_nodes' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/nodes') { |env| [200, {}, node_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/nodes/).
+            to_return(status: 200, body: node_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'returns list of nodes' do
           expect { subject.get_list_of_nodes }.not_to raise_error
@@ -411,12 +399,8 @@ module Scooter
 
       describe '.get_list_of_environments' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/environments') { |env| [200, {}, environment_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/environments/).
+            to_return(status: 200, body: environment_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'returns list of environments' do
           expect { subject.get_list_of_environments }.not_to raise_error
@@ -427,12 +411,8 @@ module Scooter
 
       describe '.get_list_of_classes' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/classes') { |env| [200, {}, class_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/classes/).
+            to_return(status: 200, body: class_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'returns list of classes' do
           expect { subject.get_list_of_classes }.not_to raise_error
@@ -443,12 +423,8 @@ module Scooter
 
       describe '.nodes_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/nodes') { |env| [200, {}, node_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/nodes/).
+            to_return(status: 200, body: node_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'nodes do not match' do
           expect(subject.nodes_match?(node_list.dup.push('another_array_item'))).to be false
@@ -461,12 +437,8 @@ module Scooter
 
       describe '.groups_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/groups') { |env| [200, {}, group_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/groups/).
+            to_return(status: 200, body: group_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'groups do not match' do
           expect(subject.groups_match?(group_list.dup.push('another_array_item'))).to be false
@@ -479,12 +451,8 @@ module Scooter
 
       describe '.classes_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/classes') { |env| [200, {}, class_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/classes/).
+            to_return(status: 200, body: class_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'classes do not match' do
           expect(subject.classes_match?(class_list.dup.push('another_array_item'))).to be false
@@ -497,12 +465,8 @@ module Scooter
 
       describe '.environments_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/environments') { |env| [200, {}, environment_list] }
-          end
+          stub_request(:get, /classifier-api\/v1\/environments/).
+            to_return(status: 200, body: environment_list.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'environments do not match' do
           expect(subject.environments_match?(environment_list.dup.push('another_array_item'))).to be false
@@ -515,23 +479,26 @@ module Scooter
 
       describe '.classifier_database_matches_self?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('classifier-api/v1/nodes') { |env| env[:url].to_s == "https://test.com:4433/classifier-api/v1/nodes" ?
-                [200, [], node_list] :
-                [200, [], node_list.dup.push('another_array_item')] }
-            stub.get('classifier-api/v1/environments') { |env| env[:url].to_s == "https://test.com:4433/classifier-api/v1/environments" ?
-                [200, [], environment_list] :
-                [200, [], environment_list.dup.push('another_array_item')] }
-            stub.get('classifier-api/v1/groups') { |env| env[:url].to_s == "https://test.com:4433/classifier-api/v1/groups" ?
-                [200, [], group_list] :
-                [200, [], group_list.dup.push('another_array_item')] }
-            stub.get('classifier-api/v1/classes') { |env| env[:url].to_s == "https://test.com:4433/classifier-api/v1/classes" ?
-                [200, [], class_list] :
-                [200, [], class_list.dup.push('another_array_item')] }
-          end
+          stub_request(:get, 'https://test.com:4433/classifier-api/v1/nodes').
+            to_return(status: 200, body: node_list.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, 'https://test2.com:4433/classifier-api/v1/nodes').
+            to_return(status: 200, body: node_list.dup.push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
+          stub_request(:get, 'https://test.com:4433/classifier-api/v1/environments').
+            to_return(status: 200, body: environment_list.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, 'https://test2.com:4433/classifier-api/v1/environments').
+            to_return(status: 200, body: environment_list.dup.push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
+          stub_request(:get, 'https://test.com:4433/classifier-api/v1/groups').
+            to_return(status: 200, body: group_list.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, 'https://test2.com:4433/classifier-api/v1/groups').
+            to_return(status: 200, body: group_list.dup.push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
+          stub_request(:get, 'https://test.com:4433/classifier-api/v1/classes').
+            to_return(status: 200, body: class_list.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, 'https://test2.com:4433/classifier-api/v1/classes').
+            to_return(status: 200, body: class_list.dup.push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
           expect(subject).to receive(:is_resolvable).exactly(8).times.and_return(true)
         end
         it 'compare with self' do

@@ -147,12 +147,8 @@ module Scooter
 
       describe '.get_classifier_events' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('activity-api/v1/events?service_id=classifier') { [200, {}] }
-          end
+          stub_request(:get, /service_id=classifier/).
+            to_return(status: 200, body: {}.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'gets classifier events' do
           expect { subject.get_classifier_events }.not_to raise_error
@@ -171,12 +167,8 @@ module Scooter
 
       describe '.get_rbac_events' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('activity-api/v1/events?service_id=rbac') { [200, {}] }
-          end
+          stub_request(:get, /service_id=rbac/).
+            to_return(status: 200, body: {}.to_json, headers: {"Content-Type"=> "application/json"})
         end
         it 'gets rbac events' do
           expect { subject.get_rbac_events }.not_to raise_error
@@ -196,20 +188,17 @@ module Scooter
 
       describe '.activity_database_matches_self?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.get('activity-api/v1/events?service_id=rbac') { |env| env[:url].to_s == "https://test.com:4433/activity-api/v1/events?service_id=rbac" ?
-                [200, [], rbac_events] :
-                [200, [], rbac_events['commits'].dup.push('another_array_item')] }
-            stub.get('activity-api/v1/events?service_id=classifier') { |env| env[:url].to_s == "https://test.com:4433/activity-api/v1/events?service_id=classifier" ?
-                [200, [], classifier_events] :
-                [200, [], classifier_events.dup["commits"].push('another_array_item')] }
-          end
+          stub_request(:get, 'https://test.com:4433/activity-api/v1/events?service_id=rbac').
+            to_return(status: 200, body: rbac_events.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, 'https://test2.com:4433/activity-api/v1/events?service_id=rbac').
+            to_return(status: 200, body: rbac_events.dup["commits"].push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
+          stub_request(:get, 'https://test.com:4433/activity-api/v1/events?service_id=classifier').
+            to_return(status: 200, body: classifier_events.to_json, headers: {"Content-Type"=> "application/json"})
+          stub_request(:get, 'https://test2.com:4433/activity-api/v1/events?service_id=classifier').
+            to_return(status: 200, body: classifier_events.dup["commits"].push('another_array_item').to_json, headers: {"Content-Type"=> "application/json"})
+
           expect(subject).to receive(:is_resolvable).exactly(4).times.and_return(true)
-          # expect(subject).to receive(:create_default_connection).with(any_args).twice.and_return(subject.connection)
-          # expect(Scooter::Utilities::BeakerUtilities).to receive(:get_public_ip).and_return('public_ip')
         end
 
         it 'compare with self' do

@@ -29,12 +29,8 @@ module Scooter
     context 'with a beaker host passed in' do
       describe '.query_nodes' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/nodes') { [200, []] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/nodes/).
+            to_return(status: 200, body: [], headers: {})
         end
         it 'query for all nodes' do
           expect { subject.query_nodes }.not_to raise_error
@@ -51,12 +47,8 @@ module Scooter
 
       describe '.query_catalogs' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/catalogs') { [200, []] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/catalogs/).
+            to_return(status: 200, body: [], headers: {})
         end
         it 'query for all catalogs' do
           expect { subject.query_catalogs }.not_to raise_error
@@ -73,12 +65,8 @@ module Scooter
 
       describe '.query_reports' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/reports') { [200, []] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/reports/).
+            to_return(status: 200, body: [], headers: {})
         end
         it 'query for all reports' do
           expect { subject.query_reports }.not_to raise_error
@@ -95,12 +83,8 @@ module Scooter
 
       describe '.query_facts' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/facts') { [200, []] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/facts/).
+            to_return(status: 200, body: [], headers: {})
         end
         it 'query for all facts' do
           expect { subject.query_facts }.not_to raise_error
@@ -121,12 +105,10 @@ module Scooter
 
       describe '.nodes_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/nodes') { [200, [], [{ 'certname' => 'name', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }]] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/nodes/).
+            to_return(status: 200,
+                      body: [{ 'certname' => 'name', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }],
+                      headers: {})
         end
         it 'nodes different size' do
           expect(subject.send(:nodes_match?, [{ 'certname' => 'name', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' },
@@ -148,12 +130,10 @@ module Scooter
 
       describe '.catalogs_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/catalogs') { [200, [], [{ 'catalog_uuid' => 'catalog_uuid_1', 'producer_timestamp' => 'time' }]] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/catalogs/).
+            to_return(status: 200,
+                      body: [{ 'catalog_uuid' => 'catalog_uuid_1', 'producer_timestamp' => 'time' }],
+                      headers: {})
         end
         it 'catalogs different size' do
           expect(subject.send(:catalogs_match?, [{ 'catalog_uuid' => 'catalog_uuid_1', 'producer_timestamp' => 'time' },
@@ -170,13 +150,12 @@ module Scooter
 
       describe '.facts_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/facts') { [200, [], [{ 'name' => 'name', 'value' => 'value' }]] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/facts/).
+            to_return(status: 200,
+                      body: [{ 'name' => 'name', 'value' => 'value' }],
+                      headers: {})
         end
+
         it 'facts different size' do
           expect(subject.send(:facts_match?, [{ 'name' => 'name', 'value' => 'value' },
                                               { 'name2' => 'name', 'value2' => 'value' }])).to be false
@@ -192,12 +171,10 @@ module Scooter
 
       describe '.reports_match?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/reports') { [200, [], [{ 'hash' => 'hash_value', 'producer_timestamp' => 'time' }]] }
-          end
+          stub_request(:post, /pdb\/query\/v4\/reports/).
+            to_return(status: 200,
+                      body: [{ 'hash' => 'hash_value', 'producer_timestamp' => 'time' }],
+                      headers: {})
         end
         it 'reports different size' do
           expect(subject.send(:reports_match?, [{ 'hash' => 'hash_value', 'producer_timestamp' => 'time' },
@@ -214,23 +191,43 @@ module Scooter
 
       describe '.replica_db_synced_with_master_db?' do
         before do
-          # find the index of the default Faraday::Adapter::NetHttp handler
-          # and replace it with the Test adapter
-          index = subject.connection.builder.handlers.index(Faraday::Adapter::NetHttp)
-          subject.connection.builder.swap(index, Faraday::Adapter::Test) do |stub|
-            stub.post('/pdb/query/v4/nodes') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/nodes" ?
-                [200, [], [{ 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }, { 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }]] :
-                [200, [], [{ 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }, { 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }]] }
-            stub.post('/pdb/query/v4/catalogs') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/catalogs" ?
-                [200, [], [{ 'certname' => 'test.com', 'catalog_uuid' => 'catalog_uuid_1', 'producer_timestamp' => 'time' }]] :
-                [200, [], [{ 'certname' => 'test2.com', 'catalog_uuid' => 'catalog_uuid_2', 'producer_timestamp' => 'time2' }]] }
-            stub.post('/pdb/query/v4/facts') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/facts" ?
-                [200, [], [{ 'name' => 'name', 'value' => 'value' }]] :
-                [200, [], [{ 'name' => 'name2', 'value' => 'value2' }]] }
-            stub.post('/pdb/query/v4/reports') { |env| env[:url].to_s == "https://test.com:8081/pdb/query/v4/reports" ?
-                [200, [], [{ 'certname' => 'test.com', 'hash' => 'hash_value', 'producer_timestamp' => 'time' }]] :
-                [200, [], [{ 'certname' => 'test2.com', 'hash' => 'hash_value2', 'producer_timestamp' => 'time2' }]] }
-          end
+          stub_request(:post, "https://test.com:8081/pdb/query/v4/nodes").
+            to_return(status: 200,
+                      body: [{ 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }, { 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }],
+                      headers: {})
+          stub_request(:post, "https://test2.com:8081/pdb/query/v4/nodes").
+            to_return(status: 200,
+                      body: [{ 'certname' => 'test2.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }, { 'certname' => 'test.com', 'facts_timestamp' => 'facts_time', 'report_timestamp' => 'reports_time', 'catalog_timestamp' => 'catalog_time' }],
+                      headers: {})
+
+          stub_request(:post, "https://test.com:8081/pdb/query/v4/catalogs").
+            to_return(status: 200,
+                      body: [{ 'certname' => 'test.com', 'catalog_uuid' => 'catalog_uuid_1', 'producer_timestamp' => 'time' }],
+                      headers: {})
+          stub_request(:post, "https://test2.com:8081/pdb/query/v4/catalogs").
+            to_return(status: 200,
+                      body: [{ 'certname' => 'test2.com', 'catalog_uuid' => 'catalog_uuid_2', 'producer_timestamp' => 'time2' }],
+                      headers: {})
+
+          stub_request(:post, "https://test.com:8081/pdb/query/v4/facts").
+            to_return(status: 200,
+                      body: [{ 'name' => 'name', 'value' => 'value' }],
+                      headers: {})
+          stub_request(:post, "https://test2.com:8081/pdb/query/v4/facts").
+            to_return(status: 200,
+                      body: [{ 'name' => 'name2', 'value' => 'value2' }],
+                      headers: {})
+
+          stub_request(:post, "https://test.com:8081/pdb/query/v4/reports").
+            to_return(status: 200,
+                      body: [{ 'certname' => 'test.com', 'hash' => 'hash_value', 'producer_timestamp' => 'time' }],
+                      headers: {})
+          stub_request(:post, "https://test2.com:8081/pdb/query/v4/reports").
+            to_return(status: 200,
+                      body: [{ 'certname' => 'test2.com', 'hash' => 'hash_value2', 'producer_timestamp' => 'time2' }],
+                      headers: {})
+
+
           expect(subject).to receive(:is_resolvable).exactly(8).times.and_return(true)
           expect(subject).to receive(:master_has_node?).twice.and_return(true)
         end
