@@ -83,13 +83,13 @@ module Scooter
         end
 
         def post_schedule_task(payload)
-          @connection.post("#{@version}/command/schedule_task") do |req|
+          @connection.post("#{@version}/scheduled_jobs/environment_jobs") do |req|
             req.body = payload
           end
         end
 
         def post_schedule_plan(payload)
-          @connection.post("#{@version}/command/schedule_plan") do |req|
+          @connection.post("#{@version}/scheduled_jobs/environment_jobs") do |req|
             req.body = payload
           end
         end
@@ -158,7 +158,7 @@ module Scooter
         end
 
         def get_scheduled_jobs(limit=nil, offset=nil)
-          path = "#{@version}/scheduled_jobs"
+          path = "#{@version}/scheduled_jobs/environment_jobs"
           @connection.get(path) do |request|
             request.params['limit'] = limit if limit
             request.params['offset'] = offset if offset
@@ -166,7 +166,9 @@ module Scooter
         end
 
         def delete_scheduled_job(job_id)
-          @connection.delete("#{@version}/scheduled_jobs/#{job_id}")
+          @connection.put("#{@version}/scheduled_jobs/environment_jobs/#{job_id}") do |req|
+            req.body = { :enabled => false }
+          end
         end
       end
     end

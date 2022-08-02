@@ -190,12 +190,12 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.not_to respond_to(:create_scheduled_job).with(2).arguments }
 
     it 'should schedule a task' do
-      expect(orchestrator_api.connection).to receive(:post).with("v1/command/schedule_task")
+      expect(orchestrator_api.connection).to receive(:post).with("v1/scheduled_jobs/environment_jobs")
       expect{ orchestrator_api.create_scheduled_job(schedule_task_payload) }.not_to raise_error
     end
 
     it 'should schedule a plan' do
-      expect(orchestrator_api.connection).to receive(:post).with("v1/command/schedule_plan")
+      expect(orchestrator_api.connection).to receive(:post).with("v1/scheduled_jobs/environment_jobs")
       expect{ orchestrator_api.create_scheduled_job(schedule_plan_payload) }.not_to raise_error
     end
   end
@@ -294,7 +294,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it {is_expected.to respond_to(:list_scheduled_jobs).with(2).arguments }
 
     before do
-      stub_request(:get, /orchestrator\/v1\/scheduled_jobs/).
+      stub_request(:get, /orchestrator\/v1\/scheduled_jobs\/environment_jobs/).
         to_return(status: 200, body: {}.to_json, headers: {"Content-Type"=> "application/json"})
     end
 
@@ -320,7 +320,7 @@ describe Scooter::HttpDispatchers::OrchestratorDispatcher do
     it { is_expected.not_to respond_to(:remove_scheduled_job).with(2).arguments }
 
     it 'should take a job id' do
-      expect(orchestrator_api.connection).to receive(:delete).with("v1/scheduled_jobs/#{job_id}")
+      expect(orchestrator_api.connection).to receive(:put).with("v1/scheduled_jobs/environment_jobs/#{job_id}")
       expect{ orchestrator_api.remove_scheduled_job(job_id) }.not_to raise_error
     end
   end
