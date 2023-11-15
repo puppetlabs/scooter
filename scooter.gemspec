@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry', '~> 0.10'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '>= 3.0.0'
-  spec.add_development_dependency 'beaker-abs', '~>0.10.0'
+  spec.add_development_dependency 'beaker-abs'
   spec.add_development_dependency 'webmock', '~> 3.13'
 
   #Documentation dependencies
@@ -31,11 +31,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'activesupport', '4.2.8'
 
   #Run time dependencies
-  spec.add_runtime_dependency 'beaker', '~> 4.0'
-  spec.add_runtime_dependency 'json', '>= 2.3.0'
+  spec.add_runtime_dependency 'beaker'
+  spec.add_runtime_dependency 'json'
   spec.add_runtime_dependency 'test-unit'
-  spec.add_runtime_dependency 'net-ldap', '~> 0.16.0'
-  spec.add_runtime_dependency 'faraday', '~> 1.5'
+  spec.add_runtime_dependency 'net-ldap', '~> 0.16'
+  spec.add_runtime_dependency 'faraday'
   spec.add_runtime_dependency 'faraday_middleware', '~> 1.2'
-  spec.add_runtime_dependency 'faraday-cookie_jar', '~> 0.0', '>= 0.0.7'
+  spec.add_runtime_dependency 'faraday-cookie_jar', '>= 0.0.7'
 end
