@@ -27,7 +27,7 @@ module Scooter
         display_name = options['display_name'] || RandomString.generate(8)
         login        = options['login'] || RandomString.generate(16)
         role_ids     = options['role_ids'] || []
-        password     = options['password'] || 'Puppet11'
+        password     = options['password'] || 'Puppetlabs-1'
 
         user_hash = { 'email'        => email,
                       'display_name' => display_name,
