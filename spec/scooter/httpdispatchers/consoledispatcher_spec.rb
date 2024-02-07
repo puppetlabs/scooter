@@ -28,6 +28,12 @@ module Scooter
 
       context '"signin with a page that returns a token' do
         before do
+          stub_request(:get, /auth\/login/).
+            to_return(status: 200,
+                      body: '',
+                      headers: {
+                        "set-cookie"=>"__HOST-somecookie=something;Secure;Path=/",
+                      })
           stub_request(:post, /auth\/login/).
             to_return(status: 200,
                       body: '',
@@ -35,7 +41,7 @@ module Scooter
                                 "date"=>"Tue, 29 Nov 2016 22:05:41 GMT",
                                 "content-length"=>"0",
                                 "connection"=>"close",
-                                "set-cookie"=>"JSESSIONID=b05e9b11-5e9f-4d6a-9faf-e28a0415197d; Path=/; Secure; HttpOnly, rememberMe=deleteMe; Path=/auth; Max-Age=0; Expires=Mon, 28-Nov-2016 22:05:41 GMT, pl_ssti=0CeHhpz5PPLna7kpaEMcTHjJ62z9eizHTzsxEXNK8W20;Secure;Path=/",
+                                "set-cookie"=>"pl_ssti=0CeHhpz5PPLna7kpaEMcTHjJ62z9eizHTzsxEXNK8W20;Secure;Path=/",
                                 "location"=>"/",
                                 "x-frame-options"=>"DENY"})
 
