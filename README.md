@@ -32,7 +32,7 @@ Scooter is currently divvied into the following sections:
 ## Running the tests
 
 ```
-bundle exec rake spec
+bundle exec rake test
 ```
 
 ## Versioning
