@@ -88,7 +88,9 @@ module Scooter
       end
 
       def signin(login=self.credentials.login, password=self.credentials.password)
-        response = @connection.get "/auth/login"
+        response = @connection.get "/auth/login" do |request|
+          connection.port = 443
+        end
         return response if response.status != 200
         # extract the session cookie, if it is present
         cookie = response.headers['Set-Cookie']
