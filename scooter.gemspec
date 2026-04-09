@@ -38,4 +38,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'faraday'
   spec.add_runtime_dependency 'faraday_middleware', '~> 1.2'
   spec.add_runtime_dependency 'faraday-cookie_jar', '>= 0.0.7'
+  # Temporarily pin http-cookie, as >1.1.0 has issues that break PEZ tests
+  spec.add_runtime_dependency 'http-cookie', '= 1.1.0'
 end
