@@ -69,7 +69,7 @@ module Scooter
         if host.is_a?(Unix::Host)
           connection.url_prefix.host = is_resolvable ? host.hostname : Scooter::Utilities::BeakerUtilities.get_public_ip(host)
         else
-          connection.url_prefix.host = host
+          connection.url_prefix.host = host.reachable_name
         end
       end
 
